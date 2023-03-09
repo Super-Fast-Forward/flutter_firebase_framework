@@ -84,5 +84,9 @@ class _SandboxLauncherState extends State<SandboxLauncher> {
         _isSandbox = !_isSandbox;
       });
     }
+    if (widget.toggleState != null) {
+      print('toggle state');
+      widget.toggleState!();
+    }
   }
 }

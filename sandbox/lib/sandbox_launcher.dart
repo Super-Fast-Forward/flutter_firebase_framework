@@ -10,6 +10,7 @@ class SandboxLauncher extends StatefulWidget {
   final Widget sandbox;
   final Function(bool state)? saveState;
   final Function()? getInitialState;
+  final Function()? toggleState;
   final Stream<bool>? feedState;
 
   const SandboxLauncher(
@@ -18,6 +19,7 @@ class SandboxLauncher extends StatefulWidget {
       required this.sandbox,
       this.getInitialState,
       this.saveState,
+      this.toggleState,
       this.feedState})
       : super(key: key);
 

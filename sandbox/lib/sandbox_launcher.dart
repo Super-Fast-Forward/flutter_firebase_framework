@@ -55,9 +55,21 @@ class _SandboxLauncherState extends State<SandboxLauncher> {
           toggle();
         }
       },
-      child: _isSandbox
-          ? Sandbox(child: widget.sandbox, toggle: toggle)
-          : widget.app);
+      child: widget.feedState != null
+          ? StreamBuilder<bool>(
+              stream: widget.feedState,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  _isSandbox = snapshot.data!;
+                }
+                return _isSandbox
+                    ? Sandbox(child: widget.sandbox, toggle: toggle)
+                    : widget.app;
+              },
+            )
+          : (_isSandbox
+              ? Sandbox(child: widget.sandbox, toggle: toggle)
+              : widget.app));
 
   void toggle() {
     print('toggle sandbox');

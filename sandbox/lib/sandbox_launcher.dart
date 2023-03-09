@@ -34,6 +34,7 @@ class _SandboxLauncherState extends State<SandboxLauncher> {
     if (widget.getInitialState != null && widget.feedState == null) {
       widget.getInitialState!().then((value) {
         if (value != null) {
+          print('initial state received, call setState with: ${value}');
           setState(() {
             _isSandbox = value;
           });
@@ -52,6 +53,7 @@ class _SandboxLauncherState extends State<SandboxLauncher> {
                 .contains(LogicalKeyboardKey.metaLeft)) {
           // sandbox will be shown/hidden on Left and Right Ctrl pressed at the
           // same time
+          print('Cmd+Cmd pressed, call toggle');
           toggle();
         }
       },
@@ -71,9 +73,11 @@ class _SandboxLauncherState extends State<SandboxLauncher> {
   void toggle() {
     print('toggle sandbox');
     if (widget.saveState != null) {
+      print('save state: ${!_isSandbox}');
       widget.saveState!(!_isSandbox);
     }
     if (widget.feedState == null) {
+      print('call setState with: ${!_isSandbox}');
       setState(() {
         _isSandbox = !_isSandbox;
       });

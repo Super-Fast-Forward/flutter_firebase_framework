@@ -68,6 +68,7 @@ class _SandboxLauncherState extends State<SandboxLauncher> {
           ? StreamBuilder<bool>(
               stream: widget.feedState,
               builder: (context, snapshot) {
+                print('build with StreamBuilder with ${_isSandbox}');
                 if (widget.toggleState == null) {
                   _isSandbox = snapshot.hasData && snapshot.data == true;
                 }

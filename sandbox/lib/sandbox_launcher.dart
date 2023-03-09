@@ -10,13 +10,15 @@ class SandboxLauncher extends StatefulWidget {
   final Widget sandbox;
   final Function(bool state)? saveState;
   final Function()? getInitialState;
+  final Stream<bool>? feedState;
 
   const SandboxLauncher(
       {Key? key,
       required this.app,
       required this.sandbox,
       this.getInitialState,
-      this.saveState})
+      this.saveState,
+      this.feedState})
       : super(key: key);
 
   @override
@@ -31,7 +33,7 @@ class _SandboxLauncherState extends State<SandboxLauncher> {
     super.initState();
     if (widget.getInitialState != null) {
       widget.getInitialState!().then((value) {
-        if (value != null && value != null) {
+        if (value != null) {
           setState(() {
             _isSandbox = value;
           });

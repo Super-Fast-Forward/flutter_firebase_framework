@@ -15,9 +15,13 @@ class Sandbox extends StatelessWidget {
                   color: Colors.grey,
                 )),
             child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                child ?? Container(),
-                ElevatedButton(onPressed: toggle, child: Text('Toggle'))
+                Expanded(child: child ?? Container()),
+                Flexible(
+                    child: ElevatedButton(
+                        onPressed: toggle, child: Text('Toggle')))
               ],
             )));
   }

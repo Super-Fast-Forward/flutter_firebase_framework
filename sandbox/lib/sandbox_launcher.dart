@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sandbox/sandbox.dart';
 
 /// This is an overlay frame for debugging individual widgets
 /// Unfortunately it updates on every click on the textedit field
@@ -42,23 +43,27 @@ class _SandboxLauncherState extends State<SandboxLauncher> {
   @override
   Widget build(BuildContext context) => RawKeyboardListener(
       focusNode: FocusNode(),
-      onKey: (event) {
-        // print(
-        //     'Ctrl Right: ${RawKeyboard.instance.keysPressed.contains(LogicalKeyboardKey.metaRight)}, Ctrl Left: ${RawKeyboard.instance.keysPressed.contains(LogicalKeyboardKey.metaLeft)}');
-        if (RawKeyboard.instance.keysPressed
-                .contains(LogicalKeyboardKey.metaRight) &&
-            RawKeyboard.instance.keysPressed
-                .contains(LogicalKeyboardKey.metaLeft)) {
-          print('sandbox will be shown/hidden');
-          // sandbox will be shown/hidden on Left and Right Ctrl pressed at the
-          // same time
-          if (widget.saveState != null) {
-            widget.saveState!(!_isSandbox);
-          }
-          setState(() {
-            _isSandbox = !_isSandbox;
-          });
-        }
-      },
-      child: _isSandbox ? widget.sandbox : widget.app);
+      onKey: toggle,
+      child: _isSandbox
+          ? Sandbox(child: widget.sandbox, toggle: toggle)
+          : widget.app);
+
+  void toggle(event) {
+    // print(
+    //     'Ctrl Right: ${RawKeyboard.instance.keysPressed.contains(LogicalKeyboardKey.metaRight)}, Ctrl Left: ${RawKeyboard.instance.keysPressed.contains(LogicalKeyboardKey.metaLeft)}');
+    if (RawKeyboard.instance.keysPressed
+            .contains(LogicalKeyboardKey.metaRight) &&
+        RawKeyboard.instance.keysPressed
+            .contains(LogicalKeyboardKey.metaLeft)) {
+      print('sandbox will be shown/hidden');
+      // sandbox will be shown/hidden on Left and Right Ctrl pressed at the
+      // same time
+      if (widget.saveState != null) {
+        widget.saveState!(!_isSandbox);
+      }
+      setState(() {
+        _isSandbox = !_isSandbox;
+      });
+    }
+  }
 }

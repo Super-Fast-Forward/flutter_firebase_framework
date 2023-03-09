@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class Sandbox extends StatelessWidget {
   final Widget? child;
-  const Sandbox({this.child, Key? key}) : super(key: key);
+  final Function()? toggle;
+  const Sandbox({this.child, this.toggle, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +14,11 @@ class Sandbox extends StatelessWidget {
                 border: Border.all(
                   color: Colors.grey,
                 )),
-            child: child ?? Container()));
+            child: Column(
+              children: [
+                child ?? Container(),
+                ElevatedButton(onPressed: toggle, child: Text('Toggle'))
+              ],
+            )));
   }
 }

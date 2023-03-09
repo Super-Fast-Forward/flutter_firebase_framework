@@ -53,10 +53,15 @@ class _SandboxLauncherState extends State<SandboxLauncher> {
                 .contains(LogicalKeyboardKey.metaRight) &&
             RawKeyboard.instance.keysPressed
                 .contains(LogicalKeyboardKey.metaLeft)) {
-          // sandbox will be shown/hidden on Left and Right Ctrl pressed at the
-          // same time
-          print('Cmd+Cmd pressed, call toggle');
-          toggle();
+          try {
+            // sandbox will be shown/hidden on Left and Right Ctrl pressed at the
+            // same time
+            print('Cmd+Cmd pressed, call toggle');
+
+            toggle();
+          } catch (e) {
+            print('Error: $e');
+          }
         }
       },
       child: widget.feedState != null

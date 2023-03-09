@@ -7,22 +7,23 @@ class Sandbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                border: Border.all(
-                  color: Colors.grey,
-                )),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(child: child ?? Container()),
-                Flexible(
-                    child: ElevatedButton(
-                        onPressed: toggle, child: Text('Toggle')))
-              ],
-            )));
+    return MaterialApp(
+        home: Scaffold(
+            body: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    border: Border.all(
+                      color: Colors.grey,
+                    )),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(child: child ?? Container()),
+                    Flexible(
+                        child: ElevatedButton(
+                            onPressed: toggle, child: Text('Toggle')))
+                  ],
+                ))));
   }
 }

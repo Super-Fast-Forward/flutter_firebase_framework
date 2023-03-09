@@ -31,7 +31,7 @@ class _SandboxLauncherState extends State<SandboxLauncher> {
   @override
   void initState() {
     super.initState();
-    if (widget.getInitialState != null) {
+    if (widget.getInitialState != null && widget.feedState == null) {
       widget.getInitialState!().then((value) {
         if (value != null) {
           setState(() {
@@ -76,8 +76,10 @@ class _SandboxLauncherState extends State<SandboxLauncher> {
     if (widget.saveState != null) {
       widget.saveState!(!_isSandbox);
     }
-    setState(() {
-      _isSandbox = !_isSandbox;
-    });
+    if (widget.feedState == null) {
+      setState(() {
+        _isSandbox = !_isSandbox;
+      });
+    }
   }
 }

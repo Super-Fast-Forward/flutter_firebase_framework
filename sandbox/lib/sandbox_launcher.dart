@@ -43,12 +43,12 @@ class _SandboxLauncherState extends State<SandboxLauncher> {
   @override
   Widget build(BuildContext context) => RawKeyboardListener(
       focusNode: FocusNode(),
-      onKey: toggle,
+      onKey: (event) => toggle,
       child: _isSandbox
           ? Sandbox(child: widget.sandbox, toggle: toggle)
           : widget.app);
 
-  void toggle(event) {
+  void toggle() {
     // print(
     //     'Ctrl Right: ${RawKeyboard.instance.keysPressed.contains(LogicalKeyboardKey.metaRight)}, Ctrl Left: ${RawKeyboard.instance.keysPressed.contains(LogicalKeyboardKey.metaLeft)}');
     if (RawKeyboard.instance.keysPressed

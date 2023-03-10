@@ -17,12 +17,14 @@ class Sandbox extends StatelessWidget {
                     )),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Expanded(child: child ?? Container()),
-                    Flexible(
-                        child: ElevatedButton(
-                            onPressed: toggle, child: Text('Toggle')))
+                    SizedBox(
+                        height: 50,
+                        child: Flexible(
+                            child: ElevatedButton(
+                                onPressed: toggle, child: Text('Toggle'))))
                   ],
                 ))));
   }

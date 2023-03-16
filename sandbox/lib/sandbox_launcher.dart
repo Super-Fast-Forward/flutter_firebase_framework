@@ -8,6 +8,7 @@ import 'package:sandbox/sandbox.dart';
 class SandboxLauncher extends StatefulWidget {
   final Widget app;
   final ThemeData? theme;
+  final ThemeData? darkTheme;
   final ThemeMode? themeMode;
   final Widget sandbox;
   final Function(bool state)? saveState;
@@ -21,6 +22,7 @@ class SandboxLauncher extends StatefulWidget {
       required this.sandbox,
       this.themeMode,
       this.theme,
+      this.darkTheme,
       this.getInitialState,
       this.saveState,
       this.toggleState,

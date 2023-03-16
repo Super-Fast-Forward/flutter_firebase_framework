@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 
 class Sandbox extends StatelessWidget {
   final ThemeData? theme;
+  final ThemeMode? themeMode;
   final Widget? child;
   final Function()? toggle;
-  const Sandbox({this.child, this.theme, this.toggle, Key? key})
+  const Sandbox({this.child, this.themeMode, this.theme, this.toggle, Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         theme: theme,
+        themeMode: themeMode,
         home: Scaffold(
             body: Container(
                 decoration: BoxDecoration(

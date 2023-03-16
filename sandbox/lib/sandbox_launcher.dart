@@ -7,6 +7,7 @@ import 'package:sandbox/sandbox.dart';
 /// or key entry. Hence, let's not use it as overlay.
 class SandboxLauncher extends StatefulWidget {
   final Widget app;
+  final ThemeData? theme;
   final Widget sandbox;
   final Function(bool state)? saveState;
   final Function()? getInitialState;
@@ -17,6 +18,7 @@ class SandboxLauncher extends StatefulWidget {
       {Key? key,
       required this.app,
       required this.sandbox,
+      this.theme,
       this.getInitialState,
       this.saveState,
       this.toggleState,
@@ -77,7 +79,8 @@ class _SandboxLauncherState extends State<SandboxLauncher> {
                     : widget.app;
               })
           : (_isSandbox
-              ? Sandbox(child: widget.sandbox, toggle: toggle)
+              ? Sandbox(
+                  child: widget.sandbox, theme: widget.theme, toggle: toggle)
               : widget.app));
 
   void toggle() {

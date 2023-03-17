@@ -20,3 +20,11 @@ String formatFirestoreDoc(DS doc) {
   });
   return JsonEncoder.withIndent('  ').convert(jsonDecode(jsonString));
 }
+
+String getFirstCharactersOfString(String str, int length) {
+  if (str.length > length) {
+    return str.substring(0, length);
+  } else {
+    return str;
+  }
+}

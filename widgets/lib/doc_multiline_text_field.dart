@@ -114,9 +114,18 @@ class DocMultilineTextField extends ConsumerStatefulWidget {
   final String field;
   final InputDecoration? decoration;
   final int maxLines;
+  final TextStyle? style;
+  final TextAlign textAlign;
+  final TextDirection? textDirection;
+  final StrutStyle? strutStyle;
 
   DocMultilineTextField(this.docRef, this.field, this.maxLines,
-      {this.decoration, Key? key})
+      {this.decoration,
+      this.style,
+      this.textAlign = TextAlign.start,
+      this.textDirection,
+      this.strutStyle,
+      Key? key})
       : super(key: key);
 
   @override
@@ -173,6 +182,10 @@ class DocMultilineTextFieldState extends ConsumerState<DocMultilineTextField> {
     return TextField(
       maxLines: widget.maxLines,
       decoration: widget.decoration,
+      style: widget.style,
+      textAlign: widget.textAlign,
+      textDirection: widget.textDirection,
+      strutStyle: widget.strutStyle,
       controller: ctrl, //..text = docSnapshot.data()![widget.field] ?? '',
       onChanged: (v) {
         if (descSaveTimer != null && descSaveTimer!.isActive) {

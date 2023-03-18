@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:providers/firestore.dart';
 
 class DocTextWidget extends ConsumerWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
@@ -34,22 +35,19 @@ class DocTextWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref
-        .watch(StreamProvider<DocumentSnapshot<Map<String, dynamic>>>(
-            (ref) => FirebaseFirestore.instance.doc(docRef.path).snapshots()))
-        .when(
-            loading: () => Container(),
-            error: (e, s) => ErrorWidget(e),
-            data: (doc) => Text(doc.data()?[field] ?? '',
-                maxLines: maxLines,
-                style: style,
-                textAlign: textAlign,
-                overflow: overflow,
-                softWrap: softWrap,
-                textDirection: textDirection,
-                locale: locale,
-                strutStyle: strutStyle,
-                textWidthBasis: textWidthBasis,
-                textHeightBehavior: textHeightBehavior));
+    return ref.watch(docSP(docRef.path)).when(
+        loading: () => Container(),
+        error: (e, s) => ErrorWidget(e),
+        data: (doc) => Text(doc.data()?[field] ?? '',
+            maxLines: maxLines,
+            style: style,
+            textAlign: textAlign,
+            overflow: overflow,
+            softWrap: softWrap,
+            textDirection: textDirection,
+            locale: locale,
+            strutStyle: strutStyle,
+            textWidthBasis: textWidthBasis,
+            textHeightBehavior: textHeightBehavior));
   }
 }

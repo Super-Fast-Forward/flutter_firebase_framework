@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class DocTextWidget extends ConsumerWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
   final String field;
+  final int maxLines;
   final TextStyle? style;
   final TextAlign textAlign;
   final TextOverflow overflow;
@@ -19,6 +20,7 @@ class DocTextWidget extends ConsumerWidget {
   DocTextWidget(this.docRef, this.field,
       {Key? key,
       this.style,
+      this.maxLines = 1,
       this.textAlign = TextAlign.start,
       this.overflow = TextOverflow.clip,
       this.softWrap = true,
@@ -39,6 +41,7 @@ class DocTextWidget extends ConsumerWidget {
             loading: () => Container(),
             error: (e, s) => ErrorWidget(e),
             data: (doc) => Text(doc.data()?[field] ?? '',
+                maxLines: maxLines,
                 style: style,
                 textAlign: textAlign,
                 overflow: overflow,

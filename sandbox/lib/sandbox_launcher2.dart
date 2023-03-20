@@ -15,6 +15,7 @@ class SandboxLauncher2 extends StatefulWidget {
   final Function()? getInitialState;
   final Function()? toggleState;
   final Stream<bool>? feedState;
+  final bool enabled;
 
   const SandboxLauncher2(
       {Key? key,
@@ -26,7 +27,8 @@ class SandboxLauncher2 extends StatefulWidget {
       this.getInitialState,
       this.saveState,
       this.toggleState,
-      this.feedState})
+      this.feedState,
+      this.enabled = true})
       : super(key: key);
 
   @override
@@ -70,19 +72,21 @@ class _SandboxLauncherState2 extends State<SandboxLauncher2> {
           }
         }
       },
-      child: widget.feedState != null
-          ? StreamBuilder<bool>(
-              stream: widget.feedState,
-              builder: (context, snapshot) {
-                print('build with StreamBuilder with ${_isSandbox}');
-                if (widget.toggleState == null) {
-                  _isSandbox = snapshot.hasData && snapshot.data == true;
-                }
-                return snapshot.hasData && snapshot.data == true
-                    ? widget.sandbox
-                    : widget.app;
-              })
-          : (_isSandbox ? widget.sandbox : widget.app));
+      child: !widget.enabled
+          ? widget.app
+          : (widget.feedState != null
+              ? StreamBuilder<bool>(
+                  stream: widget.feedState,
+                  builder: (context, snapshot) {
+                    print('build with StreamBuilder with ${_isSandbox}');
+                    if (widget.toggleState == null) {
+                      _isSandbox = snapshot.hasData && snapshot.data == true;
+                    }
+                    return snapshot.hasData && snapshot.data == true
+                        ? widget.sandbox
+                        : widget.app;
+                  })
+              : (_isSandbox ? widget.sandbox : widget.app)));
 
   void toggle() {
     print('toggle sandbox');

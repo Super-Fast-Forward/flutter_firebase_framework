@@ -28,3 +28,14 @@ String getFirstCharactersOfString(String str, int length) {
     return str;
   }
 }
+
+const dateFormat = 'yyyy-MM-dd';
+const dateTimeFormat = 'yyyy-MM-dd HH:mm:ss';
+
+String formatDate(Timestamp dateTime) {
+  return Jiffy(dateTime.toDate()).format(dateFormat);
+}
+
+String formatDateTime(Timestamp dateTime) {
+  return Jiffy(dateTime.toDate()).format(dateTimeFormat);
+}

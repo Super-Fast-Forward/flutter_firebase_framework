@@ -57,6 +57,7 @@ class _SandboxLauncherState2 extends State<SandboxLauncher2> {
   Widget build(BuildContext context) => RawKeyboardListener(
       focusNode: FocusNode(),
       onKey: (event) {
+        if (this.widget.enabled == false) return;
         if (RawKeyboard.instance.keysPressed
                 .contains(LogicalKeyboardKey.metaRight) &&
             RawKeyboard.instance.keysPressed

@@ -17,6 +17,7 @@ class DocTextWidget extends ConsumerWidget {
   final TextWidthBasis textWidthBasis;
   final TextHeightBehavior? textHeightBehavior;
   final bool? excludeFromSemantics;
+  final Function? builder;
 
   DocTextWidget(this.docRef, this.field,
       {Key? key,
@@ -30,7 +31,8 @@ class DocTextWidget extends ConsumerWidget {
       this.strutStyle,
       this.textWidthBasis = TextWidthBasis.parent,
       this.textHeightBehavior,
-      this.excludeFromSemantics})
+      this.excludeFromSemantics,
+      this.builder = null})
       : super(key: key);
 
   @override
@@ -38,7 +40,10 @@ class DocTextWidget extends ConsumerWidget {
     return ref.watch(docSP(docRef.path)).when(
         loading: () => Container(),
         error: (e, s) => ErrorWidget(e),
-        data: (doc) => Text(doc.data()?[field] ?? '',
+        data: (doc) => Text(
+            builder == null
+                ? (doc.data()?[field] ?? '')
+                : builder!(context, ref, doc.data()?[field]),
             maxLines: maxLines,
             style: style,
             textAlign: textAlign,

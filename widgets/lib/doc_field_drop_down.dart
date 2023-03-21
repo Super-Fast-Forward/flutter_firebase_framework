@@ -2,23 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:providers/firestore.dart';
-
-class _GenericStateNotifier<V> extends StateNotifier<V> {
-  _GenericStateNotifier(V d) : super(d);
-
-  set value(V v) {
-    state = v;
-  }
-
-  V get value => state;
-}
+import 'package:providers/generic.dart';
 
 class DocFieldDropDown extends ConsumerWidget {
   final DocumentReference docRef;
   final String field;
 
   final Function(String?)? onChanged;
-  final StateNotifierProvider<_GenericStateNotifier<String?>, String?> valueNP;
+  final StateNotifierProvider<GenericStateNotifier<String?>, String?> valueNP;
   final List<String> items;
 
   const DocFieldDropDown(this.docRef, this.field, this.valueNP, this.items,

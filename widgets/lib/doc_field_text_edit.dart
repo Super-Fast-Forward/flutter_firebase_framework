@@ -9,8 +9,10 @@ class DocFieldTextEdit2 extends ConsumerStatefulWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
   final String field;
   final InputDecoration? decoration;
+  final bool debugPrint;
 
-  DocFieldTextEdit2(this.docRef, this.field, {this.decoration, Key? key})
+  DocFieldTextEdit2(this.docRef, this.field,
+      {this.decoration, this.debugPrint = false, Key? key})
       : super(key: key);
 
   @override
@@ -28,7 +30,9 @@ class DocFieldTextEditState2 extends ConsumerState<DocFieldTextEdit2> {
     super.initState();
     sub = widget.docRef.snapshots().listen((event) {
       if (!event.exists) return;
-      //print('received ${event.data()![widget.field]}');
+      if (widget.debugPrint)
+        print(
+            'DocFieldTextEditState2 ${widget.field} received ${event.data()![widget.field]}');
       if (ctrl.text != event.data()![widget.field]) {
         ctrl.text = event.data()![widget.field];
       }

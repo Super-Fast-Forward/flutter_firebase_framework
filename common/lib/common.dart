@@ -32,10 +32,12 @@ String getFirstCharactersOfString(String str, int length) {
 const dateFormat = 'yyyy-MM-dd';
 const dateTimeFormat = 'yyyy-MM-dd HH:mm:ss';
 
-String formatDate(Timestamp dateTime) {
+String formatDate(Timestamp? dateTime) {
+  if (dateTime == null) return '';
   return Jiffy(dateTime.toDate()).format(dateFormat);
 }
 
-String formatDateTime(Timestamp dateTime) {
+String formatDateTime(Timestamp? dateTime) {
+  if (dateTime == null) return '';
   return Jiffy(dateTime.toDate()).format(dateTimeFormat);
 }

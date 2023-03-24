@@ -61,13 +61,13 @@ class LoginButtonsWidget extends ConsumerWidget {
         .addScope('https://www.googleapis.com/auth/contacts.readonly');
     googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
 
-    if (kIsWeb) {
-      // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithPopup(googleProvider);
-    } else {
-      // Or use signInWithRedirect
-      await FirebaseAuth.instance.signInWithRedirect(googleProvider);
-    }
+    // if (kIsWeb) {
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithPopup(googleProvider);
+    // } else {
+    //   // Or use signInWithRedirect
+    //   await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+    // }
   }
 
   ElevatedButton imageButton(

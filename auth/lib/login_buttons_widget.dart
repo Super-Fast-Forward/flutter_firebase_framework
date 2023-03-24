@@ -53,7 +53,7 @@ class LoginButtonsWidget extends ConsumerWidget {
     Key? key,
   }) : super(key: key);
 
-  Future<UserCredential> signInWithGoogle() async {
+  Future signInWithGoogle() async {
     // Create a new provider
     GoogleAuthProvider googleProvider = GoogleAuthProvider();
 
@@ -61,11 +61,13 @@ class LoginButtonsWidget extends ConsumerWidget {
         .addScope('https://www.googleapis.com/auth/contacts.readonly');
     googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithPopup(googleProvider);
-
-    // Or use signInWithRedirect
-    // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+    if (kIsWeb) {
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithPopup(googleProvider);
+    } else {
+      // Or use signInWithRedirect
+      await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+    }
   }
 
   ElevatedButton imageButton(

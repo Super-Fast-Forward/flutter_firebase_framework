@@ -9,3 +9,7 @@ class GenericStateNotifier<V> extends StateNotifier<V> {
 
   V get value => state;
 }
+
+typedef SNP<T> = StateNotifierProvider<GenericStateNotifier<T>, T>;
+typedef GSN<T> = GenericStateNotifier<T>;
+typedef MAP = Map<String, dynamic>;

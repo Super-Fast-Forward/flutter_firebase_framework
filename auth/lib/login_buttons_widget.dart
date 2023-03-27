@@ -157,7 +157,9 @@ class LoginButtonsWidget extends ConsumerWidget {
         iconButton("Log in with SSO", Icons.key, () {});
 
     final ElevatedButton emailButton =
-        iconButton("Log in with Email", Icons.mail, () {});
+        iconButton("Log in with Email", Icons.mail, () {
+          
+        });
 
     final ElevatedButton anonymousButton =
         iconButton("Log in Anonymous", Icons.account_circle, () async {

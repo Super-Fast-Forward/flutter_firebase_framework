@@ -13,3 +13,7 @@ class GenericStateNotifier<V> extends StateNotifier<V> {
 typedef SNP<T> = StateNotifierProvider<GenericStateNotifier<T>, T>;
 typedef GSN<T> = GenericStateNotifier<T>;
 typedef MAP = Map<String, dynamic>;
+
+SNP<T> snp<T>(T value) {
+  return SNP<T>((ref) => GSN<T>(value));
+}

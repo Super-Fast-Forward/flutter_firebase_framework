@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 
 typedef DS = DocumentSnapshot<Map<String, dynamic>>;
@@ -41,3 +42,14 @@ String formatDateTime(Timestamp? dateTime) {
   if (dateTime == null) return '';
   return Jiffy(dateTime.toDate()).format(dateTimeFormat);
 }
+
+Color Function(String color) getColor = (String color) {
+  // color comes as a string  4294967295
+  // 0xFF000000
+  // return Color(int.parse(color));
+  try {
+    return Color(int.parse(color));
+  } catch (e) {
+    return Colors.black;
+  }
+};

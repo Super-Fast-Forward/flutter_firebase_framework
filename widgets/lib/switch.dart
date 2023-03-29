@@ -8,23 +8,16 @@ class SwitchWidget extends ConsumerWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
   final String field;
 
-  SwitchWidget(
-    this.docRef,
-    this.field,
-  );
+  SwitchWidget(this.docRef, this.field, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DocStreamWidget(
         docStreamProvider: docSP(docRef.path),
         builder: (context, doc) => Switch(
-            value: doc.data()![field] as bool,
+            value: doc.data()?[field] ?? false,
             onChanged: (v) {
-              docRef.update({field: v});
-              // ref.read(firestoreProvider).runTransaction((transaction) async {
-              //   final freshDoc = await transaction.get(docRef);
-              //   transaction.update(docRef, {field: !freshDoc.data()![field]});
-              // });
+              docRef.set({field: v}, SetOptions(merge: true));
             }));
   }
 }

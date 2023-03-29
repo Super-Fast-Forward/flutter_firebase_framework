@@ -56,25 +56,12 @@ class DocFieldTextEditState2 extends ConsumerState<DocFieldTextEdit2> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        TextField(
-          decoration: widget.decoration,
-          controller: ctrl, //..text = docSnapshot.data()![widget.field] ?? '',
-          onChanged: (v) => saveValue(v),
-          onSubmitted: (v) => saveValue(v),
-        ),
-        Positioned(
-            right: 0,
-            // left: 100,
-            top: 0,
-            child: Icon(
-              Icons.check_circle,
-              color: Colors.green,
-            ))
-      ],
+    return TextField(
+      decoration: widget.decoration,
+      controller: ctrl,
+      onChanged: (v) => saveValue(v),
+      onSubmitted: (v) => saveValue(v),
     );
-    // });
   }
 
   void saveValue(String v) {

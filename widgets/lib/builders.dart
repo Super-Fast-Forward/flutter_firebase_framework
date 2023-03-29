@@ -43,6 +43,33 @@ class DocStreamWidget extends ConsumerWidget {
           error: (e, s) => ErrorWidget(e));
 }
 
+/// A widget that builds itself based on the latest snapshot of interaction with
+///  a [Stream].
+/// [StreamProvider] automatically handles closing the stream when the widget is
+/// removed from the widget tree.
+/// This widget is useful when you want to build a widget tree based on the
+/// latest interaction with a [Stream].
+/// See also:
+/// * [StreamProvider], which provides a [Stream] and rebuilds dependents
+///  when the [Stream] emits an event.
+/// * [StreamBuilder], which has a similar API but does not manage the
+/// subscription.
+///
+/// ColStreamWidget(
+///            colStreamProvider: userAppCommentFamilyProvider(appId),
+///           builder: (context, col, items) => ListView(
+///                shrinkWrap: true,
+///               children: items,
+///            ),
+///         itemBuilder: (c, e) => DocStreamWidget(
+///              docStreamProvider: docSP(e.reference.path),
+///             builder: (c, doc) => Row(
+///              children: [
+///            Text(doc.data()!['text'] ?? ''),
+///          ],
+///       ),
+///    )),
+///
 class ColStreamWidget extends ConsumerWidget {
   final Widget Function(BuildContext context, QS col, List<Widget> items)
       builder;

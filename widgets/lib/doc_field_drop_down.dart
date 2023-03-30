@@ -46,11 +46,11 @@ class DocDropDown2 extends ConsumerStatefulWidget {
   final String field;
 
   final Function(String?)? onChanged;
-  final StateNotifierProvider<GenericStateNotifier<String?>, String?> valueNP;
+  final StateNotifierProvider<GenericStateNotifier<String?>, String?>? valueNP;
   final List<String> items;
 
-  const DocDropDown2(this.docRef, this.field, this.valueNP, this.items,
-      {this.onChanged});
+  const DocDropDown2(this.docRef, this.field, this.items,
+      {this.valueNP, this.onChanged});
 
   @override
   ConsumerState<DocDropDown2> createState() => DocDropDown2State();
@@ -69,7 +69,9 @@ class DocDropDown2State extends ConsumerState<DocDropDown2> {
         .listen((DocumentSnapshot<Map<String, dynamic>> event) {
       if (!event.exists) return;
       val = event.data()![widget.field] as String?;
-      ref.read(widget.valueNP.notifier).value = val;
+
+      if (widget.valueNP != null)
+        ref.read(widget.valueNP!.notifier).value = val;
     });
   }
 
@@ -89,7 +91,9 @@ class DocDropDown2State extends ConsumerState<DocDropDown2> {
       onChanged: (String? newValue) {
         widget.docRef.update({widget.field: newValue});
 
-        ref.read(widget.valueNP.notifier).value = val;
+        if (widget.valueNP != null)
+          ref.read(widget.valueNP!.notifier).value = val;
+
         if (widget.onChanged != null) widget.onChanged!(newValue);
       },
       items: widget.items.map<DropdownMenuItem<String>>((String value) {

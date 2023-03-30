@@ -11,7 +11,7 @@ class DocFieldDropDown extends ConsumerWidget {
   final String field;
 
   final Function(String?)? onChanged;
-  final StateNotifierProvider<GenericStateNotifier<String?>, String?> valueNP;
+  final StateNotifierProvider<GenericStateNotifier<String?>, String?>? valueNP;
   final List<String> items;
 
   const DocFieldDropDown(this.docRef, this.field, this.valueNP, this.items,
@@ -27,7 +27,8 @@ class DocFieldDropDown extends ConsumerWidget {
                 onChanged: (String? newValue) {
                   docRef.update({field: newValue});
 
-                  ref.read(valueNP.notifier).value = newValue;
+                  if (valueNP != null)
+                    ref.read(valueNP!.notifier).value = newValue;
 
                   if (onChanged != null) onChanged!(newValue);
                 },

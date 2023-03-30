@@ -30,7 +30,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 ///    )),
 ///
 class ColStreamWidget<ItemWidgetType> extends ConsumerWidget {
-  final Widget Function(BuildContext context, QS col, List items) builder;
+  final Widget Function(
+      BuildContext context, QS col, List<ItemWidgetType> items) builder;
   final ItemWidgetType Function(BuildContext context, DS doc) itemBuilder;
   final AutoDisposeStreamProvider<QS> colStreamProvider;
   const ColStreamWidget({

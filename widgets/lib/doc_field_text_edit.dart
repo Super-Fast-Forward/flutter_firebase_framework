@@ -135,18 +135,22 @@ class DocFieldTextEditState3 extends ConsumerState<DocFieldTextEdit3> {
     return Stack(
       children: [
         TextField(
-          decoration: widget.decoration,
-          controller: ctrl,
-          onChanged: (v) {
-            ref.read(status.notifier).value = 'changed';
-            if (descSaveTimer != null && descSaveTimer!.isActive) {
-              descSaveTimer!.cancel();
-            }
-            descSaveTimer = Timer(
-                Duration(milliseconds: widget.saveDelay), () => saveValue(v));
-          },
-          onSubmitted: (v) => saveValue(v),
-        ),
+            decoration: widget.decoration,
+            controller: ctrl,
+            onChanged: (v) {
+              ref.read(status.notifier).value = 'changed';
+              if (descSaveTimer != null && descSaveTimer!.isActive) {
+                descSaveTimer!.cancel();
+              }
+              descSaveTimer = Timer(
+                  Duration(milliseconds: widget.saveDelay), () => saveValue(v));
+            },
+            onSubmitted: (v) {
+              if (descSaveTimer != null && descSaveTimer!.isActive) {
+                descSaveTimer!.cancel();
+              }
+              saveValue(v);
+            }),
         Positioned(
             right: 0,
             top: 0,

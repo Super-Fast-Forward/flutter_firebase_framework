@@ -9,3 +9,9 @@ class AuthStateNotifier<V> extends StateNotifier<V> {
 
   V get value => state;
 }
+
+final isLoggedIn = StateNotifierProvider<GenericStateNotifier<bool>, bool>(
+    (ref) => GenericStateNotifier<bool>(false));
+
+final isLoading = StateNotifierProvider<GenericStateNotifier<bool>, bool>(
+    (ref) => GenericStateNotifier<bool>(false));

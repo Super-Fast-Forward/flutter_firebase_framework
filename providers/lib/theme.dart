@@ -23,6 +23,7 @@ class ThemeStateNotifier extends StateNotifier<bool> {
   }
   void changeTheme() {
     state = !state;
+
     String themeMode = state == false ? 'light' : 'dark';
     if (auth.currentUser != null) {
       dbInstance

@@ -15,7 +15,7 @@ class DocFieldDropDown extends ConsumerWidget {
   final List<String> items;
 
   const DocFieldDropDown(this.docRef, this.field, this.valueNP, this.items,
-      {this.onChanged});
+      {this.onChanged, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) =>
@@ -50,7 +50,7 @@ class DocDropDown2 extends ConsumerStatefulWidget {
   final List<String> items;
 
   const DocDropDown2(this.docRef, this.field, this.items,
-      {this.valueNP, this.onChanged});
+      {this.valueNP, this.onChanged, super.key});
 
   @override
   ConsumerState<DocDropDown2> createState() => DocDropDown2State();

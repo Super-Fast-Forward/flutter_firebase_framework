@@ -1,1 +1,4 @@
-# flutter_firebase_framework
+# Flutter Firebase Framework
+
+Build cross-platform cloud-based applications really fast.
+

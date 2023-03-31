@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:providers/generic.dart';
 
 part 'login_buttons_widget.dart';
 

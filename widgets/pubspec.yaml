@@ -25,7 +25,10 @@ dependencies:
     git: 
       url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
       path: common
-
+  auth:
+    git: 
+      url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
+      path: auth
 
 
 dev_dependencies:

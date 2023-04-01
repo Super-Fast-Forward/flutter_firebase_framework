@@ -20,7 +20,6 @@ class LoginScreen extends ConsumerWidget {
           flex: isWideScreen ? 1 : 0,
           child: SingleChildScrollView(
               child: LoginButtonsWidget(
-            loginOptions: loginOptions,
             screenTitle: screenTitle,
           ))),
       Expanded(

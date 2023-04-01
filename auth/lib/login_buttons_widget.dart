@@ -7,12 +7,15 @@ const loginEmail = "loginEmail";
 const loginAnonymous = "loginAnonymous";
 const signupOption = "signupOption";
 
-bool showGoogleAuth = false;
-bool showGitHubAuth = false;
-bool showSsoAuth = false;
-bool showEmailAuth = false;
-bool showAnonymousAuth = false;
-bool showSignupOption = false;
+enum LoginOption {
+  GitHub,
+  Google,
+  Facebook,
+  SSO,
+  Email,
+  Anonymous,
+  signupOption,
+}
 
 const borderColor = Color.fromARGB(255, 208, 208, 208);
 const borderDecor = BoxDecoration(
@@ -29,27 +32,21 @@ final userLoggedIn = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
 final showLoading = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
     (ref) => AuthStateNotifier<bool>(false));
 
+class LoginConfig {
+  static bool enableGoogleAuth = true;
+  static bool enableGithubAuth = false;
+  static bool enableSsoAuth = false;
+  static bool enableEmailAuth = false;
+  static bool enableAnonymousAuth = true;
+  static bool enableSignupOption = false;
+}
+
 class LoginButtonsWidget extends ConsumerWidget {
   final String screenTitle;
-  final Map<String, bool> loginOptions;
 
-  ///Login Options:
-  ///
-  /// "**loginGitHub**" for Login via Github
-  ///
-  /// "**loginGoogle**" for Login via Google
-  ///
-  /// "**loginSSO**" for Login via SSO
-  ///
-  /// "**loginEmail**" for Login via Email
-  ///
-  /// "**loginAnonymous**" for Login as Anonymous user
-  ///
-  /// "**signupOption**"" for SignUp option
-  ///
+  ///Login Options are set in LoginConfig
   const LoginButtonsWidget({
     required this.screenTitle,
-    required this.loginOptions,
     Key? key,
   }) : super(key: key);
 
@@ -127,14 +124,6 @@ class LoginButtonsWidget extends ConsumerWidget {
     }
     List<String> configFlags = [];
 
-    //Separating all the "true" values from loginOptions
-    loginOptions.forEach((key, value) {
-      if (value == true) configFlags.add(key);
-    });
-
-    //Setting the flags
-    setAuthOptions(configFlags);
-
     bool isWideScreen = MediaQuery.of(context).size.width >= 800;
 
     final ElevatedButton googleButton =
@@ -157,9 +146,7 @@ class LoginButtonsWidget extends ConsumerWidget {
         iconButton("Log in with SSO", Icons.key, () {});
 
     final ElevatedButton emailButton =
-        iconButton("Log in with Email", Icons.mail, () {
-          
-        });
+        iconButton("Log in with Email", Icons.mail, () {});
 
     final ElevatedButton anonymousButton =
         iconButton("Log in Anonymous", Icons.account_circle, () async {
@@ -194,7 +181,7 @@ class LoginButtonsWidget extends ConsumerWidget {
                     ),
                   ),
                   Visibility(
-                    visible: showGoogleAuth,
+                    visible: LoginConfig.enableGoogleAuth,
                     child: Column(
                       children: [
                         const Gap(25),
@@ -203,7 +190,7 @@ class LoginButtonsWidget extends ConsumerWidget {
                     ),
                   ),
                   Visibility(
-                    visible: showGitHubAuth,
+                    visible: LoginConfig.enableGithubAuth,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -215,7 +202,7 @@ class LoginButtonsWidget extends ConsumerWidget {
                     ),
                   ),
                   Visibility(
-                      visible: showSsoAuth,
+                      visible: LoginConfig.enableSsoAuth,
                       child: Column(
                         children: [
                           const Gap(50),
@@ -223,7 +210,7 @@ class LoginButtonsWidget extends ConsumerWidget {
                         ],
                       )),
                   Visibility(
-                    visible: showEmailAuth,
+                    visible: LoginConfig.enableEmailAuth,
                     child: Column(
                       children: [
                         const Gap(50),
@@ -232,7 +219,7 @@ class LoginButtonsWidget extends ConsumerWidget {
                     ),
                   ),
                   Visibility(
-                    visible: showAnonymousAuth,
+                    visible: LoginConfig.enableAnonymousAuth,
                     child: Column(
                       children: [
                         const Gap(50),
@@ -242,7 +229,7 @@ class LoginButtonsWidget extends ConsumerWidget {
                     ),
                   ),
                   Visibility(
-                    visible: showSignupOption,
+                    visible: LoginConfig.enableSignupOption,
                     child: Column(
                       children: [
                         const Gap(50),
@@ -282,14 +269,5 @@ class LoginButtonsWidget extends ConsumerWidget {
         : SingleChildScrollView(
             child: Flex(
                 direction: Axis.vertical, children: widgets.reversed.toList()));
-  }
-
-  void setAuthOptions(List config) {
-    showGitHubAuth = config.contains(loginGitHub);
-    showGoogleAuth = config.contains(loginGoogle);
-    showEmailAuth = config.contains(loginEmail);
-    showSsoAuth = config.contains(loginSSO);
-    showAnonymousAuth = config.contains(loginAnonymous);
-    showSignupOption = config.contains(signupOption);
   }
 }

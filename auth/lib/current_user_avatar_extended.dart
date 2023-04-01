@@ -1,5 +1,4 @@
 import 'package:auth/login.dart';
-import 'package:auth/show_edit_profile.dart';
 import 'package:auth/user_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CurrentUserAvatarExtended extends ConsumerWidget {
-  Widget? child;
-  CurrentUserAvatarExtended({Key? key, this.child}) : super(key: key);
+  final Widget? child;
+  const CurrentUserAvatarExtended({Key? key, this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => GestureDetector(

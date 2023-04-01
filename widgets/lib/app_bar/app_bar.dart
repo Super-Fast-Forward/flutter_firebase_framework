@@ -8,10 +8,14 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   //all other properties of AppBar widget can be added here
   final Widget userAvatar;
   final Widget themeButton;
+  final bool showUserAvatar;
+  final bool showThemeButton;
 
   CustomAppBar({
     Key? key,
-    this.title = const Text('Custom App Bar'),
+    this.title = const Text(''),
+    this.showUserAvatar = true,
+    this.showThemeButton = true,
     this.userAvatar = const CurrentUserAvatarExtended(),
     this.themeButton = const ThemeSwitch(),
   }) : super(key: key);
@@ -20,7 +24,10 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBar(
       title: title,
-      actions: [],
+      actions: [
+        if (showUserAvatar) userAvatar,
+        if (showThemeButton) themeButton
+      ],
     );
   }
 

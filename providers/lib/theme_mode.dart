@@ -5,10 +5,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ThemeStateNotifier extends StateNotifier<bool> {
+class ThemeModeStateNotifier extends StateNotifier<bool> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final dbInstance = FirebaseFirestore.instance;
-  ThemeStateNotifier(bool loginState) : super(false) {
+  ThemeModeStateNotifier(bool loginState) : super(false) {
     if (loginState == true && auth.currentUser != null) {
       dbInstance
           .collection('user')
@@ -34,8 +34,7 @@ class ThemeStateNotifier extends StateNotifier<bool> {
   }
 }
 
-final themeStateNotifierProvider =
-    StateNotifierProvider<ThemeStateNotifier, bool>((ref) {
+final themeModeSNP = StateNotifierProvider<ThemeModeStateNotifier, bool>((ref) {
   bool loginState = ref.watch(isLoggedIn);
-  return ThemeStateNotifier(loginState);
+  return ThemeModeStateNotifier(loginState);
 }, dependencies: [isLoggedIn]);

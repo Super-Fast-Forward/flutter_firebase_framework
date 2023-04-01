@@ -14,4 +14,4 @@ final isLoggedIn = StateNotifierProvider<GenericStateNotifier<bool>, bool>(
     (ref) => GenericStateNotifier<bool>(false));
 
 final isLoading = StateNotifierProvider<GenericStateNotifier<bool>, bool>(
-    (ref) => GenericStateNotifier<bool>(false));
+    (ref) => GenericStateNotifier<bool>(true));

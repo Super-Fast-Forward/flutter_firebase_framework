@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'login_dialog.dart';
+
 class CurrentUserAvatarExtended extends ConsumerWidget {
   final Widget? child;
   const CurrentUserAvatarExtended({Key? key, this.child}) : super(key: key);
@@ -91,16 +93,7 @@ class CurrentUserAvatarExtended extends ConsumerWidget {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-              title: Text("Login"),
-              content: SizedBox(
-                  height: 200.0, // Change as per your requirement
-                  width: 400.0, // Change as per your requirement
-                  child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [LoginButtonsWidget(screenTitle: '')])));
+          return LoginDialog();
         });
   }
 }

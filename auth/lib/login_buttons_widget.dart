@@ -43,10 +43,12 @@ class LoginConfig {
 
 class LoginButtonsWidget extends ConsumerWidget {
   final String screenTitle;
+  final Function? onLoginAnonymousButtonPressed;
 
   ///Login Options are set in LoginConfig
   const LoginButtonsWidget({
     required this.screenTitle,
+    this.onLoginAnonymousButtonPressed,
     Key? key,
   }) : super(key: key);
 
@@ -150,6 +152,8 @@ class LoginButtonsWidget extends ConsumerWidget {
 
     final ElevatedButton anonymousButton =
         iconButton("Log in Anonymous", Icons.account_circle, () async {
+      if (onLoginAnonymousButtonPressed != null)
+        onLoginAnonymousButtonPressed!();
       // ref.read(isLoading.notifier).value = true;
       await FirebaseAuth.instance.signInAnonymously().then((a) => {
             //     ref.read(isLoggedIn.notifier).value = true,

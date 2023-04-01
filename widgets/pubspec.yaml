@@ -31,6 +31,13 @@ dependencies:
       path: auth
 
 
+dependency_overrides:
+  common:
+    path: ../flutter_firebase_framework/common
+  providers:
+    path: ../flutter_firebase_framework/providers
+  auth:
+    path: ../flutter_firebase_framework/auth
 
 
 dev_dependencies:

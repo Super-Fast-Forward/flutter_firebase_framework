@@ -6,9 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ThemeModeStateNotifier extends StateNotifier<bool> {
+  late DocumentReference Function() saveDocRefBuilder;
+
   final FirebaseAuth auth = FirebaseAuth.instance;
   final dbInstance = FirebaseFirestore.instance;
+
   ThemeModeStateNotifier(bool loginState) : super(false) {
+    this.saveDocRefBuilder =
+        () => dbInstance.collection('user').doc(auth.currentUser!.uid);
     if (loginState == true && auth.currentUser != null) {
       dbInstance
           .collection('user')

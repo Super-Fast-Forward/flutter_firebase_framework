@@ -37,7 +37,7 @@ class ThemeModeStateNotifier extends StateNotifier<bool> {
 }
 
 final themeModeSNP = StateNotifierProvider<ThemeModeStateNotifier, bool>((ref) {
-  bool loginState = ref.watch(isLoggedIn);
+  bool loginState = ref.watch(authStateProvider);
   return ThemeModeStateNotifier(loginState);
 }, dependencies: [isLoggedIn]);
 

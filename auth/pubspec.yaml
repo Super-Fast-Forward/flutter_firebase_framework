@@ -24,6 +24,9 @@ dependencies:
   gap: ^2.0.1
 
 
+dependency_overrides:
+  providers:
+    path: ../flutter_firebase_framework/providers
 
 
 dev_dependencies:

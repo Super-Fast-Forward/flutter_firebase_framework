@@ -8,6 +8,8 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  flutter:
+    sdk: flutter
   equatable: ^2.0.0
   flutter_riverpod: ^1.0.4
   firebase_core: ^2.3.0
@@ -19,8 +21,9 @@ dependencies:
       url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
       path: auth
 
-  flutter:
-    sdk: flutter
+dependency_overrides:
+  auth:
+    path: ../flutter_firebase_framework/auth
 
 
 dev_dependencies:

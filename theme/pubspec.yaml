@@ -10,6 +10,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  auth:
+    git: 
+      url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
+      path: auth
+  providers:
+    git: 
+      url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
+      path: providers
+
+dependency_overrides:
+  auth:
+    path: ../flutter_firebase_framework/auth
+  providers:
+    path: ../flutter_firebase_framework/providers
 
 dev_dependencies:
   flutter_test:

@@ -54,6 +54,7 @@ class ThemeModeConfig {
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .get())
         .data()!['themeMode'];
+    print('received: $theme');
     return theme == 'light' ? false : true;
     //     .then((value) {
     //   String theme = value['themeMode'];

@@ -23,7 +23,7 @@ dependencies:
 
 dependency_overrides:
   auth:
-    path: ../flutter_firebase_framework/auth
+    path: ../auth
 
 
 dev_dependencies:

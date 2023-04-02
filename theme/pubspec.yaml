@@ -10,6 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  firebase_core: ^2.3.0
+  cloud_firestore: ^4.0.1
+  firebase_auth_web: 5.1.3
+  firebase_auth: 4.1.5
   auth:
     git: 
       url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
@@ -21,9 +25,11 @@ dependencies:
 
 dependency_overrides:
   auth:
-    path: ../flutter_firebase_framework/auth
+    path: ../auth
   providers:
-    path: ../flutter_firebase_framework/providers
+    path: ../providers
+
+
 
 dev_dependencies:
   flutter_test:

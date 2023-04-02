@@ -26,7 +26,7 @@ dependencies:
 
 dependency_overrides:
   providers:
-    path: ../flutter_firebase_framework/providers
+    path: ../providers
 
 
 dev_dependencies:

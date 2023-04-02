@@ -4,7 +4,7 @@ PageRouteBuilder Function(RouteSettings settings) generateRoutes(
         Map<String, WidgetBuilder> routes) =>
     (RouteSettings settings) {
       WidgetBuilder builder;
-      // print('showing ${settings.name}');
+      print('showing ${settings.name}');
       builder = routes[settings.name]!;
       // switch (settings.name) {
       //   case '/providers':

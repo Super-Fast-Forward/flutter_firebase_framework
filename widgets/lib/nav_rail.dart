@@ -36,15 +36,15 @@ class NavRail extends ConsumerWidget {
           this.onDestinationSelected?.call(index);
         },
         labelType: NavigationRailLabelType.selected,
-        leading: true
-            ? FloatingActionButton(
-                elevation: 0,
-                onPressed: () {
-                  // Add your onPressed code here!
-                },
-                child: const Icon(Icons.add),
-              )
-            : const SizedBox(),
+        // leading: true
+        //     ? FloatingActionButton(
+        //         elevation: 0,
+        //         onPressed: () {
+        //           // Add your onPressed code here!
+        //         },
+        //         child: const Icon(Icons.add),
+        //       )
+        //     : const SizedBox(),
         // trailing: showTrailing
         //     ? IconButton(
         //         onPressed: () {

@@ -32,15 +32,6 @@ final userLoggedIn = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
 final showLoading = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
     (ref) => AuthStateNotifier<bool>(false));
 
-class LoginConfig {
-  static bool enableGoogleAuth = true;
-  static bool enableGithubAuth = false;
-  static bool enableSsoAuth = false;
-  static bool enableEmailAuth = false;
-  static bool enableAnonymousAuth = true;
-  static bool enableSignupOption = false;
-}
-
 class LoginButtonsWidget extends ConsumerWidget {
   final String screenTitle;
   final Function? onLoginAnonymousButtonPressed;
@@ -185,7 +176,7 @@ class LoginButtonsWidget extends ConsumerWidget {
                     ),
                   ),
                   Visibility(
-                    visible: LoginConfig.enableGoogleAuth,
+                    visible: AuthConfig.enableGoogleAuth,
                     child: Column(
                       children: [
                         const Gap(25),
@@ -194,7 +185,7 @@ class LoginButtonsWidget extends ConsumerWidget {
                     ),
                   ),
                   Visibility(
-                    visible: LoginConfig.enableGithubAuth,
+                    visible: AuthConfig.enableGithubAuth,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -206,7 +197,7 @@ class LoginButtonsWidget extends ConsumerWidget {
                     ),
                   ),
                   Visibility(
-                      visible: LoginConfig.enableSsoAuth,
+                      visible: AuthConfig.enableSsoAuth,
                       child: Column(
                         children: [
                           const Gap(50),
@@ -214,7 +205,7 @@ class LoginButtonsWidget extends ConsumerWidget {
                         ],
                       )),
                   Visibility(
-                    visible: LoginConfig.enableEmailAuth,
+                    visible: AuthConfig.enableEmailAuth,
                     child: Column(
                       children: [
                         const Gap(50),
@@ -223,7 +214,7 @@ class LoginButtonsWidget extends ConsumerWidget {
                     ),
                   ),
                   Visibility(
-                    visible: LoginConfig.enableAnonymousAuth,
+                    visible: AuthConfig.enableAnonymousAuth,
                     child: Column(
                       children: [
                         const Gap(50),
@@ -233,7 +224,7 @@ class LoginButtonsWidget extends ConsumerWidget {
                     ),
                   ),
                   Visibility(
-                    visible: LoginConfig.enableSignupOption,
+                    visible: AuthConfig.enableSignupOption,
                     child: Column(
                       children: [
                         const Gap(50),

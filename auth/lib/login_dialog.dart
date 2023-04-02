@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'login.dart';
+import 'main.dart';
 
 class LoginDialog extends ConsumerWidget {
   const LoginDialog({

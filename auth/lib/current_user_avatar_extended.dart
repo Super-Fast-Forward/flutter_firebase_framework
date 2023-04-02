@@ -1,4 +1,4 @@
-import 'package:auth/login.dart';
+import 'package:auth/main.dart';
 import 'package:auth/user_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

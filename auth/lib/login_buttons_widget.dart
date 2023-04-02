@@ -1,4 +1,4 @@
-part of flutter_firebase_auth;
+part of flutter_firebase_framework;
 
 const loginGitHub = "loginGitHub";
 const loginGoogle = "loginGoogle";

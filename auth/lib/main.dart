@@ -1,17 +1,10 @@
+library flutter_firebase_framework;
+
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-// class _GenericStateNotifier<V> extends StateNotifier<V> {
-//   _GenericStateNotifier(V d) : super(d);
-
-//   set value(V v) {
-//     state = v;
-//   }
-
-//   V get value => state;
-// }
-
-// final isLoggedIn = StateNotifierProvider<_GenericStateNotifier<bool>, bool>(
-//     (ref) => _GenericStateNotifier<bool>(false));
-
-// final isLoading = StateNotifierProvider<_GenericStateNotifier<bool>, bool>(
-//     (ref) => _GenericStateNotifier<bool>(false));
+import 'package:gap/gap.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:providers/generic.dart';
+part 'login_buttons_widget.dart';
+part 'auth_state_notifier.dart';

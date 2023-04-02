@@ -1,4 +1,4 @@
-part of flutter_firebase_auth;
+part of flutter_firebase_framework;
 
 class AuthStateNotifier<V> extends StateNotifier<V> {
   AuthStateNotifier(V d) : super(d);

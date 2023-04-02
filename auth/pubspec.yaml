@@ -1,5 +1,5 @@
 name: auth
-description: Reusable firebase auth widgets
+description: Reusable firebase auth widgets and providers, part of FFFW
 version: 0.0.1
 homepage:
 publish_to: none
@@ -17,16 +17,16 @@ dependencies:
     sdk: flutter
   flutter_riverpod: ^1.0.4
   flutter_svg: ^1.1.6
+  gap: ^2.0.1
   providers:
     git: 
       url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
       path: providers
-  gap: ^2.0.1
 
 
-dependency_overrides:
-  providers:
-    path: ../providers
+# dependency_overrides:
+#   providers:
+#     path: ../providers
 
 
 dev_dependencies:

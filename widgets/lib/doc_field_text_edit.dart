@@ -5,6 +5,90 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:providers/generic.dart';
 import 'doc_multiline_text_field.dart';
 
+// ///
+// /// This is a widget that allows you to edit a field in a document.
+// /// It is a wrapper around a [TextField] that automatically saves the
+// /// value to the document.
+// /// It is using the [StreamProvider] to listen to changes in the document.
+// /// It is using a [Timer] to delay the save operation.
+// /// This is to prevent the save operation from being called on every keystroke.
+// ///
+// /// Example:
+// ///
+// /// DocFieldTextEdit(FirebaseFirestore.instance.collection('users').doc('123'), 'name')
+// ///
+// /// This will show the value of the field 'name' from the document '123' in the collection 'users'.
+// ///
+// class DocFieldTextEdit extends ConsumerStatefulWidget {
+//   final DocumentReference<Map<String, dynamic>> docRef;
+//   final String field;
+//   final InputDecoration? decoration;
+//   final bool debugPrint;
+//   final bool showSaveStatus;
+
+//   DocFieldTextEdit(this.docRef, this.field,
+//       {this.decoration,
+//       this.showSaveStatus = true,
+//       this.debugPrint = false,
+//       Key? key})
+//       : super(key: key);
+
+//   @override
+//   ConsumerState<ConsumerStatefulWidget> createState() =>
+//       DocFieldTextEditState();
+// }
+
+// class DocFieldTextEditState extends ConsumerState<DocFieldTextEdit> {
+//   Timer? descSaveTimer;
+//   StreamSubscription? sub;
+//   final TextEditingController ctrl = TextEditingController();
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     sub = widget.docRef.snapshots().listen((event) {
+//       if (!event.exists) return;
+//       if (widget.debugPrint)
+//         print(
+//             'DocFieldTextEditState2 ${widget.field} received ${event.data()![widget.field]}');
+//       if (ctrl.text != event.data()![widget.field]) {
+//         ctrl.text = event.data()![widget.field];
+//       }
+//     });
+//   }
+
+//   @override
+//   void dispose() {
+//     super.dispose();
+//     if (sub != null) {
+//       print('sub cancelled');
+//       sub!.cancel();
+//       sub = null;
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return TextField(
+//       decoration: widget.decoration,
+//       controller: ctrl,
+//       onChanged: (v) => saveValue(v),
+//       onSubmitted: (v) => saveValue(v),
+//     );
+//   }
+
+//   void saveValue(String v) {
+//     if (descSaveTimer != null && descSaveTimer!.isActive) {
+//       descSaveTimer!.cancel();
+//     }
+//     descSaveTimer = Timer(Duration(milliseconds: 200), () {
+//       Map<String, dynamic> map = {};
+//       map[widget.field] = v;
+//       widget.docRef.set(map, SetOptions(merge: true));
+//     });
+//   }
+// }
+
 ///
 /// This is a widget that allows you to edit a field in a document.
 /// It is a wrapper around a [TextField] that automatically saves the
@@ -19,77 +103,7 @@ import 'doc_multiline_text_field.dart';
 ///
 /// This will show the value of the field 'name' from the document '123' in the collection 'users'.
 ///
-class DocFieldTextEdit2 extends ConsumerStatefulWidget {
-  final DocumentReference<Map<String, dynamic>> docRef;
-  final String field;
-  final InputDecoration? decoration;
-  final bool debugPrint;
-  final bool showSaveStatus;
-
-  DocFieldTextEdit2(this.docRef, this.field,
-      {this.decoration,
-      this.showSaveStatus = true,
-      this.debugPrint = false,
-      Key? key})
-      : super(key: key);
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      DocFieldTextEditState2();
-}
-
-class DocFieldTextEditState2 extends ConsumerState<DocFieldTextEdit2> {
-  Timer? descSaveTimer;
-  StreamSubscription? sub;
-  final TextEditingController ctrl = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    sub = widget.docRef.snapshots().listen((event) {
-      if (!event.exists) return;
-      if (widget.debugPrint)
-        print(
-            'DocFieldTextEditState2 ${widget.field} received ${event.data()![widget.field]}');
-      if (ctrl.text != event.data()![widget.field]) {
-        ctrl.text = event.data()![widget.field];
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    if (sub != null) {
-      print('sub cancelled');
-      sub!.cancel();
-      sub = null;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      decoration: widget.decoration,
-      controller: ctrl,
-      onChanged: (v) => saveValue(v),
-      onSubmitted: (v) => saveValue(v),
-    );
-  }
-
-  void saveValue(String v) {
-    if (descSaveTimer != null && descSaveTimer!.isActive) {
-      descSaveTimer!.cancel();
-    }
-    descSaveTimer = Timer(Duration(milliseconds: 200), () {
-      Map<String, dynamic> map = {};
-      map[widget.field] = v;
-      widget.docRef.set(map, SetOptions(merge: true));
-    });
-  }
-}
-
-class DocFieldTextEdit3 extends ConsumerStatefulWidget {
+class DocFieldTextEdit extends ConsumerStatefulWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
   final String field;
   final InputDecoration? decoration;
@@ -97,7 +111,7 @@ class DocFieldTextEdit3 extends ConsumerStatefulWidget {
   final bool showSaveStatus;
   final int saveDelay;
 
-  const DocFieldTextEdit3(this.docRef, this.field,
+  const DocFieldTextEdit(this.docRef, this.field,
       {this.decoration,
       this.saveDelay = 1000,
       this.showSaveStatus = true,
@@ -107,10 +121,10 @@ class DocFieldTextEdit3 extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      DocFieldTextEditState3();
+      DocFieldTextEditState();
 }
 
-class DocFieldTextEditState3 extends ConsumerState<DocFieldTextEdit3> {
+class DocFieldTextEditState extends ConsumerState<DocFieldTextEdit> {
   Timer? descSaveTimer;
   StreamSubscription? sub;
   final TextEditingController ctrl = TextEditingController();
@@ -123,7 +137,7 @@ class DocFieldTextEditState3 extends ConsumerState<DocFieldTextEdit3> {
       if (!event.exists) return;
       if (widget.debugPrint) {
         print(
-            'DocFieldTextEditState2 ${widget.field} received ${event.data()![widget.field]}');
+            'DocFieldTextEditState ${widget.field} received ${event.data()![widget.field]}');
       }
       if (ctrl.text != event.data()![widget.field]) {
         ctrl.text = event.data()![widget.field];
@@ -136,7 +150,7 @@ class DocFieldTextEditState3 extends ConsumerState<DocFieldTextEdit3> {
     super.dispose();
     if (sub != null) {
       if (widget.debugPrint) {
-        print('DocFieldTextEditState2 sub cancelled');
+        print('DocFieldTextEditState sub cancelled');
       }
       sub!.cancel();
       sub = null;

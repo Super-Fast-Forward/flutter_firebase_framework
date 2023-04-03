@@ -3,9 +3,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:providers/generic.dart';
-
 import 'doc_multiline_text_field.dart';
 
+///
+/// This is a widget that allows you to edit a field in a document.
+/// It is a wrapper around a [TextField] that automatically saves the
+/// value to the document.
+/// It is using the [StreamProvider] to listen to changes in the document.
+/// It is using a [Timer] to delay the save operation.
+/// This is to prevent the save operation from being called on every keystroke.
+///
+/// Example:
+///
+/// DocFieldTextEdit(FirebaseFirestore.instance.collection('users').doc('123'), 'name')
+///
+/// This will show the value of the field 'name' from the document '123' in the collection 'users'.
+///
 class DocFieldTextEdit2 extends ConsumerStatefulWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
   final String field;
@@ -190,8 +203,6 @@ class DocFieldTextEditState3 extends ConsumerState<DocFieldTextEdit3> {
   }
 }
 
-
-
 // class DocFieldTextEdit extends ConsumerStatefulWidget {
 //   final DocumentReference docRef;
 //   final String field;
@@ -303,7 +314,7 @@ class DocFieldTextEditState3 extends ConsumerState<DocFieldTextEdit3> {
 //   }
 // }
 
-// /// 
+// ///
 // /// Version of textedit without delayed saving
 // ///
 // // class DocFieldTextEdit extends ConsumerWidget {

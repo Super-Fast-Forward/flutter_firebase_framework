@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 PageRouteBuilder Function(RouteSettings settings) generateRoutes(
-        Map<String, WidgetBuilder> routes) =>
+        Map<String,
+                Widget Function(BuildContext context, RouteSettings settings)>
+            routes) =>
     (RouteSettings settings) {
-      WidgetBuilder builder;
       print('showing ${settings.name}');
-      builder = routes[settings.name]!;
+
       // switch (settings.name) {
       //   case '/providers':
       //     builder = (BuildContext context) => ProvidersPage();
@@ -24,7 +25,7 @@ PageRouteBuilder Function(RouteSettings settings) generateRoutes(
         settings: settings,
         pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) {
-          return builder(context);
+          return routes[settings.name]!(context, settings);
         },
         transitionsBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation, Widget child) {

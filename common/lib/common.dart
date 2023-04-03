@@ -11,8 +11,12 @@ typedef CR = CollectionReference<Map<String, dynamic>>;
 
 final kDB = FirebaseFirestore.instance;
 final kUSR = FirebaseAuth.instance.currentUser;
+
 final FFI = FirebaseFirestore.instance;
 final FAI = FirebaseAuth.instance;
+
+final USER = FirebaseAuth.instance.currentUser;
+final DB = FirebaseFirestore.instance;
 
 const WIDE_SCREEN_WIDTH = 600;
 

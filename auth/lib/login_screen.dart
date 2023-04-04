@@ -2,12 +2,23 @@ import 'package:auth/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+///
+/// This is the main widget for the login screen.
+/// It will display the login buttons on the left and the main title on the right.
+///
+/// Example:
+///  LoginScreen('Login', 'Login Buttons', {
+///   'Google': true,
+///  'Facebook': true,
+/// 'Twitter': true,
+/// });
+///
 class LoginScreen extends ConsumerWidget {
   final String screenTitle;
-  final String mainTitle;
+  final Widget aboutTheApp;
   final Map<String, bool> loginOptions;
 
-  const LoginScreen(this.mainTitle, this.screenTitle, this.loginOptions,
+  const LoginScreen(this.aboutTheApp, this.screenTitle, this.loginOptions,
       {Key? key})
       : super(key: key);
 
@@ -25,15 +36,9 @@ class LoginScreen extends ConsumerWidget {
       Expanded(
         flex: isWideScreen ? 1 : 0,
         child: Container(
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(color: Colors.blueGrey),
-          child: Text(
-            mainTitle,
-            style: TextStyle(
-              fontSize: 25,
-            ),
-          ),
-        ),
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(color: Colors.blueGrey),
+            child: aboutTheApp),
       ),
     ];
 

@@ -47,7 +47,7 @@ const dateTimeFormat = 'yyyy-MM-dd HH:mm:ss';
 ///
 String formatDate(Timestamp? dateTime, {String format = dateFormat}) {
   if (dateTime == null) return '';
-  return Jiffy(dateTime.toDate()).format(dateFormat);
+  return Jiffy(dateTime.toDate()).format(format);
 }
 
 ///
@@ -55,7 +55,7 @@ String formatDate(Timestamp? dateTime, {String format = dateFormat}) {
 ///
 String formatDateTime(Timestamp? dateTime, {String format = dateTimeFormat}) {
   if (dateTime == null) return '';
-  return Jiffy(dateTime.toDate()).format(dateTimeFormat);
+  return Jiffy(dateTime.toDate()).format(format);
 }
 
 Color Function(String color) getColor = (String color) {

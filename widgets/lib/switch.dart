@@ -15,8 +15,8 @@ class SwitchWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DocStreamWidget(
-        docStreamProvider: docSP(docRef.path),
-        builder: (context, doc) => Switch(
+        docSP(docRef.path),
+        (context, doc) => Switch(
             value: doc.data()?[field] ?? false,
             onChanged: (v) {
               docRef.set({field: v}, SetOptions(merge: true));

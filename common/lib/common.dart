@@ -30,7 +30,8 @@ String formatFirestoreDoc(DS doc) {
   return JsonEncoder.withIndent('  ').convert(jsonDecode(jsonString));
 }
 
-String getFirstCharactersOfString(String str, int length) {
+/// Returns a string with the first [length] characters of [str].
+String stringLeft(String str, int length) {
   if (str.length > length) {
     return str.substring(0, length);
   } else {
@@ -41,11 +42,13 @@ String getFirstCharactersOfString(String str, int length) {
 const dateFormat = 'yyyy-MM-dd';
 const dateTimeFormat = 'yyyy-MM-dd HH:mm:ss';
 
+/// returns a formatted date string
 String formatDate(Timestamp? dateTime) {
   if (dateTime == null) return '';
   return Jiffy(dateTime.toDate()).format(dateFormat);
 }
 
+/// returns a formatted date time string
 String formatDateTime(Timestamp? dateTime) {
   if (dateTime == null) return '';
   return Jiffy(dateTime.toDate()).format(dateTimeFormat);

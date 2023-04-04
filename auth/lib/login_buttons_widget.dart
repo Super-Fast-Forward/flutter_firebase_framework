@@ -32,8 +32,23 @@ final userLoggedIn = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
 final showLoading = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
     (ref) => AuthStateNotifier<bool>(false));
 
+/// LoginButtonsWidget is a widget that displays the login buttons.
+/// Each button is a [ElevatedButton] that calls the appropriate login function.
+/// The login functions are defined in the [LoginConfig] class.
+///
+/// Example:
+/// LoginButtonsWidget(
+///  screenTitle: 'Login',
+/// onLoginAnonymousButtonPressed: () {
+///  print('Login Anonymously');
+/// },
+///
 class LoginButtonsWidget extends ConsumerWidget {
   final String screenTitle;
+
+  /// This is the function that is called when the Anonymous Login button is pressed.
+  /// It is defined in the [LoginConfig] class.
+  /// Use it for a follow-up action when the user has logged in anonymously.
   final Function? onLoginAnonymousButtonPressed;
 
   ///Login Options are set in LoginConfig
@@ -145,11 +160,6 @@ class LoginButtonsWidget extends ConsumerWidget {
         iconButton("Log in Anonymous", Icons.account_circle, () async {
       if (onLoginAnonymousButtonPressed != null)
         onLoginAnonymousButtonPressed!();
-      // ref.read(isLoading.notifier).value = true;
-      await FirebaseAuth.instance.signInAnonymously().then((a) => {
-            //     ref.read(isLoggedIn.notifier).value = true,
-            //     ref.read(isLoading.notifier).value = false,
-          });
     });
 
     List<Widget> widgets = [

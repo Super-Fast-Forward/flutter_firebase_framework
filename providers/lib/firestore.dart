@@ -125,6 +125,8 @@ final AutoDisposeStreamProviderFamily<QuerySnapshot<Map<String, dynamic>>,
 });
 
 /// Riverpod Provider listening to a Firestore document by the path specified
+/// [path] is the path to the document
+///
 final AutoDisposeStreamProviderFamily<DocumentSnapshot<Map<String, dynamic>>,
         String> docSP =
     StreamProvider.autoDispose

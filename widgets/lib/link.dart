@@ -7,7 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 const _linkStyle = TextStyle(
   decoration: TextDecoration.underline,
   color: Colors.blue,
-  fontSize: 20,
 );
 
 class Link extends ConsumerWidget {

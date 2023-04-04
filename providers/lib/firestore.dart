@@ -45,6 +45,55 @@ class QueryParam extends Equatable {
       ];
 }
 
+class QueryParam2 extends Equatable {
+  final dynamic field;
+  // final Map<Symbol, dynamic> params;
+  final Object? isEqualTo;
+  final Object? isNotEqualTo;
+  final Object? isLessThan;
+  final Object? isLessThanOrEqualTo;
+  final Object? isGreaterThan;
+  final Object? isGreaterThanOrEqualTo;
+  final Object? arrayContains;
+  final List<Object?>? arrayContainsAny;
+  final List<Object?>? whereIn;
+  final List<Object?>? whereNotIn;
+
+  const QueryParam2(
+    this.field,
+    // this.params,
+    {
+    this.isEqualTo,
+    this.isNotEqualTo,
+    this.isLessThan,
+    this.isLessThanOrEqualTo,
+    this.isGreaterThan,
+    this.isGreaterThanOrEqualTo,
+    this.arrayContains,
+    this.arrayContainsAny,
+    this.whereIn,
+    this.whereNotIn,
+  });
+
+  @override
+  List<Object?> get props => [
+        field,
+        // ...params.entries
+        //     .map((e) => e.key.toString() + ":" + e.value.toString())
+        //     .toList(),
+        isEqualTo,
+        isNotEqualTo,
+        isLessThan,
+        isLessThanOrEqualTo,
+        isGreaterThan,
+        isGreaterThanOrEqualTo,
+        arrayContains,
+        arrayContainsAny,
+        whereIn,
+        whereNotIn,
+      ];
+}
+
 /// Filter for collection when listening to [filteredColSP]
 ///
 /// Example:
@@ -67,6 +116,31 @@ class QueryParams extends Equatable {
 
   final dynamic path;
   final List<QueryParam>? queries;
+  final String? orderBy;
+  final bool? isOrderDesc;
+  final int? limit;
+  final bool Function(QuerySnapshot a, QuerySnapshot<Map<String, dynamic>> b)?
+      distinct;
+
+  @override
+  List<Object?> get props => [
+        path,
+        ...(queries == null ? [] : queries!.map((qp) => qp..props).toList()),
+        orderBy,
+        limit
+      ];
+}
+
+class QueryParams2 extends Equatable {
+  const QueryParams2(this.path,
+      {this.queries,
+      this.orderBy,
+      this.isOrderDesc,
+      this.limit,
+      this.distinct});
+
+  final dynamic path;
+  final List<QueryParam2>? queries;
   final String? orderBy;
   final bool? isOrderDesc;
   final int? limit;
@@ -123,6 +197,85 @@ final AutoDisposeStreamProviderFamily<QuerySnapshot<Map<String, dynamic>>,
       ? q.snapshots()
       : q.snapshots().distinct(filter.distinct);
 });
+
+final f = colSPfiltered2('path to collection',
+    queries: [QueryParam2('entity', isEqualTo: 'test')]);
+
+/// Riverpod Stream Provider that listens to a collection with specific query criteria
+/// (see [QueryParams]) and [equals] function that is used by [Stream.distinct] to
+/// filter out events with unrelated changes.
+final AutoDisposeStreamProviderFamily<QuerySnapshot<Map<String, dynamic>>,
+        QueryParams2> filteredColSP2 =
+    StreamProvider.autoDispose
+        .family<QuerySnapshot<Map<String, dynamic>>, QueryParams2>(
+            (ref, filter) {
+  Query<Map<String, dynamic>> q =
+      FirebaseFirestore.instance.collection(filter.path);
+
+  if (filter.queries != null)
+    filter.queries!.forEach((query) {
+      Map<Symbol, dynamic>? params;
+      if (query.arrayContains != null) {
+        params = Map<Symbol, dynamic>.from(
+            {Symbol('arrayContains'): query.arrayContains});
+      } else if (query.arrayContainsAny != null) {
+        params = Map<Symbol, dynamic>.from(
+            {Symbol('arrayContainsAny'): query.arrayContainsAny});
+      } else if (query.isEqualTo != null) {
+        params =
+            Map<Symbol, dynamic>.from({Symbol('isEqualTo'): query.isEqualTo});
+      } else if (query.isGreaterThan != null) {
+        params = Map<Symbol, dynamic>.from(
+            {Symbol('isGreaterThan'): query.isGreaterThan});
+      } else if (query.isGreaterThanOrEqualTo != null) {
+        params = Map<Symbol, dynamic>.from(
+            {Symbol('isGreaterThanOrEqualTo'): query.isGreaterThanOrEqualTo});
+      } else if (query.isLessThan != null) {
+        params =
+            Map<Symbol, dynamic>.from({Symbol('isLessThan'): query.isLessThan});
+      } else if (query.isLessThanOrEqualTo != null) {
+        params = Map<Symbol, dynamic>.from(
+            {Symbol('isLessThanOrEqualTo'): query.isLessThanOrEqualTo});
+      } else if (query.isNotEqualTo != null) {
+        params = Map<Symbol, dynamic>.from(
+            {Symbol('isNotEqualTo'): query.isNotEqualTo});
+      } else if (query.whereIn != null) {
+        params = Map<Symbol, dynamic>.from({Symbol('whereIn'): query.whereIn});
+      } else if (query.whereNotIn != null) {
+        params =
+            Map<Symbol, dynamic>.from({Symbol('whereNotIn'): query.whereNotIn});
+      }
+
+      if (params != null) q = Function.apply(q.where, [query.field], params);
+    });
+
+  if (filter.orderBy != null)
+    q = q.orderBy(filter.orderBy!, descending: filter.isOrderDesc ?? false);
+
+  if (filter.limit != null) q = q.limit(filter.limit!);
+
+  return filter.distinct == null
+      ? q.snapshots()
+      : q.snapshots().distinct(filter.distinct);
+});
+
+AutoDisposeStreamProvider<QuerySnapshot<Map<String, dynamic>>> colSPfiltered2(
+        String path,
+        {
+        //List<QueryParam>? queries,
+        List<QueryParam2>? queries,
+        String? orderBy,
+        bool? isOrderDesc,
+        int? limit,
+        bool Function(
+                QuerySnapshot<Object?>, QuerySnapshot<Map<String, dynamic>>)?
+            distinct}) =>
+    filteredColSP2(QueryParams2(path,
+        queries: queries,
+        orderBy: orderBy,
+        distinct: distinct,
+        limit: limit,
+        isOrderDesc: isOrderDesc));
 
 /// Riverpod Provider listening to a Firestore document by the path specified
 /// [path] is the path to the document

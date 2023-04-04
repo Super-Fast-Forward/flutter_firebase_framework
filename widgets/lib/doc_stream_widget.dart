@@ -5,10 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class DocStreamWidget extends ConsumerWidget {
   final Widget Function(BuildContext context, DS doc) builder;
   final AutoDisposeStreamProvider<DS> docStreamProvider;
-  const DocStreamWidget({
+  const DocStreamWidget(
+    this.docStreamProvider,
+    this.builder, {
     super.key,
-    required this.docStreamProvider,
-    required this.builder,
   }) : assert(builder != null);
 
   @override

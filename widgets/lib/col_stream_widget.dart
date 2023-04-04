@@ -34,11 +34,11 @@ class ColStreamWidget<ItemWidgetType> extends ConsumerWidget {
       BuildContext context, QS col, List<ItemWidgetType> items) builder;
   final ItemWidgetType Function(BuildContext context, DS doc) itemBuilder;
   final AutoDisposeStreamProvider<QS> colStreamProvider;
-  const ColStreamWidget({
+  const ColStreamWidget(
+    this.colStreamProvider,
+    this.builder,
+    this.itemBuilder, {
     super.key,
-    required this.colStreamProvider,
-    required this.builder,
-    required this.itemBuilder,
   });
 
   @override

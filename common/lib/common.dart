@@ -42,14 +42,18 @@ String stringLeft(String str, int length) {
 const dateFormat = 'yyyy-MM-dd';
 const dateTimeFormat = 'yyyy-MM-dd HH:mm:ss';
 
-/// returns a formatted date string
-String formatDate(Timestamp? dateTime) {
+///
+/// Formats Firestore Timestamp to a date string
+///
+String formatDate(Timestamp? dateTime, {String format = dateFormat}) {
   if (dateTime == null) return '';
   return Jiffy(dateTime.toDate()).format(dateFormat);
 }
 
-/// returns a formatted date time string
-String formatDateTime(Timestamp? dateTime) {
+///
+/// Formats Firestore Timestamp to a date time string
+///
+String formatDateTime(Timestamp? dateTime, {String format = dateTimeFormat}) {
   if (dateTime == null) return '';
   return Jiffy(dateTime.toDate()).format(dateTimeFormat);
 }

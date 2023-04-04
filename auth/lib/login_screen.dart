@@ -35,10 +35,7 @@ class LoginScreen extends ConsumerWidget {
           ))),
       Expanded(
         flex: isWideScreen ? 1 : 0,
-        child: Container(
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(color: Colors.blueGrey),
-            child: aboutTheApp),
+        child: aboutTheApp,
       ),
     ];
 

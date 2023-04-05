@@ -15,18 +15,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// subscription.
 ///
 /// ColStreamWidget(
-///            colStreamProvider: userAppCommentFamilyProvider(appId),
-///           builder: (context, col, items) => ListView(
-///                shrinkWrap: true,
-///               children: items,
-///            ),
-///         itemBuilder: (c, e) => DocStreamWidget(
-///              docStreamProvider: docSP(e.reference.path),
-///             builder: (c, doc) => Row(
-///              children: [
-///            Text(doc.data()!['text'] ?? ''),
-///          ],
-///       ),
+///   colSP('test_collection'),
+///     (context, col, items) => ListView(
+///       shrinkWrap: true,
+///       children: items,
+///     ),
+///     (c, e) => Text(e.data()['text']
 ///    )),
 ///
 class ColStreamWidget<ItemWidgetType> extends ConsumerWidget {
@@ -34,11 +28,13 @@ class ColStreamWidget<ItemWidgetType> extends ConsumerWidget {
       BuildContext context, QS col, List<ItemWidgetType> items) builder;
   final ItemWidgetType Function(BuildContext context, DS doc) itemBuilder;
   final AutoDisposeStreamProvider<QS> colStreamProvider;
+  final Widget? loader;
   const ColStreamWidget(
     this.colStreamProvider,
     this.builder,
     this.itemBuilder, {
     super.key,
+    this.loader,
   });
 
   @override
@@ -48,6 +44,6 @@ class ColStreamWidget<ItemWidgetType> extends ConsumerWidget {
             return builder(context, col,
                 col.docs.map((doc) => itemBuilder(context, doc)).toList());
           },
-          loading: () => Text('loading'),
+          loading: () => loader == null ? Container() : loader!,
           error: (e, s) => ErrorWidget(e));
 }

@@ -35,6 +35,7 @@ dependencies:
       path: theme
   url_launcher: ^6.1.10
 
+
 dependency_overrides:
   common:
     path: ../common

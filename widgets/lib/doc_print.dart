@@ -8,9 +8,8 @@ import 'doc_stream_widget.dart';
 
 class DocPrintWidget extends ConsumerWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
-  final String field;
 
-  DocPrintWidget(this.docRef, this.field, {Key? key}) : super(key: key);
+  DocPrintWidget(this.docRef, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

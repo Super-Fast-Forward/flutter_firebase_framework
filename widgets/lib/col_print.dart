@@ -8,9 +8,8 @@ import 'col_stream_widget.dart';
 
 class ColPrintWidget extends ConsumerWidget {
   final CollectionReference<Map<String, dynamic>> docRef;
-  final String field;
 
-  ColPrintWidget(this.docRef, this.field, {Key? key}) : super(key: key);
+  ColPrintWidget(this.docRef, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ColStreamWidget<Widget>(

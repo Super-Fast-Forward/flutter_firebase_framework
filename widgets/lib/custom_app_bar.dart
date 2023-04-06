@@ -26,7 +26,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final Widget themeButton;
   final bool showUserAvatar;
   final bool showThemeButton;
-  final ValueChanged<String>? onTabSelected;
+  final Function(BuildContext context, int tabIndex, String tab)? onTabSelected;
 
   CustomAppBar({
     Key? key,

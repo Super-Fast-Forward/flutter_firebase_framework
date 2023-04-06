@@ -43,7 +43,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   Widget _buildTabBar(BuildContext context, WidgetRef ref) {
     return tabs == null
-        ? Container()
+        ? Text('no tabs') //Container()
         : Align(
             child: SizedBox(
                 width: 800,
@@ -63,9 +63,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                             style: Theme.of(context).textTheme.titleSmall,
                           )))
                       .toList(),
-                  onTap: (index) {
-                    Navigator.of(context).pushNamed(tabs![index]);
-                  },
+                  onTap: (index) => onTabSelected?.call(tabs![index]),
                 )));
   }
 }

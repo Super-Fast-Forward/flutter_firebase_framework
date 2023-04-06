@@ -26,6 +26,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final Widget themeButton;
   final bool showUserAvatar;
   final bool showThemeButton;
+  final double maxTabWidth;
   final Function(BuildContext context, int tabIndex, String tab)? onTabSelected;
 
   CustomAppBar({
@@ -38,6 +39,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
     this.userAvatar = const CurrentUserAvatarExtended(),
     this.themeButton = const ThemeSwitch(),
     this.onTabSelected,
+    this.maxTabWidth = 100,
   }) : super(key: key);
 
   @override
@@ -68,21 +70,29 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   Widget _buildTabBar(BuildContext context, WidgetRef ref) {
     return tabs == null
         ? Container()
-        : SizedBox(
-            width: 800,
-            child: TabBar(
-              tabs: tabs!
-                  .map((t) => Tab(
-                      iconMargin: EdgeInsets.all(0),
-                      child: Text(
-                        t,
-                        overflow: TextOverflow.fade,
-                        softWrap: false,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      )))
-                  .toList(),
-              onTap: (index) =>
-                  onTabSelected?.call(context, index, tabs![index]),
-            ));
+        :
+        // SizedBox(
+        //     width: tabs!.length * maxTabWidth,
+        //     child:
+        Container(
+            width: tabs!.length * maxTabWidth,
+            child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: tabs!.length * maxTabWidth,
+                ),
+                child: TabBar(
+                  tabs: tabs!
+                      .map((t) => Tab(
+                          iconMargin: EdgeInsets.all(0),
+                          child: Text(
+                            t,
+                            overflow: TextOverflow.fade,
+                            softWrap: false,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          )))
+                      .toList(),
+                  onTap: (index) =>
+                      onTabSelected?.call(context, index, tabs![index]),
+                )));
   }
 }

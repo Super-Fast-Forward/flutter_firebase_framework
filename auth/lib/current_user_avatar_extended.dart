@@ -30,7 +30,7 @@ class CurrentUserAvatarExtended extends ConsumerWidget {
         child: FirebaseAuth.instance.currentUser?.photoURL == null
             ? Icon(Icons.person)
             : CircleAvatar(
-                radius: 50,
+                radius: 20,
                 backgroundImage:
                     Image.network(FirebaseAuth.instance.currentUser!.photoURL!)
                         .image));

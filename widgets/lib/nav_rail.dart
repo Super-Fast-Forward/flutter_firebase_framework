@@ -2,6 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:providers/generic.dart';
 
+///
+/// NavigationRail widget with Riverpod state management
+///
+/// Example:
+///
+/// ```dart
+/// final navRail = NavRail(
+///  destinations: {
+///   'Home': NavigationRailDestination(
+///    icon: const Icon(Icons.home),
+///   selectedIcon: const Icon(Icons.home),
+///   label: const Text('Home'),
+///  ),
+/// 'Settings': NavigationRailDestination(
+///  icon: const Icon(Icons.settings),
+/// selectedIcon: const Icon(Icons.settings),
+/// label: const Text('Settings'),
+/// ),
+/// },
+/// );
+/// ```
+///
 class NavRail extends ConsumerWidget {
   static final SNP<int> selected = snp<int>(0);
 

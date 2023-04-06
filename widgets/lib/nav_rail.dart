@@ -25,7 +25,7 @@ import 'package:providers/generic.dart';
 /// ```
 ///
 class NavRail extends ConsumerWidget {
-  static final SNP<int> selected = snp<int>(0);
+  static final SNP<int?> selected = snp<int?>(null);
 
   final double? groupAlignment;
   final ValueChanged<int>? onDestinationSelected;

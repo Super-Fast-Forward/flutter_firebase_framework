@@ -25,7 +25,11 @@ PageRouteBuilder Function(RouteSettings settings) generateRoutes(
         settings: settings,
         pageBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation) {
-          return routes[settings.name]!(context, settings);
+          if (routes.containsKey(settings.name)) {
+            return routes[settings.name]!(context, settings);
+          }
+          //return routes[settings.name]!(context, settings);
+          throw Exception('Invalid route: ${settings.name}');
         },
         transitionsBuilder: (BuildContext context, Animation<double> animation,
             Animation<double> secondaryAnimation, Widget child) {

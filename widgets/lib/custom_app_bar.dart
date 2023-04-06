@@ -81,7 +81,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                         style: Theme.of(context).textTheme.titleSmall,
                       )))
                   .toList(),
-              onTap: (index) => onTabSelected?.call(tabs![index]),
+              onTap: (index) => onTabSelected?.call(context, index, tabs![index]),
             ));
   }
 }

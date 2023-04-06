@@ -70,18 +70,22 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
         ? Container()
         : SizedBox(
             width: 800,
-            child: TabBar(
-              tabs: tabs!
-                  .map((t) => Tab(
-                      iconMargin: EdgeInsets.all(0),
-                      child: Text(
-                        t,
-                        overflow: TextOverflow.fade,
-                        softWrap: false,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      )))
-                  .toList(),
-              onTap: (index) => onTabSelected?.call(context, index, tabs![index]),
-            ));
+            child: DefaultTabController(
+                initialIndex: 0,
+                length: tabs!.length,
+                child: TabBar(
+                  tabs: tabs!
+                      .map((t) => Tab(
+                          iconMargin: EdgeInsets.all(0),
+                          child: Text(
+                            t,
+                            overflow: TextOverflow.fade,
+                            softWrap: false,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          )))
+                      .toList(),
+                  onTap: (index) =>
+                      onTabSelected?.call(context, index, tabs![index]),
+                )));
   }
 }

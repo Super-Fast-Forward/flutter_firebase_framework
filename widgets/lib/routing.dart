@@ -5,21 +5,7 @@ PageRouteBuilder Function(RouteSettings settings) generateRoutes(
                 Widget Function(BuildContext context, RouteSettings settings)>
             routes) =>
     (RouteSettings settings) {
-      print('showing ${settings.name}');
-
-      // switch (settings.name) {
-      //   case '/providers':
-      //     builder = (BuildContext context) => ProvidersPage();
-      //     break;
-      //   case '/auth':
-      //     builder = (BuildContext context) => AuthPage();
-      //     break;
-      //   case '/widgets':
-      //     builder = (BuildContext context) => WidgetsPage();
-      //     break;
-      //   default:
-      //     throw Exception('Invalid route: ${settings.name}');
-      // }
+      // print('showing ${settings.name}');
 
       return PageRouteBuilder(
         settings: settings,
@@ -37,6 +23,52 @@ PageRouteBuilder Function(RouteSettings settings) generateRoutes(
         },
       );
     };
+
+PageRouteBuilder Function(RouteSettings settings) generateRoutesWithRegexp(
+        Map<String,
+                Widget Function(BuildContext context, RouteSettings settings)>
+            routes) =>
+    (RouteSettings settings) {
+      // print('showing ${settings.name}');
+
+      for (var route in routes.keys) {
+        final RegExp pattern = RegExp(route);
+        final match = pattern.firstMatch(settings.name!);
+        if (match != null) {
+          final String execId = match.group(1)!;
+          final String docId = match.group(2)!;
+          // return MaterialPageRoute(
+          //   builder: (BuildContext context) => routes[route]!(context, settings),
+          //   settings: settings,
+          // );
+
+          return PageRouteBuilder(
+            settings: settings,
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) {
+              if (routes.containsKey(settings.name)) {
+                //return routes[settings.name]!(context, settings);
+                return routes[route]!(
+                    context,
+                    RouteSettings(
+                        name: settings.name,
+                        arguments: {'execId': execId, 'docId': docId}));
+              }
+              //return routes[settings.name]!(context, settings);
+              throw Exception('Invalid route: ${settings.name}');
+            },
+            transitionsBuilder: (BuildContext context,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation,
+                Widget child) {
+              return child;
+            },
+          );
+        }
+      }
+      throw Exception('Invalid route: ${settings.name}');
+    };
+
 
 // PageRouteBuilder generateRoute(RouteSettings settings) {
 //   WidgetBuilder builder;

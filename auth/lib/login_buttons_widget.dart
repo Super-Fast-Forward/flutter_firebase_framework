@@ -90,7 +90,7 @@ class LoginButtonsWidget extends ConsumerWidget {
               child: Container(
                 margin: const EdgeInsets.only(right: 20),
                 child: SvgPicture.asset('/assets/$imageName.svg',
-                    package: 'flutter_firebase_auth', width: 30, height: 30),
+                    package: 'auth', width: 30, height: 30),
               ),
             ),
             SizedBox(width: 180, child: Text(title)),

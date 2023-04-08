@@ -38,4 +38,6 @@ dev_dependencies:
 flutter:
   # To add assets to your package, add an assets section, like this:
   assets:
-    - assets/
+    - assets/google_logo.svg
+    - assets/github_logo.svg
+      

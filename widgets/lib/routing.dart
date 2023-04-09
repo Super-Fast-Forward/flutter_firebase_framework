@@ -69,6 +69,33 @@ PageRouteBuilder Function(RouteSettings settings) generateRoutesWithRegexp(
       throw Exception('Invalid route: ${settings.name}');
     };
 
+String _routePattern(String route) {
+  return route.replaceAllMapped(RegExp(r'\{(\w+)\}'), (match) => r'(\w+)');
+}
+
+RouteFactory generateRoutes2(
+    Map<String, Widget Function(BuildContext, RouteSettings)> routeBuilders) {
+  return (RouteSettings settings) {
+    for (final route in routeBuilders.keys) {
+      final RegExp pattern = RegExp('^${_routePattern(route)}\$');
+      final match = pattern.firstMatch(settings.name!);
+      if (match != null) {
+        final builder = routeBuilders[route]!;
+        return MaterialPageRoute(
+          builder: (BuildContext context) => builder(context, settings),
+          settings: settings,
+        );
+      }
+    }
+
+    // If no match is found, return an error page.
+    return MaterialPageRoute(
+      builder: (BuildContext context) => ErrorPage(),
+      settings: settings,
+    );
+  };
+}
+
 
 // PageRouteBuilder generateRoute(RouteSettings settings) {
 //   WidgetBuilder builder;

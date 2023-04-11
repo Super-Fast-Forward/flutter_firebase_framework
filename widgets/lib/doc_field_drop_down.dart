@@ -41,22 +41,23 @@ class DocFieldDropDown extends ConsumerWidget {
               ));
 }
 
-class DocDropDown2 extends ConsumerStatefulWidget {
+class DocFieldDropDown2 extends ConsumerStatefulWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
   final String field;
+  final bool enabled;
 
   final Function(String?)? onChanged;
   final StateNotifierProvider<GenericStateNotifier<String?>, String?>? valueNP;
   final List<String> items;
 
-  const DocDropDown2(this.docRef, this.field, this.items,
-      {this.valueNP, this.onChanged, super.key});
+  const DocFieldDropDown2(this.docRef, this.field, this.items,
+      {this.valueNP, this.onChanged, this.enabled = false, super.key});
 
   @override
-  ConsumerState<DocDropDown2> createState() => DocDropDown2State();
+  ConsumerState<DocFieldDropDown2> createState() => DocDropDown2State();
 }
 
-class DocDropDown2State extends ConsumerState<DocDropDown2> {
+class DocDropDown2State extends ConsumerState<DocFieldDropDown2> {
   StreamSubscription? sub;
   final TextEditingController ctrl = TextEditingController();
   String? val;
@@ -88,14 +89,16 @@ class DocDropDown2State extends ConsumerState<DocDropDown2> {
   Widget build(BuildContext context) {
     return DropdownButton<String>(
       value: val,
-      onChanged: (String? newValue) {
-        widget.docRef.update({widget.field: newValue});
+      onChanged: !widget.enabled
+          ? null
+          : (String? newValue) {
+              widget.docRef.update({widget.field: newValue});
 
-        if (widget.valueNP != null)
-          ref.read(widget.valueNP!.notifier).value = val;
+              if (widget.valueNP != null)
+                ref.read(widget.valueNP!.notifier).value = val;
 
-        if (widget.onChanged != null) widget.onChanged!(newValue);
-      },
+              if (widget.onChanged != null) widget.onChanged!(newValue);
+            },
       items: widget.items.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,

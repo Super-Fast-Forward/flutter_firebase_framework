@@ -9,8 +9,10 @@ import 'doc_stream_widget.dart';
 class SwitchWidget extends ConsumerWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
   final String field;
+  final bool enabled;
 
-  SwitchWidget(this.docRef, this.field, {Key? key}) : super(key: key);
+  SwitchWidget(this.docRef, this.field, {this.enabled = true, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,8 +20,10 @@ class SwitchWidget extends ConsumerWidget {
         docSP(docRef.path),
         (context, doc) => Switch(
             value: doc.data()?[field] ?? false,
-            onChanged: (v) {
-              docRef.set({field: v}, SetOptions(merge: true));
-            }));
+            onChanged: !enabled
+                ? null
+                : (v) {
+                    docRef.set({field: v}, SetOptions(merge: true));
+                  }));
   }
 }

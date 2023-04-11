@@ -28,6 +28,7 @@ class DocFieldTextField extends ConsumerStatefulWidget {
   final TextAlign textAlign;
   final TextDirection? textDirection;
   final StrutStyle? strutStyle;
+  final bool enabled;
 
   DocFieldTextField(this.docRef, this.field, this.maxLines,
       {this.decoration,
@@ -35,6 +36,7 @@ class DocFieldTextField extends ConsumerStatefulWidget {
       this.textAlign = TextAlign.start,
       this.textDirection,
       this.strutStyle,
+      this.enabled = true,
       Key? key})
       : super(key: key);
 
@@ -79,6 +81,7 @@ class DocMultilineTextFieldState extends ConsumerState<DocFieldTextField> {
       textDirection: widget.textDirection,
       strutStyle: widget.strutStyle,
       controller: ctrl,
+      enabled: widget.enabled,
       onChanged: (v) {
         if (descSaveTimer != null && descSaveTimer!.isActive) {
           descSaveTimer!.cancel();

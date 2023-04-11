@@ -3,91 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:providers/generic.dart';
-import 'doc_multiline_text_field.dart';
-
-// ///
-// /// This is a widget that allows you to edit a field in a document.
-// /// It is a wrapper around a [TextField] that automatically saves the
-// /// value to the document.
-// /// It is using the [StreamProvider] to listen to changes in the document.
-// /// It is using a [Timer] to delay the save operation.
-// /// This is to prevent the save operation from being called on every keystroke.
-// ///
-// /// Example:
-// ///
-// /// DocFieldTextEdit(FirebaseFirestore.instance.collection('users').doc('123'), 'name')
-// ///
-// /// This will show the value of the field 'name' from the document '123' in the collection 'users'.
-// ///
-// class DocFieldTextEdit extends ConsumerStatefulWidget {
-//   final DocumentReference<Map<String, dynamic>> docRef;
-//   final String field;
-//   final InputDecoration? decoration;
-//   final bool debugPrint;
-//   final bool showSaveStatus;
-
-//   DocFieldTextEdit(this.docRef, this.field,
-//       {this.decoration,
-//       this.showSaveStatus = true,
-//       this.debugPrint = false,
-//       Key? key})
-//       : super(key: key);
-
-//   @override
-//   ConsumerState<ConsumerStatefulWidget> createState() =>
-//       DocFieldTextEditState();
-// }
-
-// class DocFieldTextEditState extends ConsumerState<DocFieldTextEdit> {
-//   Timer? descSaveTimer;
-//   StreamSubscription? sub;
-//   final TextEditingController ctrl = TextEditingController();
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     sub = widget.docRef.snapshots().listen((event) {
-//       if (!event.exists) return;
-//       if (widget.debugPrint)
-//         print(
-//             'DocFieldTextEditState2 ${widget.field} received ${event.data()![widget.field]}');
-//       if (ctrl.text != event.data()![widget.field]) {
-//         ctrl.text = event.data()![widget.field];
-//       }
-//     });
-//   }
-
-//   @override
-//   void dispose() {
-//     super.dispose();
-//     if (sub != null) {
-//       print('sub cancelled');
-//       sub!.cancel();
-//       sub = null;
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return TextField(
-//       decoration: widget.decoration,
-//       controller: ctrl,
-//       onChanged: (v) => saveValue(v),
-//       onSubmitted: (v) => saveValue(v),
-//     );
-//   }
-
-//   void saveValue(String v) {
-//     if (descSaveTimer != null && descSaveTimer!.isActive) {
-//       descSaveTimer!.cancel();
-//     }
-//     descSaveTimer = Timer(Duration(milliseconds: 200), () {
-//       Map<String, dynamic> map = {};
-//       map[widget.field] = v;
-//       widget.docRef.set(map, SetOptions(merge: true));
-//     });
-//   }
-// }
+import 'doc_field_text_field.dart';
 
 ///
 /// This is a widget that allows you to edit a field in a document.
@@ -110,12 +26,14 @@ class DocFieldTextEdit extends ConsumerStatefulWidget {
   final bool debugPrint;
   final bool showSaveStatus;
   final int saveDelay;
+  final bool enabled;
 
   const DocFieldTextEdit(this.docRef, this.field,
       {this.decoration,
       this.saveDelay = 1000,
       this.showSaveStatus = true,
       this.debugPrint = false,
+      this.enabled = true,
       Key? key})
       : super(key: key);
 
@@ -164,6 +82,7 @@ class DocFieldTextEditState extends ConsumerState<DocFieldTextEdit> {
         TextField(
             decoration: widget.decoration,
             controller: ctrl,
+            enabled: widget.enabled,
             onChanged: (v) {
               ref.read(status.notifier).value = 'changed';
               if (descSaveTimer != null && descSaveTimer!.isActive) {
@@ -366,3 +285,89 @@ class DocFieldTextEditState extends ConsumerState<DocFieldTextEdit> {
 // //                 ));
 // //   }
 // // }
+
+
+
+// ///
+// /// This is a widget that allows you to edit a field in a document.
+// /// It is a wrapper around a [TextField] that automatically saves the
+// /// value to the document.
+// /// It is using the [StreamProvider] to listen to changes in the document.
+// /// It is using a [Timer] to delay the save operation.
+// /// This is to prevent the save operation from being called on every keystroke.
+// ///
+// /// Example:
+// ///
+// /// DocFieldTextEdit(FirebaseFirestore.instance.collection('users').doc('123'), 'name')
+// ///
+// /// This will show the value of the field 'name' from the document '123' in the collection 'users'.
+// ///
+// class DocFieldTextEdit extends ConsumerStatefulWidget {
+//   final DocumentReference<Map<String, dynamic>> docRef;
+//   final String field;
+//   final InputDecoration? decoration;
+//   final bool debugPrint;
+//   final bool showSaveStatus;
+
+//   DocFieldTextEdit(this.docRef, this.field,
+//       {this.decoration,
+//       this.showSaveStatus = true,
+//       this.debugPrint = false,
+//       Key? key})
+//       : super(key: key);
+
+//   @override
+//   ConsumerState<ConsumerStatefulWidget> createState() =>
+//       DocFieldTextEditState();
+// }
+
+// class DocFieldTextEditState extends ConsumerState<DocFieldTextEdit> {
+//   Timer? descSaveTimer;
+//   StreamSubscription? sub;
+//   final TextEditingController ctrl = TextEditingController();
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     sub = widget.docRef.snapshots().listen((event) {
+//       if (!event.exists) return;
+//       if (widget.debugPrint)
+//         print(
+//             'DocFieldTextEditState2 ${widget.field} received ${event.data()![widget.field]}');
+//       if (ctrl.text != event.data()![widget.field]) {
+//         ctrl.text = event.data()![widget.field];
+//       }
+//     });
+//   }
+
+//   @override
+//   void dispose() {
+//     super.dispose();
+//     if (sub != null) {
+//       print('sub cancelled');
+//       sub!.cancel();
+//       sub = null;
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return TextField(
+//       decoration: widget.decoration,
+//       controller: ctrl,
+//       onChanged: (v) => saveValue(v),
+//       onSubmitted: (v) => saveValue(v),
+//     );
+//   }
+
+//   void saveValue(String v) {
+//     if (descSaveTimer != null && descSaveTimer!.isActive) {
+//       descSaveTimer!.cancel();
+//     }
+//     descSaveTimer = Timer(Duration(milliseconds: 200), () {
+//       Map<String, dynamic> map = {};
+//       map[widget.field] = v;
+//       widget.docRef.set(map, SetOptions(merge: true));
+//     });
+//   }
+// }

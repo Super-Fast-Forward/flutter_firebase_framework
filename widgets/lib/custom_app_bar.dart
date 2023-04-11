@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:widgets/theme_switch.dart';
 
+enum TabsAlignment { left, center, right }
+
 /// A custom app bar that can be used in place of the default [AppBar] widget.
 /// It can be used to add a [TabBar] to the [AppBar] or to add a [ThemeSwitch] and
 /// [CurrentUserAvatarExtended] to the [AppBar] actions.
@@ -27,6 +29,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final bool showUserAvatar;
   final bool showThemeButton;
   final double maxTabWidth;
+  final TabsAlignment tabsAlignment;
   final Function(BuildContext context, int tabIndex, String tab)? onTabSelected;
 
   CustomAppBar({
@@ -40,6 +43,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
     this.themeButton = const ThemeSwitch(),
     this.onTabSelected,
     this.maxTabWidth = 100,
+    this.tabsAlignment = TabsAlignment.left,
   }) : super(key: key);
 
   @override
@@ -51,9 +55,13 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                if (tabsAlignment == TabsAlignment.right)
+                  Expanded(child: Spacer()),
                 Expanded(
                   child: _buildTabBar(context, ref),
-                )
+                ),
+                if (tabsAlignment == TabsAlignment.left)
+                  Expanded(child: Spacer()),
               ],
             )
           : title,

@@ -158,8 +158,10 @@ class LoginButtonsWidget extends ConsumerWidget {
 
     final ElevatedButton anonymousButton =
         iconButton("Log in Anonymous", Icons.account_circle, () async {
-      if (onLoginAnonymousButtonPressed != null)
-        onLoginAnonymousButtonPressed!();
+      FirebaseAuth.instance.signInAnonymously().then((a) => {
+            if (onLoginAnonymousButtonPressed != null)
+              onLoginAnonymousButtonPressed!()
+          });
     });
 
     List<Widget> widgets = [

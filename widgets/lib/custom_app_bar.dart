@@ -55,13 +55,11 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                if (tabsAlignment == TabsAlignment.right)
-                  Expanded(child: Spacer()),
+                if (tabsAlignment == TabsAlignment.right) Spacer(),
                 Expanded(
                   child: _buildTabBar(context, ref),
                 ),
-                if (tabsAlignment == TabsAlignment.left)
-                  Expanded(child: Spacer()),
+                if (tabsAlignment == TabsAlignment.left) Spacer(),
               ],
             )
           : title,

@@ -27,6 +27,7 @@ class DocFieldTextEdit extends ConsumerStatefulWidget {
   final bool showSaveStatus;
   final int saveDelay;
   final bool enabled;
+  final Function? onChanged;
 
   const DocFieldTextEdit(this.docRef, this.field,
       {this.decoration,
@@ -34,6 +35,7 @@ class DocFieldTextEdit extends ConsumerStatefulWidget {
       this.showSaveStatus = true,
       this.debugPrint = false,
       this.enabled = true,
+      this.onChanged = null,
       Key? key})
       : super(key: key);
 
@@ -90,6 +92,7 @@ class DocFieldTextEditState extends ConsumerState<DocFieldTextEdit> {
               }
               descSaveTimer = Timer(
                   Duration(milliseconds: widget.saveDelay), () => saveValue(v));
+              if (widget.onChanged != null) widget.onChanged!();
             },
             onSubmitted: (v) {
               if (descSaveTimer != null && descSaveTimer!.isActive) {

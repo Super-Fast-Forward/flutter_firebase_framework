@@ -29,7 +29,7 @@ class DocFieldText extends ConsumerWidget {
   final TextWidthBasis textWidthBasis;
   final TextHeightBehavior? textHeightBehavior;
   final bool? excludeFromSemantics;
-  final Function(BuildContext, WidgetRef, String)? builder;
+  final Function(BuildContext, WidgetRef, dynamic)? builder;
 
   DocFieldText(this.docRef, this.field,
       {Key? key,

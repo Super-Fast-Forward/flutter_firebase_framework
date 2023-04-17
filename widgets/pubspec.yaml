@@ -38,6 +38,7 @@ dependencies:
   code_text_field: ^1.1.0
   google_fonts: ^4.0.3
   flutter_highlight: ^0.7.0
+  highlight: ^0.7.0
 
 
 dependency_overrides:

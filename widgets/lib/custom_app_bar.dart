@@ -82,10 +82,12 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
         // SizedBox(
         //     width: tabs!.length * maxTabWidth,
         //     child:
-        DefaultTabController(
-            key: ValueKey('DefaultTabController'),
-            length: tabs!.length,
-            child: Container(
+        // DefaultTabController(
+        //     key: ValueKey('DefaultTabController'),
+        //     length: tabs!.length,
+        //     child: 
+            
+            Container(
                 width: tabs!.length * maxTabWidth,
                 child: ConstrainedBox(
                     constraints: BoxConstraints(

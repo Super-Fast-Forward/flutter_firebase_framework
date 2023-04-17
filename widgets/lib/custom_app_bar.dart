@@ -55,8 +55,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                if (tabsAlignment == TabsAlignment.right)
-                  Spacer(),
+                if (tabsAlignment == TabsAlignment.right) Spacer(),
                 Expanded(
                   child: _buildTabBar(context, ref),
                 ),
@@ -85,29 +84,29 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
         // DefaultTabController(
         //     key: ValueKey('DefaultTabController'),
         //     length: tabs!.length,
-        //     child: 
-            
-            Container(
-                width: tabs!.length * maxTabWidth,
-                child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: tabs!.length * maxTabWidth,
-                    ),
-                    child: TabBar(
-                      tabs: tabs!
-                          .map((t) => Tab(
-                              iconMargin: EdgeInsets.all(0),
-                              child: Text(
-                                t,
-                                overflow: TextOverflow.fade,
-                                softWrap: false,
-                                style: Theme.of(context).textTheme.titleSmall,
-                              )))
-                          .toList(),
-                      onTap: (index) => onTabSelected == null
-                          ? Navigator.of(context)
-                              .pushNamed('/${tabs![index].toLowerCase()}')
-                          : onTabSelected?.call(context, index, tabs![index]),
-                    ))));
+        //     child:
+
+        Container(
+            width: tabs!.length * maxTabWidth,
+            child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: tabs!.length * maxTabWidth,
+                ),
+                child: TabBar(
+                  tabs: tabs!
+                      .map((t) => Tab(
+                          iconMargin: EdgeInsets.all(0),
+                          child: Text(
+                            t,
+                            overflow: TextOverflow.fade,
+                            softWrap: false,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          )))
+                      .toList(),
+                  onTap: (index) => onTabSelected == null
+                      ? Navigator.of(context)
+                          .pushNamed('/${tabs![index].toLowerCase()}')
+                      : onTabSelected?.call(context, index, tabs![index]),
+                )));
   }
 }

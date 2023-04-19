@@ -95,6 +95,7 @@ class DocCodeEditorState extends ConsumerState<DocCodeEditor> {
         data: CodeThemeData(styles: monokaiSublimeTheme),
         child: CodeField(
             expands: true,
+            enabled: widget.enabled,
             wrap: true,
             controller: _controller,
             onChanged: (value) {

@@ -8,7 +8,7 @@ void copyCol(
   });
 }
 
-void deleteCol(CollectionReference ref) async {
+Future<void> deleteCol(CollectionReference ref) async {
   var batch = FirebaseFirestore.instance.batch();
   var counter = 0;
 

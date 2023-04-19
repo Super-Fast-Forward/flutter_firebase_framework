@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-void copyCol(
+Future<void> copyCol(
     CollectionReference source, CollectionReference destination) async {
   QuerySnapshot querySnapshot = await source.get();
   querySnapshot.docs.forEach((doc) async {

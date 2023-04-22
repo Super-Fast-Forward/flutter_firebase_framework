@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:providers/firestore.dart';
 import 'package:providers/generic.dart';
+
+import 'col_stream_builder.dart';
 
 class DocFieldDropDown extends ConsumerWidget {
   final DocumentReference docRef;
@@ -170,4 +173,74 @@ class DocDropDown3State extends ConsumerState<DocFieldDropDown3> {
       items: widget.items,
     );
   }
+}
+
+class DocFieldColStreamDropDown extends ConsumerStatefulWidget {
+  final DocumentReference<Map<String, dynamic>> docRef;
+  final String field;
+  final AutoDisposeStreamProvider<QS> colStreamProvider;
+  final bool enabled;
+  final List<DropdownMenuItem> Function(BuildContext context, QS col) builder;
+
+  final Function(String?)? onChanged;
+  final StateNotifierProvider<GenericStateNotifier<String?>, String?>? valueNP;
+
+  const DocFieldColStreamDropDown(
+      this.docRef, this.field, this.colStreamProvider, this.builder,
+      {this.valueNP, this.onChanged, this.enabled = false, super.key});
+
+  @override
+  ConsumerState<DocFieldColStreamDropDown> createState() =>
+      DocFieldColStreamDropDownState();
+}
+
+class DocFieldColStreamDropDownState
+    extends ConsumerState<DocFieldColStreamDropDown> {
+  StreamSubscription? sub;
+  final TextEditingController ctrl = TextEditingController();
+  String? val;
+
+  @override
+  void initState() {
+    super.initState();
+    sub = widget.docRef
+        .snapshots()
+        .listen((DocumentSnapshot<Map<String, dynamic>> event) {
+      if (!event.exists) return;
+      val = event.data()![widget.field] as String?;
+
+      if (widget.valueNP != null)
+        ref.read(widget.valueNP!.notifier).value = val;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (sub != null) {
+      sub!.cancel();
+      sub = null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => ColStreamBuilder(
+        colSPfiltered2('artifact',
+            orderBy: 'timeCreated',
+            isOrderDesc: true,
+            queries: [QueryParam2('author', isEqualTo: kUSR!.uid)]),
+        (context, docs) => DropdownButton<dynamic>(
+            value: val,
+            onChanged: !widget.enabled
+                ? null
+                : (dynamic newValue) {
+                    widget.docRef.update({widget.field: newValue});
+
+                    if (widget.valueNP != null)
+                      ref.read(widget.valueNP!.notifier).value = val;
+
+                    if (widget.onChanged != null) widget.onChanged!(newValue);
+                  },
+            items: widget.builder(context, docs)),
+      );
 }

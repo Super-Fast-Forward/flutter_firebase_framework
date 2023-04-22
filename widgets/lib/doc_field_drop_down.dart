@@ -108,3 +108,67 @@ class DocDropDown2State extends ConsumerState<DocFieldDropDown2> {
     );
   }
 }
+
+class DocFieldDropDown3 extends ConsumerStatefulWidget {
+  final DocumentReference<Map<String, dynamic>> docRef;
+  final String field;
+  final bool enabled;
+
+  final Function(String?)? onChanged;
+  final StateNotifierProvider<GenericStateNotifier<String?>, String?>? valueNP;
+  final List<DropdownMenuItem<dynamic>> items;
+  final List<String> values;
+
+  const DocFieldDropDown3(this.docRef, this.field, this.values, this.items,
+      {this.valueNP, this.onChanged, this.enabled = false, super.key});
+
+  @override
+  ConsumerState<DocFieldDropDown3> createState() => DocDropDown3State();
+}
+
+class DocDropDown3State extends ConsumerState<DocFieldDropDown3> {
+  StreamSubscription? sub;
+  final TextEditingController ctrl = TextEditingController();
+  String? val;
+
+  @override
+  void initState() {
+    super.initState();
+    sub = widget.docRef
+        .snapshots()
+        .listen((DocumentSnapshot<Map<String, dynamic>> event) {
+      if (!event.exists) return;
+      val = event.data()![widget.field] as String?;
+
+      if (widget.valueNP != null)
+        ref.read(widget.valueNP!.notifier).value = val;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (sub != null) {
+      sub!.cancel();
+      sub = null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<dynamic>(
+      value: val,
+      onChanged: !widget.enabled
+          ? null
+          : (dynamic newValue) {
+              widget.docRef.update({widget.field: newValue});
+
+              if (widget.valueNP != null)
+                ref.read(widget.valueNP!.notifier).value = val;
+
+              if (widget.onChanged != null) widget.onChanged!(newValue);
+            },
+      items: widget.items,
+    );
+  }
+}

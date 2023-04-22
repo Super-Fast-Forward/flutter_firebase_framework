@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Copies all documents from one collection to another.
 Future<void> copyCol(
     CollectionReference source, CollectionReference destination) async {
   QuerySnapshot querySnapshot = await source.get();
@@ -8,6 +9,7 @@ Future<void> copyCol(
   });
 }
 
+/// Deletes all documents in a collection.
 Future<void> deleteCol(CollectionReference ref) async {
   var batch = FirebaseFirestore.instance.batch();
   var counter = 0;

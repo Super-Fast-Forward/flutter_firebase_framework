@@ -117,9 +117,8 @@ class DocFieldDropDown3 extends ConsumerStatefulWidget {
   final Function(String?)? onChanged;
   final StateNotifierProvider<GenericStateNotifier<String?>, String?>? valueNP;
   final List<DropdownMenuItem<dynamic>> items;
-  final List<String> values;
 
-  const DocFieldDropDown3(this.docRef, this.field, this.values, this.items,
+  const DocFieldDropDown3(this.docRef, this.field, this.items,
       {this.valueNP, this.onChanged, this.enabled = false, super.key});
 
   @override

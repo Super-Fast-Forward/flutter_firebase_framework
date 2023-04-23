@@ -9,6 +9,7 @@ import 'package:highlight/languages/dart.dart';
 import 'package:highlight/languages/python.dart';
 import 'package:highlight/languages/dart.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
+import 'package:providers/generic.dart';
 
 class DocCodeEditor extends ConsumerStatefulWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
@@ -25,6 +26,8 @@ class DocCodeEditor extends ConsumerStatefulWidget {
   final bool wraps;
   final Decoration? decoration;
   final Mode? language;
+  final int saveDelay;
+  final bool debugPrint;
 
   DocCodeEditor(this.docRef, this.field, this.styles,
       {this.decoration,
@@ -38,6 +41,8 @@ class DocCodeEditor extends ConsumerStatefulWidget {
       this.minLines,
       this.maxLines,
       this.language,
+      this.saveDelay = 1000,
+      this.debugPrint = false,
       Key? key})
       : super(key: key);
 
@@ -48,6 +53,8 @@ class DocCodeEditor extends ConsumerStatefulWidget {
 class DocCodeEditorState extends ConsumerState<DocCodeEditor> {
   Timer? descSaveTimer;
   StreamSubscription? sub;
+  final SNP status = snp<String>('saved');
+
   CodeController _controller = CodeController(
     // text: verDoc.data()?['code'] ?? '',
     patternMap: {
@@ -91,15 +98,58 @@ class DocCodeEditorState extends ConsumerState<DocCodeEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return CodeTheme(
-        data: CodeThemeData(styles: monokaiSublimeTheme),
-        child: CodeField(
-            expands: true,
-            enabled: widget.enabled,
-            wrap: true,
-            controller: _controller,
-            onChanged: (value) {
-              widget.docRef.update({'code': value});
-            }));
+    return Stack(children: [
+      CodeTheme(
+          data: CodeThemeData(styles: monokaiSublimeTheme),
+          child: CodeField(
+              expands: true,
+              enabled: widget.enabled,
+              wrap: true,
+              controller: _controller,
+              onChanged: (value) {
+                //widget.docRef.update({'code': value});
+                ref.read(status.notifier).value = 'changed';
+                if (descSaveTimer != null && descSaveTimer!.isActive) {
+                  descSaveTimer!.cancel();
+                }
+                descSaveTimer = Timer(Duration(milliseconds: widget.saveDelay),
+                    () => saveValue(value));
+                //if (widget.onChanged != null) widget.onChanged!(v);
+              })),
+      Positioned(
+          right: 0,
+          top: 0,
+          child: Icon(
+            ref.watch(status) == 'saved'
+                ? Icons.check_circle
+                : (ref.watch(status) == 'saving'
+                    ? Icons.save
+                    : (ref.watch(status) == 'error'
+                        ? Icons.error
+                        : Icons.edit)),
+            color: Colors.green,
+            size: 10,
+          ))
+    ]);
+  }
+
+  void saveValue(String s) async {
+    ref.read(status.notifier).value = 'saving';
+    if (widget.debugPrint) {
+      print('status: ${ref.read(status.notifier).value}');
+    }
+    try {
+      await widget.docRef.set({widget.field: s}, SetOptions(merge: true));
+    } catch (e) {
+      if (widget.debugPrint) {
+        print('error saving: ${e.toString()}');
+      }
+      ref.read(status.notifier).value = 'error';
+    }
+
+    ref.read(status.notifier).value = 'saved';
+    if (widget.debugPrint) {
+      print('status: ${ref.read(status.notifier).value}');
+    }
   }
 }

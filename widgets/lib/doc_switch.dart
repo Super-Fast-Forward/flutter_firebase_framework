@@ -6,12 +6,12 @@ import 'package:widgets/builders.dart';
 
 import 'doc_stream_widget.dart';
 
-class SwitchWidget extends ConsumerWidget {
+class DocSwitch extends ConsumerWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
   final String field;
   final bool enabled;
 
-  SwitchWidget(this.docRef, this.field, {this.enabled = true, Key? key})
+  DocSwitch(this.docRef, this.field, {this.enabled = true, Key? key})
       : super(key: key);
 
   @override

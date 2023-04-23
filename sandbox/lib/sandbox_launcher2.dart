@@ -66,9 +66,9 @@ class _SandboxLauncherState2 extends State<SandboxLauncher2> {
             RawKeyboard.instance.keysPressed
                 .contains(LogicalKeyboardKey.metaLeft) &&
             RawKeyboard.instance.keysPressed
-                .contains(LogicalKeyboardKey.controlLeft) &&
+                .contains(LogicalKeyboardKey.shiftLeft) &&
             RawKeyboard.instance.keysPressed
-                .contains(LogicalKeyboardKey.controlRight)) {
+                .contains(LogicalKeyboardKey.shiftRight)) {
           try {
             // sandbox will be shown/hidden on Left and Right Ctrl pressed at the
             // same time

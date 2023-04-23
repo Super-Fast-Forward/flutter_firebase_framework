@@ -179,9 +179,9 @@ class DocFieldColStreamDropDown extends ConsumerStatefulWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
   final String field;
   final AutoDisposeStreamProvider<QS> colStreamProvider;
-  final bool enabled;
   final List<DropdownMenuItem> Function(BuildContext context, QS col) builder;
 
+  final bool enabled;
   final Function(String?)? onChanged;
   final StateNotifierProvider<GenericStateNotifier<String?>, String?>? valueNP;
 

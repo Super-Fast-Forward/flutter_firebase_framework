@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+///
+/// CopyToClipboardWidget is a widget that copies the text to the clipboard
+/// when tapped.
+///
 class CopyToClipboardWidget extends StatelessWidget {
-  final String text;
+  final String? text;
   final Widget child;
 
   const CopyToClipboardWidget(
@@ -10,33 +14,14 @@ class CopyToClipboardWidget extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        //copy to clipboard
-        Clipboard.setData(ClipboardData(text: text));
-        //toast copied to clipboard
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Copied to clipboard: ' + text)));
-      },
-      child: child,
-    );
-  }
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: () {
+          //copy to clipboard
+          Clipboard.setData(ClipboardData(text: text));
+          //toast copied to clipboard
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Copied to clipboard: ' + (text ?? ''))));
+        },
+        child: child,
+      );
 }
-// GestureDetector(
-//                 onTap: () {
-//                   //copy to clipboard
-//                   Clipboard.setData(ClipboardData(
-//                       text:
-//                           //jsonEncode(runDoc.data()!.map((k, v) => MapEntry(k, v.toString()))
-//                           formatFirestoreDoc(runDoc)));
-//                   //toast copied to clipboard
-//                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//                       content: Text('Copied to clipboard: ' +
-//                           formatFirestoreDoc(runDoc))));
-//                 },
-//                 child: Text(formatFirestoreDoc(runDoc)));
-//           },
-//           loading: () => Container(),
-//           error: (e, s) => Text(e.toString()),
-//         );

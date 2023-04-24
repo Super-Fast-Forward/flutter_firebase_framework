@@ -26,9 +26,7 @@ List<T> buildColItems<T>(
 }
 
 T? buildDocField<T>(
-    BuildContext context, WidgetRef ref, String path, String field,
-    {required T Function(BuildContext context, MapEntry<String, dynamic> data)
-        builder}) {
+    BuildContext context, WidgetRef ref, String path, String field) {
   return ref.watch(docSP(path)).when(
       data: (doc) => doc.data()?[field] ?? null,
       loading: () => null,

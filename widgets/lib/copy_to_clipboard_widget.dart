@@ -7,15 +7,17 @@ import 'package:flutter/services.dart';
 ///
 class CopyToClipboardWidget extends StatelessWidget {
   final String? text;
+  final bool enabled;
   final Widget child;
 
   const CopyToClipboardWidget(
-      {Key? key, required this.text, required this.child})
+      {Key? key, required this.text, required this.child, this.enabled = true})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) => GestureDetector(
         onTap: () {
+          if (!enabled) return;
           //copy to clipboard
           Clipboard.setData(ClipboardData(text: text));
           //toast copied to clipboard

@@ -199,6 +199,7 @@ AutoDisposeStreamProvider<QuerySnapshot<Map<String, dynamic>>> colSPfiltered(
         {List<QueryParam>? queries,
         String? orderBy,
         bool? isOrderDesc,
+        bool? descending,
         int? limit,
         bool Function(
                 QuerySnapshot<Object?>, QuerySnapshot<Map<String, dynamic>>)?
@@ -208,7 +209,7 @@ AutoDisposeStreamProvider<QuerySnapshot<Map<String, dynamic>>> colSPfiltered(
         orderBy: orderBy,
         distinct: distinct,
         limit: limit,
-        isOrderDesc: isOrderDesc));
+        isOrderDesc: isOrderDesc ?? descending));
 
 /// Riverpod Stream Provider that listens to a collection with specific query criteria
 /// (see [QueryParams]) and [equals] function that is used by [Stream.distinct] to

@@ -175,6 +175,16 @@ class DocDropDown3State extends ConsumerState<DocFieldDropDown3> {
   }
 }
 
+///
+/// DocFieldColStreamDropDown - a dropdown that is populated from a collection stream
+/// - docRef - the document reference
+/// - field - the field to update
+/// - colStreamProvider - the collection stream provider
+/// - builder - the builder function to create the dropdown items
+/// - valueNP - the value notifier provider to update
+/// - onChanged - the function to call when the value changes
+/// - enabled - is the dropdown enabled
+///
 class DocFieldColStreamDropDown extends ConsumerStatefulWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
   final String field;
@@ -225,10 +235,7 @@ class DocFieldColStreamDropDownState
 
   @override
   Widget build(BuildContext context) => ColStreamBuilder(
-        colSPfiltered2('artifact',
-            orderBy: 'timeCreated',
-            isOrderDesc: true,
-            queries: [QueryParam2('author', isEqualTo: kUSR!.uid)]),
+        widget.colStreamProvider,
         (context, docs) => DropdownButton<dynamic>(
             value: val,
             onChanged: !widget.enabled

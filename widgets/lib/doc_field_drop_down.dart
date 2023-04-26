@@ -112,6 +112,16 @@ class DocDropDown2State extends ConsumerState<DocFieldDropDown2> {
   }
 }
 
+///
+/// DocFieldDropDown3 - a dropdown that is populated from a collection stream
+/// - docRef - the document reference
+/// - field - the field to update
+/// - colStreamProvider - the collection stream provider
+/// - builder - the builder function to create the dropdown items
+/// - valueNP - the value notifier provider to update
+/// - onChanged - the function to call when the value changes
+/// - enabled - whether the dropdown is enabled
+///
 class DocFieldDropDown3 extends ConsumerStatefulWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
   final String field;
@@ -140,7 +150,9 @@ class DocDropDown3State extends ConsumerState<DocFieldDropDown3> {
         .snapshots()
         .listen((DocumentSnapshot<Map<String, dynamic>> event) {
       if (!event.exists) return;
-      val = event.data()![widget.field] as String?;
+      setState(() {
+        val = event.data()![widget.field] as String?;
+      });
 
       if (widget.valueNP != null)
         ref.read(widget.valueNP!.notifier).value = val;
@@ -158,11 +170,13 @@ class DocDropDown3State extends ConsumerState<DocFieldDropDown3> {
 
   @override
   Widget build(BuildContext context) {
+    print('DocDropDown3State.build with ${val}');
     return DropdownButton<dynamic>(
       value: val,
       onChanged: !widget.enabled
           ? null
           : (dynamic newValue) {
+              val = newValue;
               widget.docRef.update({widget.field: newValue});
 
               if (widget.valueNP != null)

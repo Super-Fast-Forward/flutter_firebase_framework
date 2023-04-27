@@ -149,6 +149,7 @@ class DocDropDown3State extends ConsumerState<DocFieldDropDown3> {
     sub = widget.docRef
         .snapshots()
         .listen((DocumentSnapshot<Map<String, dynamic>> event) {
+      print('DocDropDown3State.initState with ${event.data()}');
       if (!event.exists) return;
       setState(() {
         val = event.data()![widget.field] as String?;

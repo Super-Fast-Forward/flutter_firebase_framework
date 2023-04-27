@@ -132,7 +132,7 @@ class DocFieldDropDown3 extends ConsumerStatefulWidget {
   final List<DropdownMenuItem<dynamic>> items;
 
   const DocFieldDropDown3(this.docRef, this.field, this.items,
-      {this.valueNP, this.onChanged, this.enabled = false, super.key});
+      {this.valueNP, this.onChanged, this.enabled = true, super.key});
 
   @override
   ConsumerState<DocFieldDropDown3> createState() => DocDropDown3State();

@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
 
 String _routePattern(String route) {
-  print('_routePattern from: ${route}');
+  // print('_routePattern from: ${route}');
   final r = route.replaceAllMapped(RegExp(r'\{(\w+)\}'), (match) => r'(\w+)');
-  print('_routePattern to: ${r}');
+  // print('_routePattern to: ${r}');
   return r;
 }
 
 RouteFactory generateRoutes(
-    Map<String, Widget Function(BuildContext, RouteSettings)> routeBuilders) {
+    Map<String, Widget Function(BuildContext, RouteSettings)> routeBuilders,
+    {bool debug = false}) {
   return (RouteSettings settings) {
-    print('parse route: ${settings.name}');
+    if (debug) print('parse route: ${settings.name}');
     for (final route in routeBuilders.keys) {
-      print('  route: ${route}');
+      if (debug) print('  route: ${route}');
       final RegExp pattern = RegExp('^${_routePattern(route)}\$');
-      print('  pattern: ${pattern}');
+      if (debug) print('  pattern: ${pattern}');
       final match = pattern.firstMatch(settings.name!);
-      print('  match: ${match}');
+      if (debug) print('  match: ${match}');
       if (match != null) {
         final builder = routeBuilders[route]!;
         final groupCounts =
             List.generate(match.groupCount, (index) => index + 1);
         final groups = match.groups(groupCounts);
-        print('  create route with ${groups}}');
+        if (debug) print('  create route with ${groups}}');
         return PageRouteBuilder(
           pageBuilder: (context, animation1, animation2) => builder(
               context, RouteSettings(name: settings.name, arguments: groups)),
@@ -43,7 +44,7 @@ RouteFactory generateRoutes(
         // );
       }
     }
-    print('no match found!');
+    if (debug) print('no match found!');
     throw Exception('Invalid route: ${settings.name}');
     // If no match is found, return an error page.
     // return MaterialPageRoute(

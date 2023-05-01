@@ -27,10 +27,13 @@ class DocFieldTextEdit extends ConsumerStatefulWidget {
   final bool showSaveStatus;
   final int saveDelay;
   final bool enabled;
+  final TextInputType? keyboardType;
+
   final Function(String)? onChanged;
 
   const DocFieldTextEdit(this.docRef, this.field,
       {this.decoration,
+      this.keyboardType,
       this.saveDelay = 1000,
       this.showSaveStatus = true,
       this.debugPrint = false,
@@ -68,6 +71,9 @@ class DocFieldTextEditState extends ConsumerState<DocFieldTextEdit> {
   @override
   void dispose() {
     super.dispose();
+    if (descSaveTimer != null && descSaveTimer!.isActive) {
+      descSaveTimer!.cancel();
+    }
     if (sub != null) {
       if (widget.debugPrint) {
         print('DocFieldTextEditState sub cancelled');
@@ -85,6 +91,7 @@ class DocFieldTextEditState extends ConsumerState<DocFieldTextEdit> {
             decoration: widget.decoration,
             controller: ctrl,
             enabled: widget.enabled,
+            keyboardType: widget.keyboardType,
             onChanged: (v) {
               ref.read(status.notifier).value = 'changed';
               if (descSaveTimer != null && descSaveTimer!.isActive) {

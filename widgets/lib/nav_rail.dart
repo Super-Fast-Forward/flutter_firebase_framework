@@ -25,17 +25,6 @@ import 'package:providers/generic.dart';
 /// ```
 ///
 class NavRail extends ConsumerWidget {
-  // double? groupAlignment,
-  // NavigationRailLabelType? labelType,
-  // TextStyle? unselectedLabelTextStyle,
-  // TextStyle? selectedLabelTextStyle,
-  // IconThemeData? unselectedIconTheme,
-  // IconThemeData? selectedIconTheme,
-  // double? minWidth,
-  // double? minExtendedWidth,
-  // bool? useIndicator,
-  // Color? indicatorColor,
-
   final Color? backgroundColor;
   final bool? extended;
   final Widget? leading;
@@ -88,9 +77,10 @@ class NavRail extends ConsumerWidget {
       destinations: destinations.values.toList(),
       selectedIndex: ref.watch(selected),
       onDestinationSelected: (int index) {
+        print(
+            'NavRail: index: $index, name: ${destinations.keys.elementAt(index)}');
+
         ref.read(selected.notifier).value = index;
-        // print(
-        //     'NavRail: index: $index, name: ${destinations.keys.elementAt(index)}');
         this.onDestinationSelected?.call(index);
       },
       elevation: elevation,

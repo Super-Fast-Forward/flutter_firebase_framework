@@ -78,7 +78,7 @@ class NavRail extends ConsumerWidget {
       selectedIndex: ref.watch(selected),
       onDestinationSelected: (int index) {
         print(
-            'NavRail: index: $index, name: ${destinations.keys.elementAt(index)}');
+            'NavRail ${key.toString()}: index: $index, name: ${destinations.keys.elementAt(index)}');
 
         ref.read(selected.notifier).value = index;
         this.onDestinationSelected?.call(index);

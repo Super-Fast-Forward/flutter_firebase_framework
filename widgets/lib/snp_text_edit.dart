@@ -45,7 +45,7 @@ import 'package:providers/generic.dart';
 // }
 
 class SnpTextEdit extends ConsumerWidget {
-  late final TextEditingController? ctrl;
+  TextEditingController? _ctrl;
   final SNP dataSNP;
   final InputDecoration? decoration;
   final bool debugPrint;
@@ -55,7 +55,7 @@ class SnpTextEdit extends ConsumerWidget {
   final Function(String)? onChanged;
 
   SnpTextEdit(this.dataSNP,
-      {this.ctrl,
+      {TextEditingController? ctrl,
       this.decoration,
       this.saveDelay = 1000,
       this.showSaveStatus = true,
@@ -63,14 +63,15 @@ class SnpTextEdit extends ConsumerWidget {
       this.enabled = true,
       this.onChanged = null,
       Key? key})
-      : super(key: key) {
-    if (this.ctrl == null) this.ctrl = TextEditingController();
+      : _ctrl = ctrl,
+        super(key: key) {
+    if (this._ctrl == null) this._ctrl = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => TextField(
       decoration: decoration,
-      controller: ctrl,
+      controller: _ctrl,
       enabled: enabled,
       onChanged: (v) {
         // ref.read(status.notifier).value = 'changed';

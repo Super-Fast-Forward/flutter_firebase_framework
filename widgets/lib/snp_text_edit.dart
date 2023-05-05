@@ -47,7 +47,6 @@ import 'package:providers/generic.dart';
 class SnpTextEdit extends ConsumerWidget {
   late final TextEditingController? ctrl;
   final SNP dataSNP;
-  final String field;
   final InputDecoration? decoration;
   final bool debugPrint;
   final bool showSaveStatus;
@@ -55,7 +54,7 @@ class SnpTextEdit extends ConsumerWidget {
   final bool enabled;
   final Function(String)? onChanged;
 
-  SnpTextEdit(this.dataSNP, this.field,
+  SnpTextEdit(this.dataSNP,
       {this.ctrl,
       this.decoration,
       this.saveDelay = 1000,

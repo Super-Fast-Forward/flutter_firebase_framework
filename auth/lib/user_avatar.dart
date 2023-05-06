@@ -12,6 +12,6 @@ class UserAvatar extends StatelessWidget {
     return photoUrl == null
         ? Icon(Icons.person)
         : CircleAvatar(
-            radius: 50, backgroundImage: Image.network(photoUrl!).image);
+            radius: 25, backgroundImage: Image.network(photoUrl!).image);
   }
 }

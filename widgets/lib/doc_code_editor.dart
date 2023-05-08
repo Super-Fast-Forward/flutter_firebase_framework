@@ -10,6 +10,7 @@ import 'package:highlight/languages/python.dart';
 import 'package:highlight/languages/dart.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
 import 'package:providers/generic.dart';
+import 'package:widgets/copy_to_clipboard_widget.dart';
 
 class DocCodeEditor extends ConsumerStatefulWidget {
   final DocumentReference<Map<String, dynamic>> docRef;
@@ -129,7 +130,12 @@ class DocCodeEditorState extends ConsumerState<DocCodeEditor> {
                         : Icons.edit)),
             color: Colors.green,
             size: 10,
-          ))
+          )),
+      Positioned(
+          right: 0,
+          top: 0,
+          child: CopyToClipboardWidget(
+              text: _controller.text, child: Icon(Icons.copy)))
     ]);
   }
 

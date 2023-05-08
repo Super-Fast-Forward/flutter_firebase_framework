@@ -12,11 +12,16 @@ class CopyToClipboardWidget extends StatelessWidget {
   final bool enabled;
   final Widget child;
 
-  const CopyToClipboardWidget(
-      {Key? key, this.text, this.getText, required this.child, this.enabled = true})
+  CopyToClipboardWidget(
+      {Key? key,
+      this.text,
+      this.getText,
+      required this.child,
+      this.enabled = true})
       : super(key: key) {
-        assert(this.text!=null || this.getText!=null, 'text or getText must be provided');
-      }
+    assert(this.text != null || this.getText != null,
+        'text or getText must be provided');
+  }
 
   @override
   Widget build(BuildContext context) => GestureDetector(

@@ -133,9 +133,9 @@ class DocCodeEditorState extends ConsumerState<DocCodeEditor> {
           )),
       Positioned(
           right: 0,
-          top: 0,
+          bottom: 0,
           child: CopyToClipboardWidget(
-              text: _controller.text, child: Icon(Icons.copy)))
+              getText: () => _controller.text, child: Icon(Icons.copy)))
     ]);
   }
 

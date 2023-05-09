@@ -26,8 +26,10 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   //all other properties of AppBar widget can be added here
   final Widget userAvatar;
   final Widget themeButton;
+  final Widget settingsButton;
   final bool showUserAvatar;
   final bool showThemeButton;
+  final bool showSettingsButton;
   final double maxTabWidth;
   final TabsAlignment tabsAlignment;
   final Function(BuildContext context, int tabIndex, String tab)? onTabSelected;
@@ -39,8 +41,10 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
     this.tabs,
     this.showUserAvatar = true,
     this.showThemeButton = true,
+    this.showSettingsButton = false,
     this.userAvatar = const CurrentUserAvatarExtended(),
     this.themeButton = const ThemeSwitch(),
+    required this.settingsButton,
     this.onTabSelected,
     this.maxTabWidth = 100,
     this.tabsAlignment = TabsAlignment.left,
@@ -65,7 +69,8 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
           : title,
       actions: [
         if (showUserAvatar) userAvatar,
-        if (showThemeButton) themeButton
+        if (showThemeButton) themeButton,
+        if (showSettingsButton) settingsButton
       ],
     );
   }

@@ -12,6 +12,9 @@ typedef CR = CollectionReference<Map<String, dynamic>>;
 final kDB = FirebaseFirestore.instance;
 final kUSR = FirebaseAuth.instance.currentUser;
 
+DR kDBUserRef() => FirebaseFirestore.instance.doc('user/${kUSR!.uid}');
+// userDocSP(String path) => docSP('user/${kUSR!.uid}/${path}');
+
 final FFI = FirebaseFirestore.instance;
 final FAI = FirebaseAuth.instance;
 

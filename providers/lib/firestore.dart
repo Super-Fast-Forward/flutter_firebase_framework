@@ -140,7 +140,8 @@ class QueryParams extends Equatable {
         path,
         ...(queries == null ? [] : queries!.map((qp) => qp..props).toList()),
         orderBy,
-        limit
+        limit,
+        isOrderDesc
       ];
 }
 
@@ -165,7 +166,8 @@ class QueryParams2 extends Equatable {
         path,
         ...(queries == null ? [] : queries!.map((qp) => qp..props).toList()),
         orderBy,
-        limit
+        limit,
+        isOrderDesc
       ];
 }
 

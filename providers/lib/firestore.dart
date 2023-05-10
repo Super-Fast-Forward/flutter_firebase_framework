@@ -472,7 +472,7 @@ final AutoDisposeStreamProviderFamily<QuerySnapshot<Map<String, dynamic>>,
 });
 
 // To get the count of a collection
-final AutoDisposeStreamProviderFamily<AggregateQuerySnapshot, String> count =
+final AutoDisposeStreamProviderFamily<AggregateQuerySnapshot, String> colCount =
     StreamProvider.autoDispose
         .family<AggregateQuerySnapshot, String>((ref, path) {
   return FirebaseFirestore.instance.collection(path).count().get().asStream();

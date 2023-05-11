@@ -32,8 +32,7 @@ class CopyToClipboardWidget extends StatelessWidget {
           Clipboard.setData(ClipboardData(text: txt));
           //toast copied to clipboard
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content:
-                  Text('Copied to clipboard: ' + stringLeft(txt ?? '', 30))));
+              content: Text('Copied to clipboard: ' + stringLeft(txt, 30))));
         },
         child: child,
       );

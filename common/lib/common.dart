@@ -71,3 +71,5 @@ Color Function(String color) getColor = (String color) {
     return Colors.black;
   }
 };
+
+final padding8 = EdgeInsets.all(8);

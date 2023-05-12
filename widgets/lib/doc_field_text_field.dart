@@ -29,6 +29,7 @@ class DocFieldTextField extends ConsumerStatefulWidget {
   final TextDirection? textDirection;
   final StrutStyle? strutStyle;
   final bool enabled;
+  final bool canAddLines;
 
   DocFieldTextField(this.docRef, this.field, this.maxLines,
       {this.decoration,
@@ -37,6 +38,7 @@ class DocFieldTextField extends ConsumerStatefulWidget {
       this.textDirection,
       this.strutStyle,
       this.enabled = true,
+      this.canAddLines = false,
       Key? key})
       : super(key: key);
 
@@ -48,6 +50,7 @@ class DocFieldTextField extends ConsumerStatefulWidget {
 class DocMultilineTextFieldState extends ConsumerState<DocFieldTextField> {
   Timer? descSaveTimer;
   StreamSubscription? sub;
+  int minLines = 1;
   final TextEditingController ctrl = TextEditingController();
 
   @override
@@ -75,6 +78,7 @@ class DocMultilineTextFieldState extends ConsumerState<DocFieldTextField> {
   Widget build(BuildContext context) {
     return TextField(
       maxLines: widget.maxLines,
+      minLines: minLines,
       decoration: widget.decoration,
       style: widget.style,
       textAlign: widget.textAlign,
@@ -90,6 +94,14 @@ class DocMultilineTextFieldState extends ConsumerState<DocFieldTextField> {
           Map<String, dynamic> map = {};
           map[widget.field] = v;
           widget.docRef.set(map, SetOptions(merge: true));
+        });
+
+        setState(() {
+          minLines = !widget.canAddLines
+              ? this.minLines
+              : (v.split('\n').length + 1 > widget.maxLines
+                  ? widget.maxLines
+                  : v.split('\n').length + 1);
         });
       },
     );

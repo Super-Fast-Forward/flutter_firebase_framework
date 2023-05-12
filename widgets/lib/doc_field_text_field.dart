@@ -32,6 +32,7 @@ class DocFieldTextField extends ConsumerStatefulWidget {
   final TextInputType? keyboardType;
   final Function(String)? onChanged;
   final bool canAddLines;
+  final TextStyle? style;
 
   const DocFieldTextField(this.docRef, this.field,
       {this.decoration,
@@ -44,6 +45,7 @@ class DocFieldTextField extends ConsumerStatefulWidget {
       this.enabled = true,
       this.onChanged = null,
       this.canAddLines = false,
+      this.style,
       Key? key})
       : super(key: key);
 
@@ -98,6 +100,7 @@ class DocFieldTextEditState extends ConsumerState<DocFieldTextField> {
             controller: ctrl,
             enabled: widget.enabled,
             keyboardType: widget.keyboardType,
+            style: widget.style,
             onChanged: (v) {
               ref.read(status.notifier).value = 'changed';
               if (descSaveTimer != null && descSaveTimer!.isActive) {

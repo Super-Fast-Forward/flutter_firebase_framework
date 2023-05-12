@@ -101,6 +101,8 @@ class DocFieldTextEditState extends ConsumerState<DocFieldTextField> {
             enabled: widget.enabled,
             keyboardType: widget.keyboardType,
             style: widget.style,
+            minLines: minLines,
+            maxLines: widget.maxLines,
             onChanged: (v) {
               ref.read(status.notifier).value = 'changed';
               if (descSaveTimer != null && descSaveTimer!.isActive) {

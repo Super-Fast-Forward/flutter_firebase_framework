@@ -58,7 +58,7 @@ class DocFieldTextEditState extends ConsumerState<DocFieldTextField> {
   Timer? descSaveTimer;
   StreamSubscription? sub;
   final TextEditingController ctrl = TextEditingController();
-  final SNP status = snp<String>('saved');
+  final SNP status = snp<String>('saved!');
   int minLines = 1;
 
   @override

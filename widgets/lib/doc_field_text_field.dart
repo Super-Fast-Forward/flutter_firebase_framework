@@ -59,11 +59,12 @@ class DocFieldTextEditState extends ConsumerState<DocFieldTextField> {
   StreamSubscription? sub;
   final TextEditingController ctrl = TextEditingController();
   final SNP status = snp<String>('saved!');
-  int minLines = 1;
+  int currentLinesCount = 1;
 
   @override
   void initState() {
     super.initState();
+    currentLinesCount = widget.minLines;
     sub = widget.docRef.snapshots().listen((event) {
       if (!event.exists) return;
       if (widget.debugPrint) {
@@ -101,7 +102,7 @@ class DocFieldTextEditState extends ConsumerState<DocFieldTextField> {
             enabled: widget.enabled,
             keyboardType: widget.keyboardType,
             style: widget.style,
-            minLines: minLines,
+            minLines: currentLinesCount,
             maxLines: widget.maxLines,
             onChanged: (v) {
               ref.read(status.notifier).value = 'changed';
@@ -113,8 +114,8 @@ class DocFieldTextEditState extends ConsumerState<DocFieldTextField> {
               if (widget.onChanged != null) widget.onChanged!(v);
 
               setState(() {
-                minLines = !widget.canAddLines
-                    ? this.minLines
+                currentLinesCount = !widget.canAddLines
+                    ? this.currentLinesCount
                     : (v.split('\n').length + 1 > widget.maxLines
                         ? widget.maxLines
                         : v.split('\n').length + 1);

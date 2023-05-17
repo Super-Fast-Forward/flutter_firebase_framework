@@ -113,12 +113,30 @@ class DocFieldTextEditState extends ConsumerState<DocFieldTextField> {
                   Duration(milliseconds: widget.saveDelay), () => saveValue(v));
               if (widget.onChanged != null) widget.onChanged!(v);
 
+              // setState(() {
+              //   currentLinesCount = !widget.canAddLines
+              //       ? this.currentLinesCount
+              //       : (v.split('\n').length + 1 > widget.maxLines
+              //           ? widget.maxLines
+              //           : v.split('\n').length + 1);
+              // });
               setState(() {
-                currentLinesCount = !widget.canAddLines
-                    ? this.currentLinesCount
-                    : (v.split('\n').length + 1 > widget.maxLines
-                        ? widget.maxLines
-                        : v.split('\n').length + 1);
+                final textLinesCount = v.split('\n').length + 1;
+                if (textLinesCount < widget.minLines) {
+                  currentLinesCount = widget.minLines;
+                } else if (textLinesCount > widget.maxLines) {
+                  currentLinesCount = widget.maxLines;
+                } else {
+                  currentLinesCount = textLinesCount;
+                }
+
+                // currentLinesCount = !widget.canAddLines
+                //     ? currentLinesCount
+                //     : textLinesCount > widget.maxLines
+                //         ? widget.maxLines
+                //         : textLinesCount < widget.minLines
+                //             ? widget.minLines
+                //             : textLinesCount;
               });
             },
             onSubmitted: (v) {

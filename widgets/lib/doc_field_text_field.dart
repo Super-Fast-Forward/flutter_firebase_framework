@@ -71,7 +71,7 @@ class DocFieldTextEditState extends ConsumerState<DocFieldTextField> {
         print(
             'DocFieldTextEditState ${widget.field} received ${event.data()![widget.field]}');
       }
-      if (ctrl.text != event.data()![widget.field]) {
+      if (event.data() != null && ctrl.text != event.data()![widget.field]) {
         ctrl.text = event.data()![widget.field];
       }
     });

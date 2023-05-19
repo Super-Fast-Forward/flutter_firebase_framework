@@ -19,7 +19,12 @@ class ThemeModeStateNotifier extends StateNotifier<bool> {
     this.saveBuilder = ThemeModeConfig.saveBuilder;
     this.getBuilder = ThemeModeConfig.getBuilder;
     if (authState.isLoaded == true && auth.currentUser != null) {
-      getBuilder().then((v) => {if (mounted) state = v});
+      getBuilder().then((v) {
+        print('mounted: ${mounted}');
+        if (!mounted) {
+          state = v;
+        }
+      });
       // dbInstance.collection('user').doc(auth.currentUser!.uid)
 
       //     .get()

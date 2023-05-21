@@ -45,7 +45,11 @@ class MessageWidget extends ConsumerWidget {
                         child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
+                        Flexible(
+                            child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Expanded(
                                 child:
@@ -58,8 +62,8 @@ class MessageWidget extends ConsumerWidget {
                               ],
                             ))
                           ],
-                        ),
-                        if (extension != null) extension!
+                        )),
+                        if (extension != null) Flexible(child: extension!)
                       ],
                     )),
                   )))));

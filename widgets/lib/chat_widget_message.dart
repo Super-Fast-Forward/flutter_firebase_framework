@@ -42,12 +42,10 @@ class MessageWidget extends ConsumerWidget {
                         // maxHeight: 200
                         ),
                     child: SingleChildScrollView(
-                        child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
+                        child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Column(
                           children: [
                             Expanded(
                                 child:
@@ -58,7 +56,7 @@ class MessageWidget extends ConsumerWidget {
                                 Text(messageDoc.data()?['error'] ?? '',
                                     style: TextStyle(color: Colors.red)),
                               ],
-                            )),
+                            ))
                           ],
                         ),
                         if (extension != null) extension!

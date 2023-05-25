@@ -164,117 +164,106 @@ class LoginButtonsWidget extends ConsumerWidget {
           });
     });
 
-    List<Widget> widgets = [
-      Expanded(
-        flex: isWideScreen ? 1 : 0,
-        child: SingleChildScrollView(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 340,
+    return ConstrainedBox(
+        constraints: BoxConstraints(
+            maxWidth: 400, maxHeight: 400, minHeight: 400, minWidth: 400),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                screenTitle,
+                overflow: TextOverflow.ellipsis,
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
+            ),
+            Visibility(
+              visible: AuthConfig.enableGoogleAuth,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      screenTitle,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Visibility(
-                    visible: AuthConfig.enableGoogleAuth,
-                    child: Column(
-                      children: [
-                        const Gap(25),
-                        SizedBox(width: double.infinity, child: googleButton),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                    visible: AuthConfig.enableGithubAuth,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        const Gap(50),
-                        SizedBox(width: double.infinity, child: githubButton),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                      visible: AuthConfig.enableSsoAuth,
-                      child: Column(
-                        children: [
-                          const Gap(50),
-                          SizedBox(width: double.infinity, child: ssoButton),
-                        ],
-                      )),
-                  Visibility(
-                    visible: AuthConfig.enableEmailAuth,
-                    child: Column(
-                      children: [
-                        const Gap(50),
-                        SizedBox(width: double.infinity, child: emailButton)
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                    visible: AuthConfig.enableAnonymousAuth,
-                    child: Column(
-                      children: [
-                        const Gap(50),
-                        SizedBox(
-                            width: double.infinity, child: anonymousButton),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                    visible: AuthConfig.enableSignupOption,
-                    child: Column(
-                      children: [
-                        const Gap(50),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text(
-                              "Don't have an account ? ",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            InkWell(
-                              //onTap: () => {print("Clicked")},
-                              child: Text(
-                                " Sign up",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 18, color: Colors.blueGrey),
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Gap(50),
+                  const Gap(25),
+                  SizedBox(width: double.infinity, child: googleButton),
                 ],
               ),
             ),
-          ),
-        ),
-      )
-    ];
+            Visibility(
+              visible: AuthConfig.enableGithubAuth,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const Gap(50),
+                  SizedBox(width: double.infinity, child: githubButton),
+                ],
+              ),
+            ),
+            Visibility(
+                visible: AuthConfig.enableSsoAuth,
+                child: Column(
+                  children: [
+                    const Gap(50),
+                    SizedBox(width: double.infinity, child: ssoButton),
+                  ],
+                )),
+            Visibility(
+              visible: AuthConfig.enableEmailAuth,
+              child: Column(
+                children: [
+                  const Gap(50),
+                  SizedBox(width: double.infinity, child: emailButton)
+                ],
+              ),
+            ),
+            Visibility(
+              visible: AuthConfig.enableAnonymousAuth,
+              child: Column(
+                children: [
+                  const Gap(50),
+                  SizedBox(width: double.infinity, child: anonymousButton),
+                ],
+              ),
+            ),
+            Divider(),
+            Visibility(
+              visible: AuthConfig.enableSignupOption,
+              child: Column(
+                children: [
+                  const Gap(50),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        "Don't have an account ? ",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      InkWell(
+                        //onTap: () => {print("Clicked")},
+                        child: Text(
+                          " Sign up",
+                          textAlign: TextAlign.center,
+                          style:
+                              TextStyle(fontSize: 18, color: Colors.blueGrey),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const Gap(50),
+          ],
+        ));
 
-    return isWideScreen
-        ? Flex(direction: Axis.horizontal, children: widgets)
-        : SingleChildScrollView(
-            child: Flex(
-                direction: Axis.vertical, children: widgets.reversed.toList()));
+    // return isWideScreen
+    //     ? Flex(direction: Axis.horizontal, children: widgets)
+    //     : SingleChildScrollView(
+    //         child: Flex(
+    //             direction: Axis.vertical, children: widgets.reversed.toList()));
   }
 }

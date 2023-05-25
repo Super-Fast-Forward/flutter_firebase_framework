@@ -26,23 +26,43 @@ class LoginScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     bool isWideScreen = MediaQuery.of(context).size.width >= 800;
 
-    List<Widget> widgets = [
-      Expanded(
-          flex: isWideScreen ? 1 : 0,
-          child: SingleChildScrollView(
-              child: LoginButtonsWidget(
-            screenTitle: screenTitle,
-          ))),
-      Expanded(
-        flex: isWideScreen ? 1 : 0,
-        child: aboutTheApp,
-      ),
-    ];
+    return isWideScreen ? _buildWideScreen() : _buildNarrowScreen();
+  }
 
-    return isWideScreen
-        ? Flex(direction: Axis.horizontal, children: widgets)
-        : SingleChildScrollView(
-            child: Flex(
-                direction: Axis.vertical, children: widgets.reversed.toList()));
+  Widget _buildWideScreen() {
+    return Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              LoginButtonsWidget(
+                screenTitle: screenTitle,
+              )
+            ],
+          )),
+          Expanded(child: Center(child: aboutTheApp))
+        ]);
+  }
+
+  Widget _buildNarrowScreen() {
+    return Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+              child: SingleChildScrollView(
+            child: Column(children: [
+              aboutTheApp,
+              LoginButtonsWidget(
+                screenTitle: screenTitle,
+              ),
+            ]),
+          ))
+        ]);
   }
 }

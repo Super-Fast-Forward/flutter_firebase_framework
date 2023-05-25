@@ -14,9 +14,6 @@ dependencies:
   cloud_firestore: ^4.0.1
   firebase_auth: ^4.6.0
   firebase_auth_web: ^5.5.0
-  # firebase_auth_web: 5.1.3
-  # firebase_auth_web: 5.5.0
-  # firebase_auth: 4.1.5
   auth:
     git: 
       url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git

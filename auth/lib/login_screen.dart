@@ -17,6 +17,7 @@ class LoginScreen extends ConsumerWidget {
   final String screenTitle;
   final Widget aboutTheApp;
   final Map<String, bool> loginOptions;
+  final Color backgroundColor = Colors.grey;
 
   const LoginScreen(this.aboutTheApp, this.screenTitle, this.loginOptions,
       {Key? key})
@@ -26,7 +27,9 @@ class LoginScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     bool isWideScreen = MediaQuery.of(context).size.width >= 800;
 
-    return isWideScreen ? _buildWideScreen() : _buildNarrowScreen();
+    return Container(
+        color: backgroundColor,
+        child: isWideScreen ? _buildWideScreen() : _buildNarrowScreen());
   }
 
   Widget _buildWideScreen() {

@@ -45,6 +45,7 @@ final showLoading = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
 ///
 class LoginButtonsWidget extends ConsumerWidget {
   final String screenTitle;
+  final double buttonWidth;
 
   /// This is the function that is called when the Anonymous Login button is pressed.
   /// It is defined in the [LoginConfig] class.
@@ -55,6 +56,7 @@ class LoginButtonsWidget extends ConsumerWidget {
   const LoginButtonsWidget({
     required this.screenTitle,
     this.onLoginAnonymousButtonPressed,
+    this.buttonWidth = 150,
     Key? key,
   }) : super(key: key);
 
@@ -75,49 +77,51 @@ class LoginButtonsWidget extends ConsumerWidget {
     // }
   }
 
-  ElevatedButton imageButton(
-      String title, String imageName, VoidCallback callback) {
-    return ElevatedButton(
-        onPressed: callback,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 50,
-              height: 50,
-              decoration: borderDecor,
-              margin: const EdgeInsets.only(right: 70),
-              child: Container(
-                margin: const EdgeInsets.only(right: 20),
-                child: SvgPicture.asset('/assets/$imageName.svg',
-                    package: 'auth', width: 30, height: 30),
-              ),
-            ),
-            SizedBox(width: 180, child: Text(title)),
-          ],
-        ));
+  Widget imageButton(String title, String imageName, VoidCallback callback) {
+    return SizedBox(
+        width: buttonWidth,
+        child: ElevatedButton(
+            onPressed: callback,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: borderDecor,
+                  margin: const EdgeInsets.only(right: 70),
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 20),
+                    child: SvgPicture.asset('/assets/$imageName.svg',
+                        package: 'auth', width: 30, height: 30),
+                  ),
+                ),
+                SizedBox(width: 180, child: Text(title)),
+              ],
+            )));
   }
 
-  ElevatedButton iconButton(
-      String title, IconData iconData, VoidCallback callback) {
-    return ElevatedButton(
-      onPressed: callback,
-      child: Row(mainAxisSize: MainAxisSize.min, children: [
-        Container(
-            height: 50,
-            width: 50,
-            decoration: borderDecor,
-            margin: const EdgeInsets.only(right: 70),
-            child: Container(
-                margin: const EdgeInsets.only(right: 20),
-                child: Icon(
-                  iconData,
-                  size: 30,
-                  color: Colors.black,
-                ))),
-        SizedBox(width: 180, child: Text(title))
-      ]),
-    );
+  Widget iconButton(String title, IconData iconData, VoidCallback callback) {
+    return SizedBox(
+        width: buttonWidth,
+        child: ElevatedButton(
+          onPressed: callback,
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            Container(
+                height: 50,
+                width: 50,
+                decoration: borderDecor,
+                margin: const EdgeInsets.only(right: 70),
+                child: Container(
+                    margin: const EdgeInsets.only(right: 20),
+                    child: Icon(
+                      iconData,
+                      size: 30,
+                      color: Colors.black,
+                    ))),
+            SizedBox(width: 180, child: Text(title))
+          ]),
+        ));
   }
 
   @override
@@ -134,14 +138,14 @@ class LoginButtonsWidget extends ConsumerWidget {
 
     bool isWideScreen = MediaQuery.of(context).size.width >= 800;
 
-    final ElevatedButton googleButton =
+    final Widget googleButton =
         imageButton("Log in with Google", "google_logo", () {
       signInWithGoogle().whenComplete(() {
         ref.read(userLoggedIn.notifier).value = true;
       });
     });
 
-    final ElevatedButton githubButton =
+    final Widget githubButton =
         imageButton("Log in with Github", "github_logo", () async {
       ref.read(showLoading.notifier).value = true;
       await FirebaseAuth.instance.signInAnonymously().then((a) => {
@@ -150,13 +154,12 @@ class LoginButtonsWidget extends ConsumerWidget {
           });
     });
 
-    final ElevatedButton ssoButton =
-        iconButton("Log in with SSO", Icons.key, () {});
+    final Widget ssoButton = iconButton("Log in with SSO", Icons.key, () {});
 
-    final ElevatedButton emailButton =
+    final Widget emailButton =
         iconButton("Log in with Email", Icons.mail, () {});
 
-    final ElevatedButton anonymousButton =
+    final Widget anonymousButton =
         iconButton("Log in Anonymous", Icons.account_circle, () async {
       FirebaseAuth.instance.signInAnonymously().then((a) => {
             if (onLoginAnonymousButtonPressed != null)

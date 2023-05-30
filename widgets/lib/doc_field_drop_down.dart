@@ -28,7 +28,7 @@ class DocFieldDropDown extends ConsumerWidget {
           data: (doc) => DropdownButton<String>(
                 value: doc.data()![field],
                 onChanged: (String? newValue) {
-                  docRef.update({field: newValue});
+                  docRef.set({field: newValue}, SetOptions(merge: true));
 
                   if (valueNP != null)
                     ref.read(valueNP!.notifier).value = newValue;
@@ -95,7 +95,8 @@ class DocDropDown2State extends ConsumerState<DocFieldDropDown2> {
       onChanged: !widget.enabled
           ? null
           : (String? newValue) {
-              widget.docRef.update({widget.field: newValue});
+              widget.docRef
+                  .set({widget.field: newValue}, SetOptions(merge: true));
 
               if (widget.valueNP != null)
                 ref.read(widget.valueNP!.notifier).value = val;
@@ -178,7 +179,8 @@ class DocDropDown3State extends ConsumerState<DocFieldDropDown3> {
           ? null
           : (dynamic newValue) {
               val = newValue;
-              widget.docRef.update({widget.field: newValue});
+              widget.docRef
+                  .set({widget.field: newValue}, SetOptions(merge: true));
 
               if (widget.valueNP != null)
                 ref.read(widget.valueNP!.notifier).value = val;
@@ -256,7 +258,8 @@ class DocFieldColStreamDropDownState
             onChanged: !widget.enabled
                 ? null
                 : (dynamic newValue) {
-                    widget.docRef.update({widget.field: newValue});
+                    widget.docRef
+                        .set({widget.field: newValue}, SetOptions(merge: true));
 
                     if (widget.valueNP != null)
                       ref.read(widget.valueNP!.notifier).value = val;

@@ -17,10 +17,10 @@ class LoginScreen extends ConsumerWidget {
   final String screenTitle;
   final Widget aboutTheApp;
   final Map<String, bool> loginOptions;
-  final Color backgroundColor = Colors.grey;
+  final Color backgroundColor = //Colors.grey
+      Color.fromARGB(255, 48, 48, 48);
 
-  const LoginScreen(this.aboutTheApp, this.screenTitle, this.loginOptions,
-      {Key? key})
+  LoginScreen(this.aboutTheApp, this.screenTitle, this.loginOptions, {Key? key})
       : super(key: key);
 
   @override
@@ -59,12 +59,16 @@ class LoginScreen extends ConsumerWidget {
         children: [
           Expanded(
               child: SingleChildScrollView(
-            child: Column(children: [
-              aboutTheApp,
-              LoginButtonsWidget(
-                screenTitle: screenTitle,
-              ),
-            ]),
+            child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  aboutTheApp,
+                  LoginButtonsWidget(
+                    screenTitle: screenTitle,
+                  ),
+                ]),
           ))
         ]);
   }

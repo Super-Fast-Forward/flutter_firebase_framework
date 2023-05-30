@@ -8,7 +8,8 @@ class ThemeModeConfig {
       .instance
       .collection('user')
       .doc(FirebaseAuth.instance.currentUser!.uid)
-      .set({'themeMode': themeMode == false ? 'light' : 'dark'});
+      .set({'themeMode': themeMode == false ? 'light' : 'dark'},
+          SetOptions(merge: true));
   static Future<bool> Function() getBuilder = () async {
     final theme = (await FirebaseFirestore.instance
             .collection('user')

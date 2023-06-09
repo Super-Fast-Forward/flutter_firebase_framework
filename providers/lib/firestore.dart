@@ -47,7 +47,6 @@ class QueryParam extends Equatable {
 
 class QueryParam2 extends Equatable {
   final dynamic field;
-  // final Map<Symbol, dynamic> params;
   final Object? isEqualTo;
   final Object? isNotEqualTo;
   final Object? isLessThan;
@@ -60,9 +59,7 @@ class QueryParam2 extends Equatable {
   final List<Object?>? whereNotIn;
 
   const QueryParam2(
-    this.field,
-    // this.params,
-    {
+    this.field, {
     this.isEqualTo,
     this.isNotEqualTo,
     this.isLessThan,

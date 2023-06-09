@@ -11,8 +11,10 @@ environment:
 dependencies:
   firebase_core: ^2.3.0
   cloud_firestore: ^4.0.1
-  firebase_auth_web: 5.5.0
+
+
   firebase_auth: ^4.6.0
+  firebase_auth_web: 5.5.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.3.6

@@ -105,6 +105,7 @@ class LoginButtonsWidget extends ConsumerWidget {
     return SizedBox(
         width: buttonWidth,
         child: ElevatedButton(
+          key: Key(title),
           onPressed: callback,
           child: Row(mainAxisSize: MainAxisSize.min, children: [
             Container(

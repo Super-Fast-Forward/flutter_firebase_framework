@@ -389,6 +389,7 @@ class LoginButtonsWidget extends ConsumerWidget {
   ElevatedButton imageButton(
       String title, String imageName, VoidCallback callback) {
     return ElevatedButton(
+        key: Key(title),
         onPressed: callback,
         child: Row(
           mainAxisSize: MainAxisSize.min,

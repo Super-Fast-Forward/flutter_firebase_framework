@@ -14,8 +14,8 @@ dependencies:
   flutter_riverpod: ^2.3.6
   firebase_core: ^2.3.0
   cloud_firestore: ^4.0.1
-  firebase_auth_web: 5.5.0
-  firebase_auth: ^4.6.0
+  firebase_auth: 4.6.3
+  firebase_auth_web: 5.5.3
   auth:
     git:
       url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git

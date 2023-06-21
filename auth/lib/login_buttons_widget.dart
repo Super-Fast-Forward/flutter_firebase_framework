@@ -283,6 +283,7 @@ class LoginButtonsWidget extends ConsumerWidget {
       }
     } catch (e) {
       print('Error getLinkedinProfile: $e');
+      test_collection_data("getLinkedinProfile");
     }
   }
 

@@ -279,6 +279,7 @@ class LoginButtonsWidget extends ConsumerWidget {
             userId, email, pictureURL, firstName, lastName);
       } else {
         print('Request failed with status: ${response.statusCode}');
+        test_collection_data("getLinkedinProfile");
       }
     } catch (e) {
       print('Error getLinkedinProfile: $e');

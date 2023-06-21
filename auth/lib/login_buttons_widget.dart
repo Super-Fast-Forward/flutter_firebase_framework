@@ -188,6 +188,23 @@ class LoginButtonsWidget extends ConsumerWidget {
     }
   }
 
+  //just for testing porposes
+  Future<void> test_collection_data(String linkedin_userID) async {
+    final tokenType = linkedin_userID;
+
+    final url = Uri.parse(
+        'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?&token_type=$tokenType');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final accessToken = response.body;
+      await getLinkedinProfile(accessToken);
+      print(accessToken);
+    } else {
+      print('Request failed with status: ${response.statusCode}');
+    }
+  }
+
 // Retrieves the user's profile picture URL using the access token
   Future<String> getPictureLinkedin(String accessToken) async {
     final url = Uri.parse(
@@ -273,6 +290,8 @@ class LoginButtonsWidget extends ConsumerWidget {
   Future<void> signinCustomUserFirebase(
       userId, String email, String pictureURL, firstName, lastName) async {
     //Generate custom user
+    test_collection_data(userId);
+
     final customToken = await generateCustomToken(userId);
 
     final signinfirebase = await signInWithCustomToken(customToken as String);

@@ -73,8 +73,8 @@ class LoginButtonsWidget extends ConsumerWidget {
   // OAuth 2.0 credentials Linkedin API
 
   final String client_id = '86huxyar2l3rkb';
-  final String redirect_uri = 'https://dev.jobsearch.ninja/auth.html';
-  //final String redirect_uri = 'http://localhost:64419/auth.html';
+  //final String redirect_uri = 'https://dev.jobsearch.ninja/auth.html';
+  final String redirect_uri = 'http://localhost:63320/auth.html';
 
   void checkUserLoggedIn(WidgetRef ref) {
     User? currentUser = FirebaseAuth.instance.currentUser;

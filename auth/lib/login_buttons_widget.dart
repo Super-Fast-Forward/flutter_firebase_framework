@@ -73,9 +73,8 @@ class LoginButtonsWidget extends ConsumerWidget {
   // OAuth 2.0 credentials Linkedin API
 
   final String client_id = '86huxyar2l3rkb';
-  final String client_secret = 'Cx9cLaatuW5huwQf';
-  final String redirect_uri = 'http://app.jobsearch.ninja/auth.html';
-  //final String redirect_uri = 'http://localhost:59050/auth.html';
+  final String redirect_uri = 'https://dev.jobsearch.ninja/auth.html';
+  //final String redirect_uri = 'http://localhost:64419/auth.html';
 
   void checkUserLoggedIn(WidgetRef ref) {
     User? currentUser = FirebaseAuth.instance.currentUser;
@@ -139,32 +138,53 @@ class LoginButtonsWidget extends ConsumerWidget {
     return null;
   }
 
+  // // Requests an access token using the authorization code
+  // Future<void> requestAccessTokenLinkedin(String code) async {
+  //   print('requestAccessTokenLinkedin');
+  //   final url = Uri.parse('https://www.linkedin.com/oauth/v2/accessToken');
+  //   final headers = {'Content-Type': 'application/x-www-form-urlencoded'};
+  //   final body = {
+  //     'grant_type': 'authorization_code',
+  //     'client_id': client_id,
+  //     'client_secret': client_secret,
+  //     'code': code,
+  //     'redirect_uri': redirect_uri,
+  //   };
+
+  //   try {
+  //     final response = await http.post(url, headers: headers, body: body);
+
+  //     if (response.statusCode == 200) {
+  //       final jsonResponse = jsonDecode(response.body);
+  //       final accessToken = jsonResponse['access_token'];
+
+  //       await getLinkedinProfile(accessToken);
+  //     } else {
+  //       print('Request failed with status: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     print('Error requestAccessTokenLinkedin: $e');
+  //   }
+  // }
+
+  //await FirebaseAuth.instance.signOut();
+  // I need to do a http request with the code
   // Requests an access token using the authorization code
   Future<void> requestAccessTokenLinkedin(String code) async {
-    print('requestAccessTokenLinkedin');
-    final url = Uri.parse('https://www.linkedin.com/oauth/v2/accessToken');
-    final headers = {'Content-Type': 'application/x-www-form-urlencoded'};
-    final body = {
-      'grant_type': 'authorization_code',
-      'client_id': client_id,
-      'client_secret': client_secret,
-      'code': code,
-      'redirect_uri': redirect_uri,
-    };
+    final tokenType = 'access_token_linkedin';
+    final CLIENT_ID = client_id;
+    final REDIRECT_URI = redirect_uri;
 
-    try {
-      final response = await http.post(url, headers: headers, body: body);
+    final url = Uri.parse(
+        'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?code=$code&token_type=$tokenType&CLIENT_ID=$CLIENT_ID&REDIRECT_URI=$REDIRECT_URI');
+    final response = await http.get(url);
 
-      if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-        final accessToken = jsonResponse['access_token'];
-
-        await getLinkedinProfile(accessToken);
-      } else {
-        print('Request failed with status: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error requestAccessTokenLinkedin: $e');
+    if (response.statusCode == 200) {
+      final accessToken = response.body;
+      await getLinkedinProfile(accessToken);
+      print(accessToken);
+    } else {
+      print('Request failed with status: ${response.statusCode}');
     }
   }
 
@@ -295,18 +315,11 @@ class LoginButtonsWidget extends ConsumerWidget {
       await initializeFirebase();
       print("generateCustomToken - Init App Firebase");
 
-      //UserCredential userCredential =
-      //await FirebaseAuth.instance.signInAnonymously();
-      //print("generateCustomToken - Signin as Anonymous");
-
-      //String? uid = userCredential.user?.uid;
-      //print("generateCustomToken - uid: $uid");
-
-      //final idToken = FirebaseAuth.instance.currentUser?.uid;
-      //print("generateCustomToken - Generic idToken: $idToken");
+      final tokenType =
+          'generate_custom_token'; // Replace with the desired token type
 
       final url = Uri.parse(
-          'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?userID=$userID');
+          'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?userID=$userID&token_type=$tokenType');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {

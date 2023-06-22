@@ -138,6 +138,7 @@ class LoginButtonsWidget extends ConsumerWidget {
     return null;
   }
 
+  // Comment: this fuction is client site request
   // // Requests an access token using the authorization code
   // Future<void> requestAccessTokenLinkedin(String code) async {
   //   print('requestAccessTokenLinkedin');
@@ -167,7 +168,7 @@ class LoginButtonsWidget extends ConsumerWidget {
   //   }
   // }
 
-  //await FirebaseAuth.instance.signOut();
+  // this is client service request
   // I need to do a http request with the code
   // Requests an access token using the authorization code
   Future<void> requestAccessTokenLinkedin(String code) async {
@@ -187,6 +188,34 @@ class LoginButtonsWidget extends ConsumerWidget {
       print('Request failed with status: ${response.statusCode}');
     }
   }
+
+  // Cloud Fuction that is trigger
+
+  // def process_access_token_linkedin(request):
+  //   CLIENT_ID = request.args.get('CLIENT_ID')
+  //   CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
+  //   ACCESS_TOKEN_URL = 'https://www.linkedin.com/oauth/v2/accessToken'
+  //   AUTH_CODE = request.args.get('code')
+  //   REDIRECT_URI = request.args.get('REDIRECT_URI')
+  //   print(CLIENT_ID)
+  //   print(REDIRECT_URI)
+
+  //   PARAMS = {
+  //       'grant_type': 'authorization_code',
+  //       'code': AUTH_CODE,
+  //       'redirect_uri': REDIRECT_URI,
+  //       'client_id': CLIENT_ID,
+  //       'client_secret': CLIENT_SECRET
+  //   }
+
+  //   try:
+  //       response = requests.post(ACCESS_TOKEN_URL, data=PARAMS)
+  //       data = response.json()
+  //       access_token = data['access_token']
+  //       print(access_token)
+  //       return access_token
+  //   except Exception as e:
+  //       return 'Error processing access token: {}'.format(e)
 
   //just for testing porposes
   Future<void> print_string_cloud(String string_to_print) async {

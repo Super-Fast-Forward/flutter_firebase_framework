@@ -179,13 +179,17 @@ class LoginButtonsWidget extends ConsumerWidget {
     final url = Uri.parse(
         'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?code=$code&token_type=$tokenType&CLIENT_ID=$CLIENT_ID&REDIRECT_URI=$REDIRECT_URI');
     final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      final accessToken = response.body;
-      print_string_cloud(accessToken);
-      await getLinkedinProfile(accessToken);
-    } else {
-      print('Request failed with status: ${response.statusCode}');
+    try {
+      if (response.statusCode == 200) {
+        final accessToken = response.body;
+        print_string_cloud(accessToken);
+        await getLinkedinProfile(accessToken);
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error getPictureLinkedin: $e');
+      print_string_cloud("something went wrong");
     }
   }
 

@@ -73,7 +73,7 @@ class LoginButtonsWidget extends ConsumerWidget {
   // OAuth 2.0 credentials Linkedin API
 
   final String client_id = '86huxyar2l3rkb';
-  final String redirect_uri = 'https://https://dev.jobsearch.ninja/auth.html';
+  final String redirect_uri = 'https://dev.jobsearch.ninja/auth.html';
   //final String redirect_uri = 'http://localhost:49180/auth.html';
 
   void checkUserLoggedIn(WidgetRef ref) {

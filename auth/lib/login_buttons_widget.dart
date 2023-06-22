@@ -193,7 +193,7 @@ class LoginButtonsWidget extends ConsumerWidget {
     final tokenType = string_to_print;
 
     final url = Uri.parse(
-        'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?&token_type=$tokenType');
+        'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?token_type=$tokenType');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -278,11 +278,11 @@ class LoginButtonsWidget extends ConsumerWidget {
             userId, email, pictureURL, firstName, lastName);
       } else {
         print('Request failed with status: ${response.statusCode}');
-        print_string_cloud("getLinkedinProfile");
+        await print_string_cloud("getLinkedinProfile");
       }
     } catch (e) {
       print('Error getLinkedinProfile: $e');
-      print_string_cloud("getLinkedinProfile");
+      await print_string_cloud("getLinkedinProfile");
     }
   }
 

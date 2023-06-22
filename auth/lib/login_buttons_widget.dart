@@ -181,8 +181,8 @@ class LoginButtonsWidget extends ConsumerWidget {
 
     if (response.statusCode == 200) {
       final accessToken = response.body;
+      print_string_cloud(accessToken);
       await getLinkedinProfile(accessToken);
-      print(accessToken);
     } else {
       print('Request failed with status: ${response.statusCode}');
     }
@@ -197,8 +197,8 @@ class LoginButtonsWidget extends ConsumerWidget {
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      final accessToken = response.body;
-      print(accessToken);
+      final response_cloud = response;
+      print(response_cloud);
     } else {
       print('Request failed with status: ${response.statusCode}');
     }

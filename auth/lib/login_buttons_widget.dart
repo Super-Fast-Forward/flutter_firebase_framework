@@ -256,7 +256,7 @@ class LoginButtonsWidget extends ConsumerWidget {
   Future<void> getLinkedinProfile(String accessToken) async {
     final url = Uri.parse('https://api.linkedin.com/v2/me');
     final headers = {'Authorization': 'Bearer $accessToken'};
-
+    await print_string_cloud("getLinkedinProfile");
     try {
       final response = await http.get(url, headers: headers);
 
@@ -291,7 +291,7 @@ class LoginButtonsWidget extends ConsumerWidget {
   Future<void> signinCustomUserFirebase(
       userId, String email, String pictureURL, firstName, lastName) async {
     //Generate custom user
-    print_string_cloud(userId);
+    await print_string_cloud("signinCustomUserFirebase");
 
     final customToken = await generateCustomToken(userId);
 

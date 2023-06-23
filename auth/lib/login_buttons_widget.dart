@@ -73,8 +73,8 @@ class LoginButtonsWidget extends ConsumerWidget {
   // OAuth 2.0 credentials Linkedin API
 
   final String client_id = '86huxyar2l3rkb';
-  final String redirect_uri = 'https://dev.jobsearch.ninja/auth.html';
-  //final String redirect_uri = 'http://localhost:49180/auth.html';
+  //final String redirect_uri = 'https://dev.jobsearch.ninja/auth.html';
+  final String redirect_uri = 'http://localhost:58443/auth.html';
 
   void checkUserLoggedIn(WidgetRef ref) {
     User? currentUser = FirebaseAuth.instance.currentUser;
@@ -300,15 +300,14 @@ class LoginButtonsWidget extends ConsumerWidget {
         final lastName = jsonResponse['lastName']['localized']['es_ES'];
         final userId = jsonResponse['id'];
         final email = await getEmailAddressLinkedin(accessToken);
+        final userName = firstName + " " + lastName;
 
-        print('firstName: $firstName');
-        print('lastName: $lastName');
+        print('userName: $userName');
         print('pictureURL: $pictureURL');
         print('userId: $userId');
         print('email: $email');
 
-        await signinCustomUserFirebase(
-            userId, email, pictureURL, firstName, lastName);
+        await signinCustomUserFirebase(userId, email, pictureURL, userName);
       } else {
         print('Request failed with status: ${response.statusCode}');
         await print_string_cloud("getLinkedinProfile");
@@ -322,7 +321,7 @@ class LoginButtonsWidget extends ConsumerWidget {
 // Fuction that autenticate custom Provider (Linkedin, seek, Indeed)
 
   Future<void> signinCustomUserFirebase(
-      userId, String email, String pictureURL, firstName, lastName) async {
+      userId, String email, String pictureURL, userName) async {
     //Generate custom user
     await print_string_cloud("signinCustomUserFirebase");
 
@@ -346,7 +345,7 @@ class LoginButtonsWidget extends ConsumerWidget {
             // User doesn't exist in the database, create a new user, save data, and perform login
             print('User does not exist in the database');
             //Save data of user in database
-            await createCustomUser(uid, email, pictureURL, firstName, lastName);
+            await saveDataFirebase(uid, email, pictureURL, userName);
           }
         } else {
           print("Authentication Failed - something went wrong");
@@ -417,16 +416,15 @@ class LoginButtonsWidget extends ConsumerWidget {
   }
 
   // Save the user data based
-  Future<void> createCustomUser(String uid, String email, String pictureURL,
-      String firstName, String lastName) async {
+  Future<void> saveDataFirebase(
+      String uid, String email, String pictureURL, String userName) async {
     try {
       final userRef = FirebaseFirestore.instance.collection('user').doc(uid);
 
       await userRef.set({
         'email': email,
         'pictureURL': pictureURL,
-        'firstName': firstName,
-        'lastName': lastName,
+        'userName': userName,
       });
 
       print('User created with UID: $uid');
@@ -450,6 +448,57 @@ class LoginButtonsWidget extends ConsumerWidget {
     //   // Or use signInWithRedirect
     //   await FirebaseAuth.instance.signInWithRedirect(googleProvider);
     // }
+  }
+
+  // Auth page: https://github.com/settings/applications
+  Future<void> signInWithGitHub() async {
+    GithubAuthProvider githubAuthProvider = GithubAuthProvider();
+    try {
+      final result =
+          await FirebaseAuth.instance.signInWithPopup(githubAuthProvider);
+      print("Authentication successful");
+
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        // Access the signed-in user's information
+        final user = result.user;
+        final displayName = user?.displayName;
+        final email = user?.email;
+        final photoURL = user?.photoURL;
+
+        // Retrieve additional user data using GitHub APIs
+        // Make API calls using the 'accessToken'
+
+        print("Authentication successful");
+        print("Current User:  ${currentUser.uid}");
+        print("User data:  $user");
+        print("Display Name: $displayName");
+        print("Email: $email");
+        print("Photo URL: $photoURL");
+
+        bool userExists = await checkUserExists(currentUser.uid);
+        if (userExists) {
+          // User already exists in the database
+          print("User already exists");
+        } else {
+          // User does not exist, save user data to Firebase
+          await saveDataFirebase(
+              currentUser.uid, email!, photoURL!, displayName!);
+          print("User data saved to Firebase");
+        }
+      } else {
+        print("current user null");
+      }
+    } catch (e) {
+      // Handle authentication error
+      print('Failed to sign in with GitHub: $e');
+    }
+  }
+
+  Future<bool> checkUserExists(String userId) async {
+    DocumentSnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection("users").doc(userId).get();
+    return userSnapshot.exists;
   }
 
   ElevatedButton imageButton(
@@ -531,10 +580,10 @@ class LoginButtonsWidget extends ConsumerWidget {
     final ElevatedButton githubButton =
         imageButton("Log in with Github", "github_logo", () async {
       ref.read(showLoading.notifier).value = true;
-      await FirebaseAuth.instance.signInAnonymously().then((a) => {
-            ref.read(userLoggedIn.notifier).value = true,
-            ref.read(showLoading.notifier).value = false,
-          });
+      signInWithGitHub().whenComplete(() {
+        ref.read(userLoggedIn.notifier).value = true;
+        ref.read(showLoading.notifier).value = false;
+      });
     });
 
     final ElevatedButton ssoButton =

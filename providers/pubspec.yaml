@@ -21,8 +21,8 @@ dependencies:
       url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
       path: auth
 
-  #auth:
-  #path: "C:/Users/sebas/Desktop/Workspace/JobSearchNinja/flutter_firebase_framework/auth"
+  # auth:
+  #   path: "C:/Users/sebas/Desktop/Workspace/JobSearchNinja/flutter_firebase_framework/auth"
 
 dev_dependencies:
   flutter_test:

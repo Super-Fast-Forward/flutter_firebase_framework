@@ -2,10 +2,12 @@ part of flutter_firebase_framework;
 
 const loginGitHub = "loginGitHub";
 const loginGoogle = "loginGoogle";
-const signuplinkedin = "signuplinkedin";
+const loginlinkedin = "loginlinkedin";
 const loginSSO = "loginSSO";
 const loginEmail = "loginEmail";
 const loginAnonymous = "loginAnonymous";
+const loginFacebook = "loginFacebook";
+const loginTwiter = "loginTwitter";
 const signupOption = "signupOption";
 
 enum LoginOption {
@@ -16,6 +18,7 @@ enum LoginOption {
   Email,
   Anonymous,
   signupOption,
+  Twiter,
 }
 
 const borderColor = Color.fromARGB(255, 208, 208, 208);
@@ -73,8 +76,8 @@ class LoginButtonsWidget extends ConsumerWidget {
   // OAuth 2.0 credentials Linkedin API
 
   final String client_id = '86huxyar2l3rkb';
-  //final String redirect_uri = 'https://dev.jobsearch.ninja/auth.html';
-  final String redirect_uri = 'http://localhost:58443/auth.html';
+  final String redirect_uri = 'https://dev.jobsearch.ninja/auth.html';
+  //final String redirect_uri = 'http://localhost:58443/auth.html';
 
   void checkUserLoggedIn(WidgetRef ref) {
     User? currentUser = FirebaseAuth.instance.currentUser;
@@ -495,6 +498,97 @@ class LoginButtonsWidget extends ConsumerWidget {
     }
   }
 
+  //https://developer.twitter.com/en/portal/projects/1672405934805745666/apps/27364500/settings
+  Future<void> signInWithFacebook() async {
+    FacebookAuthProvider facebookAuthProvider = FacebookAuthProvider();
+    try {
+      print("Starting Facebook authentication");
+      final result =
+          await FirebaseAuth.instance.signInWithPopup(facebookAuthProvider);
+      print("Authentication successful");
+
+      // User? currentUser = FirebaseAuth.instance.currentUser;
+      // if (currentUser != null) {
+      //   // Access the signed-in user's information
+      //   final user = result.user;
+      //   final displayName = user?.displayName;
+      //   final email = user?.email;
+      //   final photoURL = user?.photoURL;
+
+      //   // Retrieve additional user data using GitHub APIs
+      //   // Make API calls using the 'accessToken'
+
+      //   print("Authentication successful");
+      //   print("Current User:  ${currentUser.uid}");
+      //   print("User data:  $user");
+      //   print("Display Name: $displayName");
+      //   print("Email: $email");
+      //   print("Photo URL: $photoURL");
+
+      //   bool userExists = await checkUserExists(currentUser.uid);
+      //   if (userExists) {
+      //     // User already exists in the database
+      //     print("User already exists");
+      //   } else {
+      //     // User does not exist, save user data to Firebase
+      //     await saveDataFirebase(
+      //         currentUser.uid, email!, photoURL!, displayName!);
+      //     print("User data saved to Firebase");
+      //   }
+      // } else {
+      //   print("current user null");
+      // }
+    } catch (e) {
+      // Handle authentication error
+      print('Failed to sign in with Facebook: $e');
+    }
+  }
+
+  Future<void> signInWithTwitter() async {
+    TwitterAuthProvider twitterAuthProvider = TwitterAuthProvider();
+    try {
+      print("Starting twitter authentication");
+      final result =
+          await FirebaseAuth.instance.signInWithPopup(twitterAuthProvider);
+      print("Authentication successful");
+
+      // User? currentUser = FirebaseAuth.instance.currentUser;
+      // if (currentUser != null) {
+      //   // Access the signed-in user's information
+      //   final user = result.user;
+      //   final displayName = user?.displayName;
+      //   final email = user?.email;
+      //   final photoURL = user?.photoURL;
+
+      //   // Retrieve additional user data using GitHub APIs
+      //   // Make API calls using the 'accessToken'
+
+      //   print("Authentication successful");
+      //   print("Current User:  ${currentUser.uid}");
+      //   print("User data:  $user");
+      //   print("Display Name: $displayName");
+      //   print("Email: $email");
+      //   print("Photo URL: $photoURL");
+
+      //   bool userExists = await checkUserExists(currentUser.uid);
+      //   if (userExists) {
+      //     // User already exists in the database
+      //     print("User already exists");
+      //   } else {
+      //     // User does not exist, save user data to Firebase
+      //     await saveDataFirebase(
+      //         currentUser.uid, email!, photoURL!, displayName!);
+      //     print("User data saved to Firebase");
+      //   }
+      // } else {
+      //   print("current user null");
+      // }
+    } catch (e) {
+      // Handle authentication error
+      print('Failed to sign in with Twitter: $e');
+    }
+  }
+
   Future<bool> checkUserExists(String userId) async {
     DocumentSnapshot userSnapshot =
         await FirebaseFirestore.instance.collection("users").doc(userId).get();
@@ -586,6 +680,24 @@ class LoginButtonsWidget extends ConsumerWidget {
       });
     });
 
+    final ElevatedButton facebookButton =
+        imageButton("Log in with facebook", "facebook_logo", () async {
+      ref.read(showLoading.notifier).value = true;
+      signInWithFacebook().whenComplete(() {
+        ref.read(userLoggedIn.notifier).value = true;
+        ref.read(showLoading.notifier).value = false;
+      });
+    });
+
+    final ElevatedButton twitterButton =
+        imageButton("Log in with twiter", "twitter_logo", () async {
+      ref.read(showLoading.notifier).value = true;
+      signInWithTwitter().whenComplete(() {
+        ref.read(userLoggedIn.notifier).value = true;
+        ref.read(showLoading.notifier).value = false;
+      });
+    });
+
     final ElevatedButton ssoButton =
         iconButton("Log in with SSO", Icons.key, () {});
 
@@ -636,7 +748,7 @@ class LoginButtonsWidget extends ConsumerWidget {
                     visible: AuthConfig.enableLinkedinOption,
                     child: Column(
                       children: [
-                        const Gap(25),
+                        const Gap(50),
                         SizedBox(width: double.infinity, child: linkedinButton),
                       ],
                     ),
@@ -650,6 +762,30 @@ class LoginButtonsWidget extends ConsumerWidget {
                       children: [
                         const Gap(50),
                         SizedBox(width: double.infinity, child: githubButton),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible: AuthConfig.enableFacebookOption,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        const Gap(50),
+                        SizedBox(width: double.infinity, child: facebookButton),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible: AuthConfig.enableTwitterOption,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        const Gap(50),
+                        SizedBox(width: double.infinity, child: twitterButton),
                       ],
                     ),
                   ),

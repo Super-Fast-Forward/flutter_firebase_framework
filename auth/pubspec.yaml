@@ -29,8 +29,8 @@ dependencies:
       url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
       path: providers
 
-#  providers:
-#    path: "C:/Users/sebas/Desktop/Workspace/JobSearchNinja/flutter_firebase_framework/providers"
+  # providers:
+  #   path: "C:/Users/sebas/Desktop/Workspace/JobSearchNinja/flutter_firebase_framework/providers"
 
 # dependency_overrides:
 #   providers:
@@ -48,3 +48,5 @@ flutter:
     - assets/google_logo.svg
     - assets/github_logo.svg
     - assets/linkedin_logo.svg
+    - assets/facebook_logo.svg
+    - assets/twitter_logo.svg

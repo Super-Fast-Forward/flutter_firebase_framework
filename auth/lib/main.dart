@@ -28,10 +28,12 @@ part 'auth_state_notifier.dart';
 
 class AuthConfig {
   static bool enableGoogleAuth = true;
-  static bool enableGithubAuth = false;
+  static bool enableGithubAuth = true;
   static bool enableSsoAuth = false;
   static bool enableEmailAuth = false;
   static bool enableAnonymousAuth = true;
   static bool enableSignupOption = false;
   static bool enableLinkedinOption = true;
+  static bool enableFacebookOption = true;
+  static bool enableTwitterOption = true;
 }

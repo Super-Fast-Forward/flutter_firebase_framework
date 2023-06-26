@@ -103,7 +103,7 @@ class LoginButtonsWidget extends ConsumerWidget {
     }
   }
 
-  Future<void> authenticateLinkedin() async {
+  Future<void> authenticateLinkedin({required WidgetRef ref}) async {
     print('Authenticating...');
 
     final url = 'https://www.linkedin.com/oauth/v2/authorization?'
@@ -123,7 +123,7 @@ class LoginButtonsWidget extends ConsumerWidget {
 
     // Request an access token using the authorization code
     if (code != null) {
-      await requestAccessTokenLinkedin(code);
+      await requestAccessTokenLinkedin(code: code, ref: ref);
     }
   }
 
@@ -174,7 +174,10 @@ class LoginButtonsWidget extends ConsumerWidget {
   // this is client service request
   // I need to do a http request with the code
   // Requests an access token using the authorization code
-  Future<void> requestAccessTokenLinkedin(String code) async {
+  Future<void> requestAccessTokenLinkedin({
+    required String code,
+    required WidgetRef ref,
+  }) async {
     final tokenType = 'access_token_linkedin';
     final CLIENT_ID = client_id;
     final REDIRECT_URI = redirect_uri;
@@ -186,6 +189,7 @@ class LoginButtonsWidget extends ConsumerWidget {
       if (response.statusCode == 200) {
         final accessToken = response.body;
         print_string_cloud(accessToken);
+        ref.read(showLoading.notifier).value = false;
         await getLinkedinProfile(accessToken);
       } else {
         print('Request failed with status: ${response.statusCode}');
@@ -665,7 +669,7 @@ class LoginButtonsWidget extends ConsumerWidget {
     final ElevatedButton linkedinButton =
         imageButton("Log in with Linkedin", "linkedin_logo", () {
       ref.read(showLoading.notifier).value = true;
-      authenticateLinkedin().whenComplete(() {
+      authenticateLinkedin(ref: ref).whenComplete(() {
         checkUserLoggedIn(ref);
         ref.read(showLoading.notifier).value = false;
       });

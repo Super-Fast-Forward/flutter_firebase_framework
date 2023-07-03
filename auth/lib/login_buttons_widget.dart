@@ -436,7 +436,7 @@ class LoginButtonsWidget extends ConsumerWidget {
     }
   }
 
-  Future signInWithGoogle() async {
+  Future<void> signInWithGoogle() async {
     // Create a new provider
     GoogleAuthProvider googleProvider = GoogleAuthProvider();
 
@@ -444,13 +444,17 @@ class LoginButtonsWidget extends ConsumerWidget {
         .addScope('https://www.googleapis.com/auth/contacts.readonly');
     googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
 
-    // if (kIsWeb) {
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithPopup(googleProvider);
-    // } else {
-    //   // Or use signInWithRedirect
-    //   await FirebaseAuth.instance.signInWithRedirect(googleProvider);
-    // }
+    try {
+      final result =
+          await FirebaseAuth.instance.signInWithPopup(googleProvider);
+      print("Authentication successful");
+
+      //determine if the user exists if not save custom data in the data base
+      await checkUserExists(result);
+    } catch (e) {
+      // Handle authentication error
+      print('Failed to sign in with GitHub: $e');
+    }
   }
 
   // Auth page: https://github.com/settings/applications
@@ -461,37 +465,8 @@ class LoginButtonsWidget extends ConsumerWidget {
           await FirebaseAuth.instance.signInWithPopup(githubAuthProvider);
       print("Authentication successful");
 
-      User? currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser != null) {
-        // Access the signed-in user's information
-        final user = result.user;
-        final displayName = user?.displayName;
-        final email = user?.email;
-        final photoURL = user?.photoURL;
-
-        // Retrieve additional user data using GitHub APIs
-        // Make API calls using the 'accessToken'
-
-        print("Authentication successful");
-        print("Current User:  ${currentUser.uid}");
-        print("User data:  $user");
-        print("Display Name: $displayName");
-        print("Email: $email");
-        print("Photo URL: $photoURL");
-
-        bool userExists = await checkUserExists(currentUser.uid);
-        if (userExists) {
-          // User already exists in the database
-          print("User already exists");
-        } else {
-          // User does not exist, save user data to Firebase
-          await saveDataFirebase(
-              currentUser.uid, email!, photoURL!, displayName!);
-          print("User data saved to Firebase");
-        }
-      } else {
-        print("current user null");
-      }
+      //determine if the user exists if not save custom data in the data base
+      await checkUserExists(result);
     } catch (e) {
       // Handle authentication error
       print('Failed to sign in with GitHub: $e');
@@ -506,38 +481,8 @@ class LoginButtonsWidget extends ConsumerWidget {
       final result =
           await FirebaseAuth.instance.signInWithPopup(facebookAuthProvider);
       print("Authentication successful");
-
-      // User? currentUser = FirebaseAuth.instance.currentUser;
-      // if (currentUser != null) {
-      //   // Access the signed-in user's information
-      //   final user = result.user;
-      //   final displayName = user?.displayName;
-      //   final email = user?.email;
-      //   final photoURL = user?.photoURL;
-
-      //   // Retrieve additional user data using GitHub APIs
-      //   // Make API calls using the 'accessToken'
-
-      //   print("Authentication successful");
-      //   print("Current User:  ${currentUser.uid}");
-      //   print("User data:  $user");
-      //   print("Display Name: $displayName");
-      //   print("Email: $email");
-      //   print("Photo URL: $photoURL");
-
-      //   bool userExists = await checkUserExists(currentUser.uid);
-      //   if (userExists) {
-      //     // User already exists in the database
-      //     print("User already exists");
-      //   } else {
-      //     // User does not exist, save user data to Firebase
-      //     await saveDataFirebase(
-      //         currentUser.uid, email!, photoURL!, displayName!);
-      //     print("User data saved to Firebase");
-      //   }
-      // } else {
-      //   print("current user null");
-      // }
+      //determine if the user exists if not save custom data in the data base
+      await checkUserExists(result);
     } catch (e) {
       // Handle authentication error
       print('Failed to sign in with Facebook: $e');
@@ -547,52 +492,61 @@ class LoginButtonsWidget extends ConsumerWidget {
   Future<void> signInWithTwitter() async {
     TwitterAuthProvider twitterAuthProvider = TwitterAuthProvider();
     try {
-      print("Starting twitter authentication");
-      final result =
-          await FirebaseAuth.instance.signInWithPopup(twitterAuthProvider);
+      if (kIsWeb) {
+        print("Starting twitter authentication");
+        final result =
+            await FirebaseAuth.instance.signInWithPopup(twitterAuthProvider);
+        await checkUserExists(result);
+      } else {
+        final result =
+            await FirebaseAuth.instance.signInWithProvider(twitterAuthProvider);
+        await checkUserExists(result);
+      }
       print("Authentication successful");
-
-      // User? currentUser = FirebaseAuth.instance.currentUser;
-      // if (currentUser != null) {
-      //   // Access the signed-in user's information
-      //   final user = result.user;
-      //   final displayName = user?.displayName;
-      //   final email = user?.email;
-      //   final photoURL = user?.photoURL;
-
-      //   // Retrieve additional user data using GitHub APIs
-      //   // Make API calls using the 'accessToken'
-
-      //   print("Authentication successful");
-      //   print("Current User:  ${currentUser.uid}");
-      //   print("User data:  $user");
-      //   print("Display Name: $displayName");
-      //   print("Email: $email");
-      //   print("Photo URL: $photoURL");
-
-      //   bool userExists = await checkUserExists(currentUser.uid);
-      //   if (userExists) {
-      //     // User already exists in the database
-      //     print("User already exists");
-      //   } else {
-      //     // User does not exist, save user data to Firebase
-      //     await saveDataFirebase(
-      //         currentUser.uid, email!, photoURL!, displayName!);
-      //     print("User data saved to Firebase");
-      //   }
-      // } else {
-      //   print("current user null");
-      // }
+      //determine if the user exists if not save custom data in the data base
     } catch (e) {
       // Handle authentication error
       print('Failed to sign in with Twitter: $e');
     }
   }
 
-  Future<bool> checkUserExists(String userId) async {
-    DocumentSnapshot userSnapshot =
-        await FirebaseFirestore.instance.collection("users").doc(userId).get();
-    return userSnapshot.exists;
+  Future<void> checkUserExists(UserCredential result) async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser != null) {
+      // Access the signed-in user's information
+      final user = result.user;
+      final displayName = user?.displayName;
+      final email = user?.email;
+      final photoURL = user?.photoURL;
+
+      // Retrieve additional user data using GitHub APIs
+      // Make API calls using the 'accessToken'
+
+      // print("Current User:  ${currentUser.uid}");
+      // print("User data:  $user");
+      // print("Display Name: $displayName");
+      // print("Email: $email");
+      // print("Photo URL: $photoURL");
+
+      // Deteremine if the user exits
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(currentUser.uid)
+          .get();
+
+      if (userSnapshot.exists) {
+        // User already exists in the database
+        print("User already exists");
+      } else {
+        // User does not exist, save user data to Firebase
+        await saveDataFirebase(
+            currentUser.uid, email!, photoURL!, displayName!);
+        print("User data saved to Firebase");
+      }
+    } else {
+      print("current user is null");
+    }
   }
 
   ElevatedButton imageButton(

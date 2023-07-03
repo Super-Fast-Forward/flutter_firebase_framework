@@ -34,7 +34,8 @@
 /dev/docs/doc/
 /dev/docs/flutter.docs.zip
 /dev/docs/lib/
-/dev/docs/pubspec.yaml
+/dev/docs/pubsp
+ec.yaml
 /dev/integration_tests/**/xcuserdata
 /dev/integration_tests/**/Pods
 /packages/flutter/coverage/
@@ -45,8 +46,10 @@ analysis_benchmark.json
 .packages.generated
 
 # Flutter/Dart/Pub related
-**/doc/api/
 .dart_tool/
+build/
+pubspec.lock
+**/doc/api/
 .flutter-plugins
 .flutter-plugins-dependencies
 **/generated_plugin_registrant.dart

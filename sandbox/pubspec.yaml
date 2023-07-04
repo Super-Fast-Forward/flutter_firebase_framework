@@ -1,7 +1,6 @@
 name: sandbox
 description: sandbox for widget testing
 version: 0.0.1
-homepage:
 publish_to: none
 
 environment:

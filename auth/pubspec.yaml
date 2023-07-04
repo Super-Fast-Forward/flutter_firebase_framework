@@ -1,7 +1,6 @@
 name: auth
 description: Reusable firebase auth widgets and providers, part of FFFW
 version: 0.0.1
-homepage:
 publish_to: none
 
 environment:

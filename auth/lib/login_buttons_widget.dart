@@ -73,12 +73,6 @@ class LoginButtonsWidget extends ConsumerWidget {
     Key? key,
   }) : super(key: key);
 
-  // OAuth 2.0 credentials Linkedin API
-
-  final String client_id = '86huxyar2l3rkb';
-  final String redirect_uri = 'https://dev.jobsearch.ninja/auth.html';
-  //final String redirect_uri = 'http://localhost:58443/auth.html';
-
   void checkUserLoggedIn(WidgetRef ref) {
     User? currentUser = FirebaseAuth.instance.currentUser;
 
@@ -103,7 +97,36 @@ class LoginButtonsWidget extends ConsumerWidget {
     }
   }
 
+  Future<String?> validate_url() async {
+    print('validate_url');
+    final tokenType = 'validate_url';
+    try {
+      final url = Uri.parse(
+          'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?token_type=$tokenType');
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final validate_url = response.body;
+        //print("validate_url: $validate_url");
+        return validate_url;
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error validate_url: $e');
+    }
+    return null;
+  }
+
   Future<void> authenticateLinkedin({required WidgetRef ref}) async {
+    // returne the current url to do the resquest
+    final valid_url = await validate_url();
+
+    final String client_id = '86huxyar2l3rkb';
+    final String redirect_uri = '${valid_url}/auth.html';
+    print("redirect_uri: $redirect_uri");
+    //final String redirect_uri = 'http://localhost:49215/auth.html';
+
     print('Authenticating...');
 
     final url = 'https://www.linkedin.com/oauth/v2/authorization?'
@@ -115,7 +138,7 @@ class LoginButtonsWidget extends ConsumerWidget {
     // Open the authorization URL in a web view and wait for the result
     final result = await FlutterWebAuth2.authenticate(
       url: url,
-      callbackUrlScheme: 'http',
+      callbackUrlScheme: 'https',
     );
 
     // Extract the authorization code from the result
@@ -123,13 +146,17 @@ class LoginButtonsWidget extends ConsumerWidget {
 
     // Request an access token using the authorization code
     if (code != null) {
-      await requestAccessTokenLinkedin(code: code, ref: ref);
+      await requestAccessTokenLinkedin(
+          code: code,
+          ref: ref,
+          client_id: client_id,
+          redirect_uri: redirect_uri);
     }
   }
 
   // Extracts the authorization code from the callback URL
   Future<String?> handleAuthResultCodeLinkedin(String result) async {
-    print("handleAuthResultCodeLinkedin");
+    print("handleAuthResultCodeLinkedin-test");
     final currentUri = Uri.parse(result);
 
     if (currentUri.queryParameters.containsKey('code')) {
@@ -141,187 +168,45 @@ class LoginButtonsWidget extends ConsumerWidget {
     return null;
   }
 
-  // Comment: this fuction is client site request
-  // // Requests an access token using the authorization code
-  // Future<void> requestAccessTokenLinkedin(String code) async {
-  //   print('requestAccessTokenLinkedin');
-  //   final url = Uri.parse('https://www.linkedin.com/oauth/v2/accessToken');
-  //   final headers = {'Content-Type': 'application/x-www-form-urlencoded'};
-  //   final body = {
-  //     'grant_type': 'authorization_code',
-  //     'client_id': client_id,
-  //     'client_secret': client_secret,
-  //     'code': code,
-  //     'redirect_uri': redirect_uri,
-  //   };
-
-  //   try {
-  //     final response = await http.post(url, headers: headers, body: body);
-
-  //     if (response.statusCode == 200) {
-  //       final jsonResponse = jsonDecode(response.body);
-  //       final accessToken = jsonResponse['access_token'];
-
-  //       await getLinkedinProfile(accessToken);
-  //     } else {
-  //       print('Request failed with status: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     print('Error requestAccessTokenLinkedin: $e');
-  //   }
-  // }
-
   // this is client service request
   // I need to do a http request with the code
   // Requests an access token using the authorization code
   Future<void> requestAccessTokenLinkedin({
     required String code,
     required WidgetRef ref,
+    required String client_id,
+    required String redirect_uri,
   }) async {
+    print("requestAccessTokenLinkedin");
     final tokenType = 'access_token_linkedin';
     final CLIENT_ID = client_id;
     final REDIRECT_URI = redirect_uri;
 
-    final url = Uri.parse(
-        'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?code=$code&token_type=$tokenType&CLIENT_ID=$CLIENT_ID&REDIRECT_URI=$REDIRECT_URI');
-    final response = await http.get(url);
     try {
+      final url = Uri.parse(
+          'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?code=$code&token_type=$tokenType&CLIENT_ID=$CLIENT_ID&REDIRECT_URI=$REDIRECT_URI');
+      final response = await http.get(url);
+      print("requestAccessTokenLinkedin - response: $response");
       if (response.statusCode == 200) {
-        final accessToken = response.body;
-        print_string_cloud(accessToken);
+        final responseBody = response.body;
+        final Map<String, dynamic> responseData = json.decode(responseBody);
+        final user_id = responseData['user_id'];
+        final email = responseData['email'];
+        final picture_url = responseData['picture_url'];
+        final user_name = responseData['user_name'];
+
+        // print("User ID: $user_id");
+        // print("Email: $email");
+        // print("Picture URL: $picture_url");
+        // print("User Name: $user_name");
         ref.read(showLoading.notifier).value = false;
-        await getLinkedinProfile(accessToken);
+        await signinCustomUserFirebase(user_id, email, picture_url, user_name);
       } else {
         print('Request failed with status: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error getPictureLinkedin: $e');
-      print_string_cloud("something went wrong");
-    }
-  }
-
-  // Cloud Fuction that is trigger
-
-  // def process_access_token_linkedin(request):
-  //   CLIENT_ID = request.args.get('CLIENT_ID')
-  //   CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
-  //   ACCESS_TOKEN_URL = 'https://www.linkedin.com/oauth/v2/accessToken'
-  //   AUTH_CODE = request.args.get('code')
-  //   REDIRECT_URI = request.args.get('REDIRECT_URI')
-  //   print(CLIENT_ID)
-  //   print(REDIRECT_URI)
-
-  //   PARAMS = {
-  //       'grant_type': 'authorization_code',
-  //       'code': AUTH_CODE,
-  //       'redirect_uri': REDIRECT_URI,
-  //       'client_id': CLIENT_ID,
-  //       'client_secret': CLIENT_SECRET
-  //   }
-
-  //   try:
-  //       response = requests.post(ACCESS_TOKEN_URL, data=PARAMS)
-  //       data = response.json()
-  //       access_token = data['access_token']
-  //       print(access_token)
-  //       return access_token
-  //   except Exception as e:
-  //       return 'Error processing access token: {}'.format(e)
-
-  //just for testing porposes
-  Future<void> print_string_cloud(String string_to_print) async {
-    final tokenType = string_to_print;
-
-    final url = Uri.parse(
-        'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?token_type=$tokenType');
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      final response_cloud = response;
-      print(response_cloud);
-    } else {
-      print('Request failed with status: ${response.statusCode}');
-    }
-  }
-
-// Retrieves the user's profile picture URL using the access token
-  Future<String> getPictureLinkedin(String accessToken) async {
-    final url = Uri.parse(
-        'https://api.linkedin.com/v2/me?projection=(profilePicture(displayImage~:playableStreams))');
-    final headers = {'Authorization': 'Bearer $accessToken'};
-
-    try {
-      final response = await http.get(url, headers: headers);
-
-      if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-        final profilePic = jsonResponse['profilePicture']['displayImage~']
-            ['elements'][0]['identifiers'][0]['identifier'];
-
-        return profilePic.toString();
-      } else {
-        print('Request failed with status: ${response.statusCode}');
-        return '${response.statusCode}';
-      }
-    } catch (e) {
-      print('Error getPictureLinkedin: $e');
-      return '$e';
-    }
-  }
-
-  // Requests the user's email address using the access token
-  Future<String> getEmailAddressLinkedin(String accessToken) async {
-    final url = Uri.parse(
-        'https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))');
-    final headers = {'Authorization': 'Bearer $accessToken'};
-
-    try {
-      final response = await http.get(url, headers: headers);
-
-      if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-        final email = jsonResponse['elements'][0]['handle~']['emailAddress'];
-        return email.toString();
-      } else {
-        print('Request failed with status: ${response.statusCode}');
-        return '${response.statusCode}';
-      }
-    } catch (e) {
-      print('Error getEmailAddressLinkedin: $e');
-      return '$e';
-    }
-  }
-
-  // fuction that make a request to Linkedin Api to retrive the main values
-  Future<void> getLinkedinProfile(String accessToken) async {
-    final url = Uri.parse('https://api.linkedin.com/v2/me');
-    final headers = {'Authorization': 'Bearer $accessToken'};
-    await print_string_cloud("getLinkedinProfile");
-    try {
-      final response = await http.get(url, headers: headers);
-
-      if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-        final pictureURL = await getPictureLinkedin(accessToken);
-        final firstName = jsonResponse['firstName']['localized']['es_ES'];
-        final lastName = jsonResponse['lastName']['localized']['es_ES'];
-        final userId = jsonResponse['id'];
-        final email = await getEmailAddressLinkedin(accessToken);
-        final userName = firstName + " " + lastName;
-
-        print('userName: $userName');
-        print('pictureURL: $pictureURL');
-        print('userId: $userId');
-        print('email: $email');
-
-        await signinCustomUserFirebase(userId, email, pictureURL, userName);
-      } else {
-        print('Request failed with status: ${response.statusCode}');
-        await print_string_cloud("getLinkedinProfile");
-      }
-    } catch (e) {
-      print('Error getLinkedinProfile: $e');
-      await print_string_cloud("getLinkedinProfile");
+      print('Error requestAccessTokenLinkedin: $e');
+      // Handle the error
     }
   }
 
@@ -330,8 +215,8 @@ class LoginButtonsWidget extends ConsumerWidget {
   Future<void> signinCustomUserFirebase(
       userId, String email, String pictureURL, userName) async {
     //Generate custom user
-    await print_string_cloud("signinCustomUserFirebase");
 
+    print('signinCustomUserFirebase');
     final customToken = await generateCustomToken(userId);
 
     final signinfirebase = await signInWithCustomToken(customToken as String);
@@ -356,7 +241,6 @@ class LoginButtonsWidget extends ConsumerWidget {
           }
         } else {
           print("Authentication Failed - something went wrong");
-          // Authentication failed
         }
       }
     }
@@ -412,6 +296,7 @@ class LoginButtonsWidget extends ConsumerWidget {
   }
 
   Future<bool> checkCustomUserExists(String uid) async {
+    print('checkCustomUserExists');
     try {
       final DocumentSnapshot snapshot =
           await FirebaseFirestore.instance.collection('user').doc(uid).get();
@@ -425,6 +310,7 @@ class LoginButtonsWidget extends ConsumerWidget {
   // Save the user data based
   Future<void> saveDataFirebase(
       String uid, String email, String pictureURL, String userName) async {
+    print('saveDataFirebase');
     try {
       final userRef = FirebaseFirestore.instance.collection('user').doc(uid);
 
@@ -515,6 +401,7 @@ class LoginButtonsWidget extends ConsumerWidget {
   }
 
   Future<void> checkUserExists(UserCredential result) async {
+    print("checkUserExists");
     User? currentUser = FirebaseAuth.instance.currentUser;
 
     if (currentUser != null) {
@@ -527,7 +414,7 @@ class LoginButtonsWidget extends ConsumerWidget {
       // Retrieve additional user data using GitHub APIs
       // Make API calls using the 'accessToken'
 
-      // print("Current User:  ${currentUser.uid}");
+      print("Current User:  ${currentUser.uid}");
       // print("User data:  $user");
       // print("Display Name: $displayName");
       // print("Email: $email");
@@ -535,7 +422,7 @@ class LoginButtonsWidget extends ConsumerWidget {
 
       // Deteremine if the user exits
       DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection("users")
+          .collection("user")
           .doc(currentUser.uid)
           .get();
 
@@ -543,7 +430,7 @@ class LoginButtonsWidget extends ConsumerWidget {
         // User already exists in the database
         print("User already exists");
       } else {
-        // User does not exist, save user data to Firebase
+        print("data it will be saved");
         await saveDataFirebase(
             currentUser.uid, email!, photoURL!, displayName!);
         print("User data saved to Firebase");

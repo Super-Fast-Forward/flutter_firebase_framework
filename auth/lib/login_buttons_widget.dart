@@ -58,7 +58,7 @@ Future<void> initializeFirebase() async {
   print('Firebase initialized successfully');
 }
 
-class LoginButtonsWidget extends ConsumerWidget {
+class LoginWidget extends ConsumerWidget {
   final String screenTitle;
 
   /// This is the function that is called when the Anonymous Login button is pressed.
@@ -67,7 +67,7 @@ class LoginButtonsWidget extends ConsumerWidget {
   final Function? onLoginAnonymousButtonPressed;
 
   ///Login Options are set in LoginConfig
-  const LoginButtonsWidget({
+  const LoginWidget({
     required this.screenTitle,
     this.onLoginAnonymousButtonPressed,
     Key? key,
@@ -488,6 +488,9 @@ class LoginButtonsWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenSize = MediaQuery.of(context).size;
+    bool isWideScreen = screenSize.width >= screenSize.height;
+
     if (ref.watch(showLoading)) {
       return Center(
         child: Container(
@@ -497,8 +500,6 @@ class LoginButtonsWidget extends ConsumerWidget {
       );
     }
     List<String> configFlags = [];
-
-    bool isWideScreen = MediaQuery.of(context).size.width >= 800;
 
     final ElevatedButton googleButton =
         imageButton("Log in with Google", "google_logo", () {
@@ -701,6 +702,9 @@ class LoginButtonsWidget extends ConsumerWidget {
         ? Flex(direction: Axis.horizontal, children: widgets)
         : SingleChildScrollView(
             child: Flex(
-                direction: Axis.vertical, children: widgets.reversed.toList()));
+              direction: Axis.vertical,
+              children: widgets.reversed.toList(),
+            ),
+          );
   }
 }

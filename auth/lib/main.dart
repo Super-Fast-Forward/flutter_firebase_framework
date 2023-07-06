@@ -2,6 +2,7 @@ library flutter_firebase_framework;
 
 //import 'dart:ffi';
 
+import 'package:auth/login_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:firebase_admin/firebase_admin.dart';
 //import 'package:firebase_admin/src/auth/token_generator.dart';
@@ -22,10 +23,8 @@ import 'package:flutter/material.dart';
 
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:providers/generic.dart';
-part 'login_buttons_widget.dart';
+part 'login_widget.dart';
 part 'auth_state_notifier.dart';
 
 class AuthConfig {

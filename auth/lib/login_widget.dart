@@ -21,15 +21,6 @@ enum LoginOption {
   Twiter,
 }
 
-const borderColor = Color.fromARGB(255, 208, 208, 208);
-const borderDecor = BoxDecoration(
-  border: Border(
-    right: BorderSide(
-      color: borderColor,
-    ),
-  ),
-);
-
 final userLoggedIn = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
     (ref) => AuthStateNotifier<bool>(false));
 
@@ -58,7 +49,7 @@ Future<void> initializeFirebase() async {
   print('Firebase initialized successfully');
 }
 
-class LoginButtonsWidget extends ConsumerWidget {
+class LoginWidget extends ConsumerWidget {
   final String screenTitle;
 
   /// This is the function that is called when the Anonymous Login button is pressed.
@@ -67,7 +58,7 @@ class LoginButtonsWidget extends ConsumerWidget {
   final Function? onLoginAnonymousButtonPressed;
 
   ///Login Options are set in LoginConfig
-  const LoginButtonsWidget({
+  const LoginWidget({
     required this.screenTitle,
     this.onLoginAnonymousButtonPressed,
     Key? key,
@@ -440,267 +431,113 @@ class LoginButtonsWidget extends ConsumerWidget {
     }
   }
 
-  ElevatedButton imageButton(
-      String title, String imageName, VoidCallback callback) {
-    return ElevatedButton(
-        key: Key(title),
-        onPressed: callback,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 50,
-              height: 50,
-              decoration: borderDecor,
-              margin: const EdgeInsets.only(right: 70),
-              child: Container(
-                margin: const EdgeInsets.only(right: 20),
-                child: SvgPicture.asset('/assets/$imageName.svg',
-                    package: 'auth', width: 30, height: 30),
-              ),
-            ),
-            SizedBox(width: 180, child: Text(title)),
-          ],
-        ));
-  }
-
-  ElevatedButton iconButton(
-      String title, IconData iconData, VoidCallback callback) {
-    return ElevatedButton(
-      onPressed: callback,
-      child: Row(mainAxisSize: MainAxisSize.min, children: [
-        Container(
-            height: 50,
-            width: 50,
-            decoration: borderDecor,
-            margin: const EdgeInsets.only(right: 70),
-            child: Container(
-                margin: const EdgeInsets.only(right: 20),
-                child: Icon(
-                  iconData,
-                  size: 30,
-                  color: Colors.black,
-                ))),
-        SizedBox(width: 180, child: Text(title))
-      ]),
-    );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (ref.watch(showLoading)) {
-      return Center(
-        child: Container(
-          alignment: const Alignment(0.0, 0.0),
-          child: const CircularProgressIndicator(),
-        ),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
-    List<String> configFlags = [];
 
-    bool isWideScreen = MediaQuery.of(context).size.width >= 800;
-
-    final ElevatedButton googleButton =
-        imageButton("Log in with Google", "google_logo", () {
-      signInWithGoogle().whenComplete(() {
-        ref.read(userLoggedIn.notifier).value = true;
-      });
-    });
-
-    final ElevatedButton linkedinButton =
-        imageButton("Log in with Linkedin", "linkedin_logo", () {
-      ref.read(showLoading.notifier).value = true;
-      authenticateLinkedin(ref: ref).whenComplete(() {
-        checkUserLoggedIn(ref);
-        ref.read(showLoading.notifier).value = false;
-      });
-    });
-
-    final ElevatedButton githubButton =
-        imageButton("Log in with Github", "github_logo", () async {
-      ref.read(showLoading.notifier).value = true;
-      signInWithGitHub().whenComplete(() {
-        ref.read(userLoggedIn.notifier).value = true;
-        ref.read(showLoading.notifier).value = false;
-      });
-    });
-
-    final ElevatedButton facebookButton =
-        imageButton("Log in with facebook", "facebook_logo", () async {
-      ref.read(showLoading.notifier).value = true;
-      signInWithFacebook().whenComplete(() {
-        ref.read(userLoggedIn.notifier).value = true;
-        ref.read(showLoading.notifier).value = false;
-      });
-    });
-
-    final ElevatedButton twitterButton =
-        imageButton("Log in with twiter", "twitter_logo", () async {
-      ref.read(showLoading.notifier).value = true;
-      signInWithTwitter().whenComplete(() {
-        ref.read(userLoggedIn.notifier).value = true;
-        ref.read(showLoading.notifier).value = false;
-      });
-    });
-
-    final ElevatedButton ssoButton =
-        iconButton("Log in with SSO", Icons.key, () {});
-
-    final ElevatedButton emailButton =
-        iconButton("Log in with Email", Icons.mail, () {});
-
-    final ElevatedButton anonymousButton =
-        iconButton("Log in Anonymous", Icons.account_circle, () async {
-      FirebaseAuth.instance.signInAnonymously().then((a) => {
-            if (onLoginAnonymousButtonPressed != null)
-              onLoginAnonymousButtonPressed!()
-          });
-    });
-
-    List<Widget> widgets = [
-      Expanded(
-        flex: isWideScreen ? 1 : 0,
-        child: SingleChildScrollView(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 340,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      screenTitle,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Visibility(
-                    visible: AuthConfig.enableGoogleAuth,
-                    child: Column(
-                      children: [
-                        const Gap(25),
-                        SizedBox(width: double.infinity, child: googleButton),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                    visible: AuthConfig.enableLinkedinOption,
-                    child: Column(
-                      children: [
-                        const Gap(50),
-                        SizedBox(width: double.infinity, child: linkedinButton),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                    visible: AuthConfig.enableGithubAuth,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        const Gap(50),
-                        SizedBox(width: double.infinity, child: githubButton),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                    visible: AuthConfig.enableFacebookOption,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        const Gap(50),
-                        SizedBox(width: double.infinity, child: facebookButton),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                    visible: AuthConfig.enableTwitterOption,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        const Gap(50),
-                        SizedBox(width: double.infinity, child: twitterButton),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                      visible: AuthConfig.enableSsoAuth,
-                      child: Column(
-                        children: [
-                          const Gap(50),
-                          SizedBox(width: double.infinity, child: ssoButton),
-                        ],
-                      )),
-                  Visibility(
-                    visible: AuthConfig.enableEmailAuth,
-                    child: Column(
-                      children: [
-                        const Gap(50),
-                        SizedBox(width: double.infinity, child: emailButton)
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                    visible: AuthConfig.enableAnonymousAuth,
-                    child: Column(
-                      children: [
-                        const Gap(50),
-                        SizedBox(
-                            width: double.infinity, child: anonymousButton),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                    visible: AuthConfig.enableSignupOption,
-                    child: Column(
-                      children: [
-                        const Gap(50),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text(
-                              "Don't have an account ? ",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            InkWell(
-                              //onTap: () => {print("Clicked")},
-                              child: Text(
-                                " Sign up",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 18, color: Colors.blueGrey),
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Gap(50),
-                ],
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        maxWidth: 340,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              screenTitle,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-        ),
-      )
-    ];
-
-    return isWideScreen
-        ? Flex(direction: Axis.horizontal, children: widgets)
-        : SingleChildScrollView(
-            child: Flex(
-                direction: Axis.vertical, children: widgets.reversed.toList()));
+          LoginButton(
+            text: "Log in with Google",
+            icon: '/assets/google_logo.svg',
+            isVisible: AuthConfig.enableGoogleAuth,
+            onPressed: () {
+              signInWithGoogle().whenComplete(() {
+                ref.read(userLoggedIn.notifier).value = true;
+              });
+            },
+          ),
+          LoginButton(
+            text: "Log in with Linkedin",
+            icon: '/assets/linkedin_logo.svg',
+            isVisible: AuthConfig.enableLinkedinOption,
+            onPressed: () {
+              ref.read(showLoading.notifier).value = true;
+              authenticateLinkedin(ref: ref).whenComplete(
+                () {
+                  checkUserLoggedIn(ref);
+                  ref.read(showLoading.notifier).value = false;
+                },
+              );
+            },
+          ),
+          LoginButton(
+            text: "Log in with Github",
+            icon: '/assets/github_logo.svg',
+            isVisible: AuthConfig.enableGithubAuth,
+            onPressed: () async {
+              ref.read(showLoading.notifier).value = true;
+              signInWithGitHub().whenComplete(
+                () {
+                  ref.read(userLoggedIn.notifier).value = true;
+                  ref.read(showLoading.notifier).value = false;
+                },
+              );
+            },
+          ),
+          LoginButton(
+            text: "Log in with facebook",
+            icon: '/assets/facebook_logo.svg',
+            isVisible: AuthConfig.enableFacebookOption,
+            onPressed: () async {
+              ref.read(showLoading.notifier).value = true;
+              signInWithFacebook().whenComplete(() {
+                ref.read(userLoggedIn.notifier).value = true;
+                ref.read(showLoading.notifier).value = false;
+              });
+            },
+          ),
+          LoginButton(
+            text: "Log in with twiter",
+            icon: '/assets/twitter_logo.svg',
+            isVisible: AuthConfig.enableTwitterOption,
+            onPressed: () async {
+              ref.read(showLoading.notifier).value = true;
+              signInWithTwitter().whenComplete(() {
+                ref.read(userLoggedIn.notifier).value = true;
+                ref.read(showLoading.notifier).value = false;
+              });
+            },
+          ),
+          LoginButton(
+            text: "Log in with Email",
+            icon: "",
+            isVisible: AuthConfig.enableEmailAuth,
+            onPressed: () {},
+          ),
+          LoginButton(
+            text: "Log in Anonymous",
+            icon: '/assets/google_logo.svg',
+            isVisible: AuthConfig.enableAnonymousAuth,
+            onPressed: () async {
+              FirebaseAuth.instance.signInAnonymously().then((a) => {
+                    if (onLoginAnonymousButtonPressed != null)
+                      onLoginAnonymousButtonPressed!()
+                  });
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

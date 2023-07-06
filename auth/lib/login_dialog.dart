@@ -20,7 +20,7 @@ class LoginDialog extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  LoginButtonsWidget(
+                  LoginWidget(
                       screenTitle: '',
                       onLoginAnonymousButtonPressed: () =>
                           Navigator.pop(context))

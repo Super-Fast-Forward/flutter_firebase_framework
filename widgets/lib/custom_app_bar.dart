@@ -108,8 +108,8 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                           )))
                       .toList(),
                   onTap: (index) => onTabSelected == null
-                      ? Navigator.of(context)
-                          .pushNamed('/${tabs![index].toLowerCase()}')
+                      ? Navigator.of(context).pushNamed(
+                          '/${tabs![index].toLowerCase().replaceAll(' ', '_')}')
                       : onTabSelected?.call(context, index, tabs![index]),
                 )));
   }

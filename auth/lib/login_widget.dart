@@ -436,7 +436,6 @@ class LoginWidget extends ConsumerWidget {
     if (ref.watch(showLoading)) {
       return const Center(child: CircularProgressIndicator());
     }
-
     return ConstrainedBox(
       constraints: const BoxConstraints(
         maxWidth: 340,

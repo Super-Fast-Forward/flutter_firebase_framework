@@ -27,6 +27,9 @@ final userLoggedIn = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
 final showLoading = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
     (ref) => AuthStateNotifier<bool>(false));
 
+final openEmailLogin = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
+    (ref) => AuthStateNotifier<bool>(false));
+
 /// LoginButtonsWidget is a widget that displays the login buttons.
 /// Each button is a [ElevatedButton] that calls the appropriate login function.
 /// The login functions are defined in the [LoginConfig] class.
@@ -436,6 +439,10 @@ class LoginWidget extends ConsumerWidget {
     if (ref.watch(showLoading)) {
       return const Center(child: CircularProgressIndicator());
     }
+    if (ref.watch(openEmailLogin)) {
+      return const EmailLoginView();
+    }
+
     return ConstrainedBox(
       constraints: const BoxConstraints(
         maxWidth: 340,
@@ -520,13 +527,15 @@ class LoginWidget extends ConsumerWidget {
           ),
           LoginButton(
             text: "Log in with Email",
-            icon: "",
+            icon: "/assets/email.svg",
             isVisible: AuthConfig.enableEmailAuth,
-            onPressed: () {},
+            onPressed: () {
+              ref.read(openEmailLogin.notifier).value = true;
+            },
           ),
           LoginButton(
             text: "Log in Anonymous",
-            icon: '/assets/google_logo.svg',
+            icon: '/assets/anonymous.svg',
             isVisible: AuthConfig.enableAnonymousAuth,
             onPressed: () async {
               FirebaseAuth.instance.signInAnonymously().then((a) => {

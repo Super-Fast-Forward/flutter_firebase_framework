@@ -28,7 +28,11 @@ class LoginPage extends ConsumerWidget {
   Widget _buildWideScreen() {
     return Row(
       children: [
-        Expanded(child: LoginWidget(screenTitle: screenTitle)),
+        Expanded(
+          child: SingleChildScrollView(
+            child: LoginWidget(screenTitle: screenTitle),
+          ),
+        ),
         Expanded(child: aboutTheApp)
       ],
     );

@@ -2,6 +2,7 @@ library flutter_firebase_framework;
 
 //import 'dart:ffi';
 
+import 'package:auth/email_login_view.dart';
 import 'package:auth/login_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:firebase_admin/firebase_admin.dart';

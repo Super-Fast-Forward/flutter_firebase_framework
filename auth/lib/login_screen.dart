@@ -12,7 +12,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 ///  'Facebook': true,
 /// 'Twitter': true,
 /// });
-///
+/// This is the login screen
+
 class LoginScreen extends ConsumerWidget {
   final String screenTitle;
   final Widget aboutTheApp;

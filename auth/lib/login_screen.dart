@@ -44,7 +44,7 @@ class LoginScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              LoginButtonsWidget(
+              LoginWidget(
                 screenTitle: screenTitle,
               )
             ],
@@ -66,7 +66,7 @@ class LoginScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   aboutTheApp,
-                  LoginButtonsWidget(
+                  LoginWidget(
                     screenTitle: screenTitle,
                   ),
                 ]),

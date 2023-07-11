@@ -42,10 +42,8 @@ class LoginButton extends StatelessWidget {
                   ),
                 ),
               ),
-              child: SizedBox.square(
-                dimension: 30,
-                child: SvgPicture.asset(icon),
-              ),
+              padding: const EdgeInsets.all(18),
+              child: SvgPicture.asset(icon),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),

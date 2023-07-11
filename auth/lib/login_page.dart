@@ -7,16 +7,19 @@ class LoginPage extends ConsumerWidget {
   const LoginPage({
     required this.aboutTheApp,
     required this.screenTitle,
+    required this.header,
     Key? key,
   }) : super(key: key);
 
   final String screenTitle;
   final Widget aboutTheApp;
+  final Widget header;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenSize = MediaQuery.of(context).size;
-    bool isWideScreen = screenSize.width >= screenSize.height;
+    bool isWideScreen =
+        screenSize.width >= screenSize.height && screenSize.width > 800;
 
     return Container(
       color: Colors.white,
@@ -30,7 +33,9 @@ class LoginPage extends ConsumerWidget {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            child: LoginWidget(screenTitle: screenTitle),
+            child: Center(
+              child: LoginWidget(),
+            ),
           ),
         ),
         Expanded(child: aboutTheApp)
@@ -40,13 +45,18 @@ class LoginPage extends ConsumerWidget {
 
   //used when screen height > screen width
   Widget _buildNarrowScreen() {
-    return ListView(
-      children: [
-        aboutTheApp,
-        LoginWidget(
-          screenTitle: screenTitle,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 50),
+        child: Center(
+          child: Column(
+            children: [
+              header,
+              LoginWidget(),
+            ],
+          ),
         ),
-      ],
+      ),
     );
   }
 }

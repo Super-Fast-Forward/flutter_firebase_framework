@@ -1,7 +1,9 @@
+import 'package:auth/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EmailLoginView extends StatelessWidget {
+class EmailLoginView extends ConsumerWidget {
   const EmailLoginView({super.key});
 
   Future<void> signInWithEmail(String email, String password) async {
@@ -17,63 +19,92 @@ class EmailLoginView extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     return SizedBox(
-      width: 400,
+      width: 430,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
         children: [
           Container(
             alignment: Alignment.centerLeft,
-            child: const Text(
+            child: Text(
               "Log in to continue",
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+              style: const TextStyle(
+                fontSize: 23,
+                fontWeight: FontWeight.w800,
               ),
             ),
+          ),
+          SizedBox(
+            height: 47,
           ),
           _LoginTextField(
             header: "Email",
             controller: emailController,
           ),
           const SizedBox(
-            height: 20,
+            height: 25,
           ),
           _LoginTextField(
             header: "Password",
             controller: passwordController,
           ),
           const SizedBox(
-            height: 20,
+            height: 25,
           ),
           GestureDetector(
             onTap: () {
               signInWithEmail(emailController.text, passwordController.text);
             },
             child: Container(
-              color: Colors.purple,
-              child: const Text("Log In"),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 60, 12, 234),
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: Colors.black, width: 0.3),
+              ),
+              height: 60,
+              alignment: Alignment.center,
+              width: double.maxFinite,
+              child: const Text(
+                "Log In",
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
           const SizedBox(
-            height: 20,
+            height: 35,
           ),
           GestureDetector(
-            child: const Text(
+            child: Text(
               "Reset your password",
-              style: TextStyle(color: Colors.purple),
+              style: TextStyle(
+                fontSize: 19,
+                color: Color.fromARGB(255, 60, 12, 234),
+              ),
             ),
           ),
           const SizedBox(
-            height: 20,
+            height: 35,
           ),
           GestureDetector(
-            child: const Text(
+            onTap: () {
+              ref.read(openEmailLogin.notifier).value = false;
+            },
+            child: Text(
               "Cancel",
-              style: TextStyle(color: Colors.purple),
+              style: TextStyle(
+                fontSize: 19,
+                color: Color.fromARGB(255, 60, 12, 234),
+              ),
             ),
           ),
         ],
@@ -94,8 +125,12 @@ class _LoginTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(header),
+        Text(
+          header,
+          style: const TextStyle(fontSize: 18),
+        ),
         const SizedBox(height: 10),
         TextFormField(
           controller: controller,
@@ -106,6 +141,8 @@ class _LoginTextField extends StatelessWidget {
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey, width: 1.0),
             ),
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
           ),
         ),
       ],

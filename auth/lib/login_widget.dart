@@ -53,8 +53,6 @@ Future<void> initializeFirebase() async {
 }
 
 class LoginWidget extends ConsumerWidget {
-  final String screenTitle;
-
   /// This is the function that is called when the Anonymous Login button is pressed.
   /// It is defined in the [LoginConfig] class.
   /// Use it for a follow-up action when the user has logged in anonymously.
@@ -62,7 +60,6 @@ class LoginWidget extends ConsumerWidget {
 
   ///Login Options are set in LoginConfig
   const LoginWidget({
-    required this.screenTitle,
     this.onLoginAnonymousButtonPressed,
     Key? key,
   }) : super(key: key);
@@ -443,10 +440,8 @@ class LoginWidget extends ConsumerWidget {
       return const EmailLoginView();
     }
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxWidth: 340,
-      ),
+    return SizedBox(
+      width: 430,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -455,17 +450,20 @@ class LoginWidget extends ConsumerWidget {
           Container(
             alignment: Alignment.centerLeft,
             child: Text(
-              screenTitle,
+              "Log in",
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: 25,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
+          SizedBox(
+            height: 42,
+          ),
           LoginButton(
             text: "Log in with Google",
-            icon: '/assets/google_logo.svg',
+            icon: 'assets/google_logo.svg',
             isVisible: AuthConfig.enableGoogleAuth,
             onPressed: () {
               signInWithGoogle().whenComplete(() {
@@ -475,7 +473,7 @@ class LoginWidget extends ConsumerWidget {
           ),
           LoginButton(
             text: "Log in with Linkedin",
-            icon: '/assets/linkedin_logo.svg',
+            icon: 'assets/linkedin_logo.svg',
             isVisible: AuthConfig.enableLinkedinOption,
             onPressed: () {
               ref.read(showLoading.notifier).value = true;
@@ -489,7 +487,7 @@ class LoginWidget extends ConsumerWidget {
           ),
           LoginButton(
             text: "Log in with Github",
-            icon: '/assets/github_logo.svg',
+            icon: 'assets/github_logo.svg',
             isVisible: AuthConfig.enableGithubAuth,
             onPressed: () async {
               ref.read(showLoading.notifier).value = true;
@@ -503,7 +501,7 @@ class LoginWidget extends ConsumerWidget {
           ),
           LoginButton(
             text: "Log in with facebook",
-            icon: '/assets/facebook_logo.svg',
+            icon: 'assets/facebook_logo.svg',
             isVisible: AuthConfig.enableFacebookOption,
             onPressed: () async {
               ref.read(showLoading.notifier).value = true;
@@ -515,7 +513,7 @@ class LoginWidget extends ConsumerWidget {
           ),
           LoginButton(
             text: "Log in with twiter",
-            icon: '/assets/twitter_logo.svg',
+            icon: 'assets/twitter_logo.svg',
             isVisible: AuthConfig.enableTwitterOption,
             onPressed: () async {
               ref.read(showLoading.notifier).value = true;
@@ -527,7 +525,7 @@ class LoginWidget extends ConsumerWidget {
           ),
           LoginButton(
             text: "Log in with Email",
-            icon: "/assets/email.svg",
+            icon: "assets/email.svg",
             isVisible: AuthConfig.enableEmailAuth,
             onPressed: () {
               ref.read(openEmailLogin.notifier).value = true;
@@ -535,14 +533,41 @@ class LoginWidget extends ConsumerWidget {
           ),
           LoginButton(
             text: "Log in Anonymous",
-            icon: '/assets/anonymous.svg',
+            icon: 'assets/anonymous.svg',
             isVisible: AuthConfig.enableAnonymousAuth,
             onPressed: () async {
-              FirebaseAuth.instance.signInAnonymously().then((a) => {
-                    if (onLoginAnonymousButtonPressed != null)
-                      onLoginAnonymousButtonPressed!()
-                  });
+              FirebaseAuth.instance.signInAnonymously().then(
+                    (a) => {
+                      if (onLoginAnonymousButtonPressed != null)
+                        onLoginAnonymousButtonPressed!()
+                    },
+                  );
             },
+          ),
+          const SizedBox(height: 30),
+          const Divider(color: Color.fromARGB(30, 0, 0, 0), height: 0.1),
+          const SizedBox(height: 30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Don't have an account? ",
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w100,
+                ),
+              ),
+              GestureDetector(
+                child: const Text(
+                  "Sign up",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                    color: Color.fromARGB(255, 60, 12, 234),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

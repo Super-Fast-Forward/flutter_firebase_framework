@@ -43,11 +43,7 @@ class LoginScreen extends ConsumerWidget {
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              LoginWidget(
-                screenTitle: screenTitle,
-              )
-            ],
+            children: [],
           )),
           Expanded(child: Center(child: aboutTheApp))
         ]);
@@ -55,22 +51,22 @@ class LoginScreen extends ConsumerWidget {
 
   Widget _buildNarrowScreen() {
     return Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-              child: SingleChildScrollView(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
             child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  aboutTheApp,
-                  LoginWidget(
-                    screenTitle: screenTitle,
-                  ),
-                ]),
-          ))
-        ]);
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                aboutTheApp,
+              ],
+            ),
+          ),
+        )
+      ],
+    );
   }
 }

@@ -11,19 +11,20 @@ class LoginDialog extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AlertDialog(
-        title: Text("Please log in"),
-        content: SizedBox(
-            height: 200.0, // Change as per your requirement
-            width: 400.0, // Change as per your requirement
-            child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  LoginWidget(
-                      screenTitle: '',
-                      onLoginAnonymousButtonPressed: () =>
-                          Navigator.pop(context))
-                ])));
+      title: const Text("Please log in"),
+      content: SizedBox(
+        height: 200.0, // Change as per your requirement
+        width: 400.0, // Change as per your requirement
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            LoginWidget(
+                onLoginAnonymousButtonPressed: () => Navigator.pop(context))
+          ],
+        ),
+      ),
+    );
   }
 }

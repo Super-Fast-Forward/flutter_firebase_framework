@@ -19,34 +19,43 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: isVisible,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        child: Padding(
-          padding: padding ?? const EdgeInsets.symmetric(vertical: 25),
-          child: Row(
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: const BoxDecoration(
-                  border: Border(
-                    right: BorderSide(
-                      color: Color.fromARGB(255, 208, 208, 208),
-                    ),
+    //if (isVisible) return SizedBox.shrink();
+    return Container(
+      height: 65,
+      margin: const EdgeInsets.symmetric(vertical: 7),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: Colors.black, width: 0.3),
+      ),
+      child: GestureDetector(
+        onTap: onPressed,
+        child: Row(
+          children: [
+            Container(
+              width: 65,
+              height: 65,
+              decoration: const BoxDecoration(
+                border: Border(
+                  right: BorderSide(
+                    color: Colors.black,
+                    width: 0.3,
                   ),
                 ),
-                margin: const EdgeInsets.only(right: 50),
-                padding: const EdgeInsets.only(right: 20),
-                child: SizedBox.square(
-                  dimension: 30,
-                  child: SvgPicture.asset(icon, fit: BoxFit.contain),
-                ),
               ),
-              SizedBox(width: 180, child: Text(text)),
-            ],
-          ),
+              child: SizedBox.square(
+                dimension: 30,
+                child: SvgPicture.asset(icon),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                text,
+                style:
+                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+              ),
+            ),
+          ],
         ),
       ),
     );

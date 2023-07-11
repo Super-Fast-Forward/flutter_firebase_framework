@@ -28,6 +28,7 @@ dependencies:
       url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
       path: providers
 
+  # For testing locally
   # providers:
   #   path: "C:/Users/sebas/Desktop/Workspace/JobSearchNinja/flutter_firebase_framework/providers"
 

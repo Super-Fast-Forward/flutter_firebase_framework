@@ -309,7 +309,7 @@ class LoginWidget extends ConsumerWidget {
         'email': email,
         'pictureURL': pictureURL,
         'userName': userName,
-      });
+      }, SetOptions(merge: true));
 
       print('User created with UID: $uid');
     } catch (e) {

@@ -445,22 +445,20 @@ class LoginWidget extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             alignment: Alignment.centerLeft,
-            child: Text(
+            child: const Text(
               "Log in",
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          SizedBox(
-            height: 42,
-          ),
+          const SizedBox(height: 42),
           LoginButton(
             text: "Log in with Google",
             icon: 'assets/google_logo.svg',

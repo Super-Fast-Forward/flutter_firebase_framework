@@ -31,7 +31,7 @@ class LoginPage extends ConsumerWidget {
   Widget _buildWideScreen() {
     return Row(
       children: [
-        Expanded(
+        const Expanded(
           child: SingleChildScrollView(
             child: Center(
               child: LoginWidget(),
@@ -45,14 +45,16 @@ class LoginPage extends ConsumerWidget {
 
   //used when screen height > screen width
   Widget _buildNarrowScreen() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 50),
-        child: Center(
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 50),
+        child: SizedBox(
+          width: double.infinity,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               header,
-              LoginWidget(),
+              const LoginWidget(),
             ],
           ),
         ),

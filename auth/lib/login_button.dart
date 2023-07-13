@@ -27,7 +27,7 @@ class LoginButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         border: Border.all(color: Colors.black, width: 0.3),
       ),
-      child: GestureDetector(
+      child: InkWell(
         onTap: onPressed,
         child: Row(
           children: [

@@ -8,8 +8,7 @@ class EmailLoginView extends ConsumerWidget {
 
   Future<void> signInWithEmail(String email, String password) async {
     try {
-      final UserCredential credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -31,16 +30,16 @@ class EmailLoginView extends ConsumerWidget {
         children: [
           Container(
             alignment: Alignment.centerLeft,
-            child: Text(
+            child: const Text(
               "Log in to continue",
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 23,
                 fontWeight: FontWeight.w800,
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 47,
           ),
           _LoginTextField(
@@ -63,7 +62,7 @@ class EmailLoginView extends ConsumerWidget {
             },
             child: Container(
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 60, 12, 234),
+                color: const Color.fromARGB(255, 60, 12, 234),
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(color: Colors.black, width: 0.3),
               ),
@@ -84,7 +83,7 @@ class EmailLoginView extends ConsumerWidget {
             height: 35,
           ),
           GestureDetector(
-            child: Text(
+            child: const Text(
               "Reset your password",
               style: TextStyle(
                 fontSize: 19,
@@ -99,7 +98,7 @@ class EmailLoginView extends ConsumerWidget {
             onTap: () {
               ref.read(openEmailLogin.notifier).value = false;
             },
-            child: Text(
+            child: const Text(
               "Cancel",
               style: TextStyle(
                 fontSize: 19,

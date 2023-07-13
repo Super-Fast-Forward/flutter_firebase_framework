@@ -556,6 +556,9 @@ class LoginWidget extends ConsumerWidget {
                 ),
               ),
               GestureDetector(
+                onTap: () {
+                  ref.read(openEmailLogin.notifier).value = true;
+                },
                 child: const Text(
                   "Sign up",
                   style: TextStyle(

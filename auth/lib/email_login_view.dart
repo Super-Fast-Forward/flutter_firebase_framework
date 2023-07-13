@@ -8,12 +8,35 @@ class EmailLoginView extends ConsumerWidget {
 
   Future<void> signInWithEmail(String email, String password) async {
     try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } catch (e) {
+      print('Failed to sign in with Email: $e');
+    }
+  }
+
+  Future<void> signUpWithEmail(String email, String password) async {
+    try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
     } catch (e) {
       print('Failed to sign in with Email: $e');
+    }
+  }
+
+  Future<void> emailSignIn({
+    required WidgetRef ref,
+    required String email,
+    required String password,
+  }) async {
+    if (ref.watch(openEmailLogin)) {
+      signUpWithEmail(email, password);
+    } else {
+      signInWithEmail(email, password);
     }
   }
 
@@ -51,6 +74,7 @@ class EmailLoginView extends ConsumerWidget {
           ),
           _LoginTextField(
             header: "Password",
+            obscureText: true,
             controller: passwordController,
           ),
           const SizedBox(
@@ -58,7 +82,11 @@ class EmailLoginView extends ConsumerWidget {
           ),
           GestureDetector(
             onTap: () {
-              signInWithEmail(emailController.text, passwordController.text);
+              emailSignIn(
+                ref: ref,
+                email: emailController.text,
+                password: passwordController.text,
+              );
             },
             child: Container(
               decoration: BoxDecoration(
@@ -116,9 +144,11 @@ class _LoginTextField extends StatelessWidget {
   const _LoginTextField({
     required this.header,
     required this.controller,
+    this.obscureText = false,
   });
 
   final String header;
+  final bool obscureText;
   final TextEditingController controller;
 
   @override
@@ -132,6 +162,7 @@ class _LoginTextField extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         TextFormField(
+          obscureText: obscureText,
           controller: controller,
           decoration: const InputDecoration(
             focusedBorder: OutlineInputBorder(

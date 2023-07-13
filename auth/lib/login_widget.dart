@@ -30,6 +30,9 @@ final showLoading = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
 final openEmailLogin = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
     (ref) => AuthStateNotifier<bool>(false));
 
+final openEmailSignIn = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
+    (ref) => AuthStateNotifier<bool>(false));
+
 /// LoginButtonsWidget is a widget that displays the login buttons.
 /// Each button is a [ElevatedButton] that calls the appropriate login function.
 /// The login functions are defined in the [LoginConfig] class.
@@ -436,7 +439,7 @@ class LoginWidget extends ConsumerWidget {
     if (ref.watch(showLoading)) {
       return const Center(child: CircularProgressIndicator());
     }
-    if (ref.watch(openEmailLogin)) {
+    if (ref.watch(openEmailLogin) || ref.watch(openEmailSignIn)) {
       return const EmailLoginView();
     }
 
@@ -557,7 +560,7 @@ class LoginWidget extends ConsumerWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  ref.read(openEmailLogin.notifier).value = true;
+                  ref.read(openEmailSignIn.notifier).value = true;
                 },
                 child: const Text(
                   "Sign up",

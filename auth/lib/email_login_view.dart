@@ -125,6 +125,7 @@ class EmailLoginView extends ConsumerWidget {
           GestureDetector(
             onTap: () {
               ref.read(openEmailLogin.notifier).value = false;
+              ref.read(openEmailSignIn.notifier).value = false;
             },
             child: const Text(
               "Cancel",

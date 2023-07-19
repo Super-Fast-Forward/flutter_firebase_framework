@@ -13,6 +13,7 @@ dependencies:
   equatable: ^2.0.0
   firebase_core: ^2.3.0
   firebase_auth: 4.6.3
+  firebase_auth_platform_interface: 6.15.3
   cloud_firestore: ^4.0.1
   jiffy: ^5.0.0
   stack_trace: ^1.11.0

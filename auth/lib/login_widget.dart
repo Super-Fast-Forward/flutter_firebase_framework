@@ -439,7 +439,7 @@ class LoginWidget extends ConsumerWidget {
     if (ref.watch(showLoading)) {
       return const Center(child: CircularProgressIndicator());
     }
-    if (ref.watch(openEmailLogin) || ref.watch(openEmailSignIn)) {
+    if (ref.watch(openEmailLogin)) {
       return const EmailLoginView();
     }
 
@@ -544,34 +544,6 @@ class LoginWidget extends ConsumerWidget {
                     },
                   );
             },
-          ),
-          const SizedBox(height: 30),
-          const Divider(color: Color.fromARGB(30, 0, 0, 0), height: 0.1),
-          const SizedBox(height: 30),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Don't have an account? ",
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w100,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  ref.read(openEmailSignIn.notifier).value = true;
-                },
-                child: const Text(
-                  "Sign up",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                    color: Color.fromARGB(255, 60, 12, 234),
-                  ),
-                ),
-              ),
-            ],
           ),
         ],
       ),

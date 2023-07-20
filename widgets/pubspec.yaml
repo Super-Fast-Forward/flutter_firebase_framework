@@ -1,7 +1,6 @@
 name: widgets
 description: Widgets for simplicity of UI with Firestore
 version: 0.0.1
-homepage:
 publish_to: "none"
 
 environment:
@@ -14,6 +13,7 @@ dependencies:
   equatable: ^2.0.0
   firebase_core: ^2.3.0
   firebase_auth: 4.6.3
+  firebase_auth_platform_interface: 6.15.3
   flutter_riverpod: ^2.3.6
   cloud_firestore: ^4.0.1
   jiffy: ^5.0.0

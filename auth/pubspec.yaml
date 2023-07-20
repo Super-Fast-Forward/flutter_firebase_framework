@@ -11,6 +11,8 @@ dependencies:
   firebase_core: ^2.3.0
   cloud_firestore: ^4.0.1
   firebase_auth: 4.6.3
+  firebase_auth_web: 5.5.3
+  firebase_auth_platform_interface: 6.15.3
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.3.6

@@ -8,12 +8,27 @@ class LoginPage extends ConsumerWidget {
     required this.aboutTheApp,
     required this.screenTitle,
     required this.header,
+    this.googleLogin = true,
+    this.linkedinLogin = true,
+    this.githubLogin = true,
+    this.facebookLogin = true,
+    this.twitterLogin = true,
+    this.emailLogin = true,
+    this.anonymousLogin = true,
     Key? key,
   }) : super(key: key);
 
   final String screenTitle;
   final Widget aboutTheApp;
   final Widget header;
+
+  final bool googleLogin;
+  final bool linkedinLogin;
+  final bool githubLogin;
+  final bool facebookLogin;
+  final bool twitterLogin;
+  final bool emailLogin;
+  final bool anonymousLogin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

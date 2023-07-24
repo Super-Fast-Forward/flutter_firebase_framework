@@ -63,9 +63,24 @@ class LoginWidget extends ConsumerWidget {
 
   ///Login Options are set in LoginConfig
   const LoginWidget({
+    this.googleLogin = true,
+    this.linkedinLogin = true,
+    this.githubLogin = true,
+    this.facebookLogin = true,
+    this.twitterLogin = true,
+    this.emailLogin = true,
+    this.anonymousLogin = true,
     this.onLoginAnonymousButtonPressed,
     Key? key,
   }) : super(key: key);
+
+  final bool googleLogin;
+  final bool linkedinLogin;
+  final bool githubLogin;
+  final bool facebookLogin;
+  final bool twitterLogin;
+  final bool emailLogin;
+  final bool anonymousLogin;
 
   void checkUserLoggedIn(WidgetRef ref) {
     User? currentUser = FirebaseAuth.instance.currentUser;
@@ -439,7 +454,7 @@ class LoginWidget extends ConsumerWidget {
     if (ref.watch(showLoading)) {
       return const Center(child: CircularProgressIndicator());
     }
-    if (ref.watch(openEmailLogin) || ref.watch(openEmailSignIn)) {
+    if (ref.watch(openEmailLogin)) {
       return const EmailLoginView();
     }
 
@@ -465,7 +480,7 @@ class LoginWidget extends ConsumerWidget {
           LoginButton(
             text: "Log in with Google",
             icon: 'assets/google_logo.svg',
-            isVisible: AuthConfig.enableGoogleAuth,
+            isVisible: googleLogin,
             onPressed: () {
               signInWithGoogle().whenComplete(() {
                 ref.read(userLoggedIn.notifier).value = true;
@@ -475,7 +490,7 @@ class LoginWidget extends ConsumerWidget {
           LoginButton(
             text: "Log in with Linkedin",
             icon: 'assets/linkedin_logo.svg',
-            isVisible: AuthConfig.enableLinkedinOption,
+            isVisible: linkedinLogin,
             onPressed: () {
               ref.read(showLoading.notifier).value = true;
               authenticateLinkedin(ref: ref).whenComplete(
@@ -489,7 +504,7 @@ class LoginWidget extends ConsumerWidget {
           LoginButton(
             text: "Log in with Github",
             icon: 'assets/github_logo.svg',
-            isVisible: AuthConfig.enableGithubAuth,
+            isVisible: githubLogin,
             onPressed: () async {
               ref.read(showLoading.notifier).value = true;
               signInWithGitHub().whenComplete(
@@ -503,7 +518,7 @@ class LoginWidget extends ConsumerWidget {
           LoginButton(
             text: "Log in with facebook",
             icon: 'assets/facebook_logo.svg',
-            isVisible: AuthConfig.enableFacebookOption,
+            isVisible: facebookLogin,
             onPressed: () async {
               ref.read(showLoading.notifier).value = true;
               signInWithFacebook().whenComplete(() {
@@ -515,7 +530,7 @@ class LoginWidget extends ConsumerWidget {
           LoginButton(
             text: "Log in with twiter",
             icon: 'assets/twitter_logo.svg',
-            isVisible: AuthConfig.enableTwitterOption,
+            isVisible: twitterLogin,
             onPressed: () async {
               ref.read(showLoading.notifier).value = true;
               signInWithTwitter().whenComplete(() {
@@ -527,7 +542,7 @@ class LoginWidget extends ConsumerWidget {
           LoginButton(
             text: "Log in with Email",
             icon: "assets/email.svg",
-            isVisible: AuthConfig.enableEmailAuth,
+            isVisible: emailLogin,
             onPressed: () {
               ref.read(openEmailLogin.notifier).value = true;
             },
@@ -535,7 +550,7 @@ class LoginWidget extends ConsumerWidget {
           LoginButton(
             text: "Log in Anonymous",
             icon: 'assets/anonymous.svg',
-            isVisible: AuthConfig.enableAnonymousAuth,
+            isVisible: anonymousLogin,
             onPressed: () async {
               FirebaseAuth.instance.signInAnonymously().then(
                     (a) => {
@@ -544,34 +559,6 @@ class LoginWidget extends ConsumerWidget {
                     },
                   );
             },
-          ),
-          const SizedBox(height: 30),
-          const Divider(color: Color.fromARGB(30, 0, 0, 0), height: 0.1),
-          const SizedBox(height: 30),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Don't have an account? ",
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w100,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  ref.read(openEmailSignIn.notifier).value = true;
-                },
-                child: const Text(
-                  "Sign up",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                    color: Color.fromARGB(255, 60, 12, 234),
-                  ),
-                ),
-              ),
-            ],
           ),
         ],
       ),

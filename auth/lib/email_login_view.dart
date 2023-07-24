@@ -1,4 +1,5 @@
 import 'package:auth/main.dart';
+import 'package:auth/utils/firebase_exception_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,37 +7,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class EmailLoginView extends ConsumerWidget {
   const EmailLoginView({super.key});
 
-  Future<void> signInWithEmail(String email, String password) async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } catch (e) {
-      print('Failed to sign in with Email: $e');
-    }
-  }
-
-  Future<void> signUpWithEmail(String email, String password) async {
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } catch (e) {
-      print('Failed to sign in with Email: $e');
-    }
-  }
-
-  Future<void> emailSignIn({
-    required WidgetRef ref,
+  Future<void> signUpWithEmail({
     required String email,
     required String password,
   }) async {
-    if (ref.watch(openEmailLogin)) {
-      signUpWithEmail(email, password);
-    } else {
-      signInWithEmail(email, password);
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        try {
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
+        } on FirebaseAuthException catch (e) {
+          getFirebaseMessageFromErrorCode(e.code);
+        }
+      } else {
+        getFirebaseMessageFromErrorCode(e.code);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -82,8 +74,7 @@ class EmailLoginView extends ConsumerWidget {
           ),
           GestureDetector(
             onTap: () {
-              emailSignIn(
-                ref: ref,
+              signUpWithEmail(
                 email: emailController.text,
                 password: passwordController.text,
               );
@@ -125,6 +116,7 @@ class EmailLoginView extends ConsumerWidget {
           GestureDetector(
             onTap: () {
               ref.read(openEmailLogin.notifier).value = false;
+              ref.read(openEmailSignIn.notifier).value = false;
             },
             child: const Text(
               "Cancel",

@@ -328,6 +328,13 @@ class LoginWidget extends ConsumerWidget {
         'pictureURL': pictureURL,
         'userName': userName,
       }, SetOptions(merge: true));
+      // target: /user/{uid}/profile/full_name
+      final profileRef = FirebaseFirestore.instance
+          .collection('user')
+          .doc(uid)
+          .collection('profile')
+          .doc('full_name');
+      await profileRef.update({'value': userName});
 
       print('User created with UID: $uid');
     } catch (e) {

@@ -170,7 +170,7 @@ class LoginWidget extends ConsumerWidget {
 
     if (currentUri.queryParameters.containsKey('code')) {
       final code = currentUri.queryParameters['code'];
-      print(code);
+      print("Authorization Code was obtained");
       return code;
     }
 
@@ -276,7 +276,8 @@ class LoginWidget extends ConsumerWidget {
 
       if (response.statusCode == 200) {
         final customToken = response.body;
-        print('Custom Token: $customToken');
+        print('Custom Token was obtained');
+        //print('Custom Token: $customToken');
         return customToken;
       } else {
         print(
@@ -296,7 +297,7 @@ class LoginWidget extends ConsumerWidget {
     print('signInWithCustomToken');
     try {
       await FirebaseAuth.instance.signInWithCustomToken(customToken);
-      print('signInWithCustomToken -- no error yet');
+      print('signInWithCustomToken done!');
       return true;
     } catch (e) {
       print('Authentication with custom token Error: $e');
@@ -305,7 +306,7 @@ class LoginWidget extends ConsumerWidget {
   }
 
   Future<bool> checkCustomUserExists(String uid) async {
-    print('checkCustomUserExists');
+    print('checkCustomUserExists - start');
     try {
       final DocumentSnapshot snapshot =
           await FirebaseFirestore.instance.collection('user').doc(uid).get();
@@ -328,13 +329,6 @@ class LoginWidget extends ConsumerWidget {
         'pictureURL': pictureURL,
         'userName': userName,
       }, SetOptions(merge: true));
-      // target: /user/{uid}/profile/full_name
-      final profileRef = FirebaseFirestore.instance
-          .collection('user')
-          .doc(uid)
-          .collection('profile')
-          .doc('full_name');
-      await profileRef.update({'value': userName});
 
       print('User created with UID: $uid');
     } catch (e) {

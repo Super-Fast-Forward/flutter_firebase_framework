@@ -19,7 +19,7 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isVisible) return const SizedBox.shrink();
+    if (!isVisible) return const SizedBox.shrink();
     return Container(
       height: 65,
       margin: const EdgeInsets.symmetric(vertical: 7),

@@ -46,10 +46,18 @@ class LoginPage extends ConsumerWidget {
   Widget _buildWideScreen() {
     return Row(
       children: [
-        const Expanded(
+        Expanded(
           child: SingleChildScrollView(
             child: Center(
-              child: LoginWidget(),
+              child: LoginWidget(
+                anonymousLogin: anonymousLogin,
+                emailLogin: emailLogin,
+                facebookLogin: facebookLogin,
+                githubLogin: githubLogin,
+                googleLogin: googleLogin,
+                linkedinLogin: linkedinLogin,
+                twitterLogin: twitterLogin,
+              ),
             ),
           ),
         ),
@@ -69,7 +77,15 @@ class LoginPage extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               header,
-              const LoginWidget(),
+              LoginWidget(
+                anonymousLogin: anonymousLogin,
+                emailLogin: emailLogin,
+                facebookLogin: facebookLogin,
+                githubLogin: githubLogin,
+                googleLogin: googleLogin,
+                linkedinLogin: linkedinLogin,
+                twitterLogin: twitterLogin,
+              ),
             ],
           ),
         ),

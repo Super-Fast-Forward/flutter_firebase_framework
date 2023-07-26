@@ -1,55 +1,39 @@
-import 'package:auth/main.dart';
 import 'package:auth/providers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'config.dart';
+import 'package:theme/config.dart';
 
 class ThemeModeStateNotifier extends StateNotifier<bool> {
-  late void Function(bool) saveBuilder;
-  late Future<bool> Function() getBuilder;
+  ThemeModeStateNotifier({required this.ref}) : super(false) {
+    getTheme();
+  }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final dbInstance = FirebaseFirestore.instance;
+  final db = FirebaseFirestore.instance;
+  final Ref ref;
 
-  ThemeModeStateNotifier(AuthState authState) : super(false) {
-    this.saveBuilder = ThemeModeConfig.saveBuilder;
-    this.getBuilder = ThemeModeConfig.getBuilder;
-    if (authState.isLoaded == true && auth.currentUser != null) {
-      getBuilder().then((v) {
-        // print('mounted: ${mounted}');
-        if (!mounted) {
-          state = v;
-        }
-      });
-      // dbInstance.collection('user').doc(auth.currentUser!.uid)
-
-      //     .get()
-      //     .then((value) {
-      //   String theme = value['themeMode'];
-      //   bool isDark = theme == 'light' ? false : true;
-      //   state = isDark;
-      // });
+  void getTheme() async {
+    if (ref.watch(authStateProvider).isLoaded || auth.currentUser != null) {
+      final theme = await ThemeModeConfig.getTheme();
+      state = theme;
     }
-
-    state = ThemeModeConfig.defaultToLightTheme ? true : false;
   }
-  void changeTheme() {
-    state = !state;
 
-    if (auth.currentUser != null) {
-      saveBuilder(state);
+  void toggleTheme() {
+    changeTheme(!state);
+  }
+
+  void changeTheme(bool newState) async {
+    state = newState;
+    if (ref.read(authStateProvider).isLoaded || auth.currentUser != null) {
+      await ThemeModeConfig.saveTheme(state);
     }
   }
 }
 
 final themeModeSNP = StateNotifierProvider<ThemeModeStateNotifier, bool>(
   (ref) {
-    AuthState loginState = ref.watch(authStateProvider);
-    return ThemeModeStateNotifier(loginState);
+    return ThemeModeStateNotifier(ref: ref);
   },
-// dependencies: [isLoggedIn]
 );

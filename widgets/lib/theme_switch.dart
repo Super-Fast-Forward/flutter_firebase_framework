@@ -11,7 +11,7 @@ class ThemeSwitch extends ConsumerWidget {
     return IconButton(
         tooltip: 'dark/light mode',
         onPressed: () {
-          ref.read(themeModeSNP.notifier).changeTheme();
+          ref.read(themeModeSNP.notifier).toggleTheme();
         },
         icon: Icon(isDarkState == true
             ? Icons.nightlight

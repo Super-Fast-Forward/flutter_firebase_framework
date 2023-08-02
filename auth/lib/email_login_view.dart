@@ -1,4 +1,5 @@
 import 'package:auth/main.dart';
+import 'package:auth/toast.dart';
 import 'package:auth/utils/firebase_exception_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +23,13 @@ class EmailLoginView extends ConsumerWidget {
             password: password,
           );
         } on FirebaseAuthException catch (e) {
-          getFirebaseMessageFromErrorCode(e.code);
+          Toast.showError(getFirebaseMessageFromErrorCode(e.code));
         }
       } else {
-        getFirebaseMessageFromErrorCode(e.code);
+        Toast.showError(getFirebaseMessageFromErrorCode(e.code));
       }
     } catch (e) {
-      print(e);
+      Toast.showError(e.toString());
     }
   }
 

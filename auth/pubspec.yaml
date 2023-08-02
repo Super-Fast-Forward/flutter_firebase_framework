@@ -29,21 +29,11 @@ dependencies:
       url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
       path: providers
 
-  # For testing locally
-  # providers:
-  #   path: "C:/Users/sebas/Desktop/Workspace/JobSearchNinja/flutter_firebase_framework/providers"
-
-# dependency_overrides:
-#   providers:
-#     path: ../providers
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
 
-# The following section is specific to Flutter packages.
 flutter:
-  # To add assets to your package, add an assets section, like this:
   assets:
     - assets/

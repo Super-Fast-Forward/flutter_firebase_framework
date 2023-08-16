@@ -12,7 +12,7 @@ class ThemeModeConfig {
           .collection('user')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .set(
-        {'themeMode': themeData ? 'light' : 'dark'},
+        {'themeMode': themeData ? 'dark' : 'light'},
         SetOptions(merge: true),
       );
       return true;
@@ -27,6 +27,7 @@ class ThemeModeConfig {
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .get())
         .data()!['themeMode'];
-    return theme == 'light';
+
+    return (theme == 'dark');
   }
 }

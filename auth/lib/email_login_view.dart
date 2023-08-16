@@ -11,25 +11,46 @@ class EmailLoginView extends ConsumerWidget {
   Future<void> signUpWithEmail({
     required String email,
     required String password,
+    required BuildContext context,
   }) async {
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        try {
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: email,
-            password: password,
-          );
-        } on FirebaseAuthException catch (e) {
-          Toast.showError(getFirebaseMessageFromErrorCode(e.code));
-        }
-      } else {
-        Toast.showError(getFirebaseMessageFromErrorCode(e.code));
-      }
+      Toast.showByContext(
+        context: context,
+        message: getFirebaseMessageFromErrorCode(e.code),
+      );
     } catch (e) {
-      Toast.showError(e.toString());
+      Toast.showByContext(
+        context: context,
+        message: getFirebaseMessageFromErrorCode(""),
+      );
+    }
+  }
+
+  Future<void> signInWithEmail({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      Toast.showByContext(
+        context: context,
+        message: getFirebaseMessageFromErrorCode(e.code),
+      );
+    } catch (e) {
+      Toast.showByContext(
+        context: context,
+        message: getFirebaseMessageFromErrorCode(""),
+      );
     }
   }
 
@@ -78,6 +99,7 @@ class EmailLoginView extends ConsumerWidget {
               signUpWithEmail(
                 email: emailController.text,
                 password: passwordController.text,
+                context: context,
               );
             },
             child: Container(

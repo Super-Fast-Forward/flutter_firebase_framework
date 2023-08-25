@@ -8,12 +8,6 @@ class LoginPage extends ConsumerWidget {
     required this.aboutTheApp,
     required this.screenTitle,
     required this.header,
-    this.googleLogin = true,
-    this.linkedinLogin = true,
-    this.githubLogin = true,
-    this.facebookLogin = true,
-    this.twitterLogin = true,
-    this.emailLogin = true,
     this.anonymousLogin = true,
     Key? key,
   }) : super(key: key);
@@ -21,13 +15,6 @@ class LoginPage extends ConsumerWidget {
   final String screenTitle;
   final Widget aboutTheApp;
   final Widget header;
-
-  final bool googleLogin;
-  final bool linkedinLogin;
-  final bool githubLogin;
-  final bool facebookLogin;
-  final bool twitterLogin;
-  final bool emailLogin;
   final bool anonymousLogin;
 
   @override
@@ -42,22 +29,14 @@ class LoginPage extends ConsumerWidget {
     );
   }
 
-  //used when screen width >= screen height
+  //Used when screen width >= screen height
   Widget _buildWideScreen() {
     return Row(
       children: [
         Expanded(
           child: SingleChildScrollView(
-            child: Center(
-              child: LoginWidget(
-                anonymousLogin: anonymousLogin,
-                emailLogin: emailLogin,
-                facebookLogin: facebookLogin,
-                githubLogin: githubLogin,
-                googleLogin: googleLogin,
-                linkedinLogin: linkedinLogin,
-                twitterLogin: twitterLogin,
-              ),
+            child: LoginWidget(
+              anonymousLogin: anonymousLogin,
             ),
           ),
         ),
@@ -66,7 +45,7 @@ class LoginPage extends ConsumerWidget {
     );
   }
 
-  //used when screen height > screen width
+  //Used when screen height > screen width
   Widget _buildNarrowScreen() {
     return Center(
       child: SingleChildScrollView(
@@ -79,12 +58,6 @@ class LoginPage extends ConsumerWidget {
               header,
               LoginWidget(
                 anonymousLogin: anonymousLogin,
-                emailLogin: emailLogin,
-                facebookLogin: facebookLogin,
-                githubLogin: githubLogin,
-                googleLogin: googleLogin,
-                linkedinLogin: linkedinLogin,
-                twitterLogin: twitterLogin,
               ),
             ],
           ),

@@ -1,26 +1,5 @@
 part of flutter_firebase_framework;
 
-const loginGitHub = "loginGitHub";
-const loginGoogle = "loginGoogle";
-const loginlinkedin = "loginlinkedin";
-const loginSSO = "loginSSO";
-const loginEmail = "loginEmail";
-const loginAnonymous = "loginAnonymous";
-const loginFacebook = "loginFacebook";
-const loginTwiter = "loginTwitter";
-const signupOption = "signupOption";
-
-enum LoginOption {
-  GitHub,
-  Google,
-  Facebook,
-  SSO,
-  Email,
-  Anonymous,
-  signupOption,
-  Twiter,
-}
-
 final userLoggedIn = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
     (ref) => AuthStateNotifier<bool>(false));
 
@@ -52,7 +31,6 @@ final openEmailSignIn = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
 Future<void> initializeFirebase() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  print('Firebase initialized successfully');
 }
 
 class LoginWidget extends ConsumerWidget {
@@ -63,23 +41,11 @@ class LoginWidget extends ConsumerWidget {
 
   ///Login Options are set in LoginConfig
   const LoginWidget({
-    this.googleLogin = true,
-    this.linkedinLogin = true,
-    this.githubLogin = true,
-    this.facebookLogin = true,
-    this.twitterLogin = true,
-    this.emailLogin = true,
     this.anonymousLogin = true,
     this.onLoginAnonymousButtonPressed,
     Key? key,
   }) : super(key: key);
 
-  final bool googleLogin;
-  final bool linkedinLogin;
-  final bool githubLogin;
-  final bool facebookLogin;
-  final bool twitterLogin;
-  final bool emailLogin;
   final bool anonymousLogin;
 
   void checkUserLoggedIn(WidgetRef ref) {
@@ -115,9 +81,9 @@ class LoginWidget extends ConsumerWidget {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        final validate_url = response.body;
+        final validateUrl = response.body;
         //print("validate_url: $validate_url");
-        return validate_url;
+        return validateUrl;
       } else {
         print('Request failed with status: ${response.statusCode}');
       }
@@ -129,19 +95,19 @@ class LoginWidget extends ConsumerWidget {
 
   Future<void> authenticateLinkedin({required WidgetRef ref}) async {
     // returne the current url to do the resquest
-    final valid_url = await validate_url();
+    final validUrl = await validate_url();
 
-    final String client_id = '86huxyar2l3rkb';
-    final String redirect_uri = '${valid_url}/auth.html';
-    print("redirect_uri: $redirect_uri");
+    const String clientId = '86huxyar2l3rkb';
+    final String redirectUri = '${validUrl}/auth.html';
+    print("redirect_uri: $redirectUri");
     //final String redirect_uri = 'http://localhost:49215/auth.html';
 
     print('Authenticating...');
 
     final url = 'https://www.linkedin.com/oauth/v2/authorization?'
         'response_type=code&'
-        'client_id=$client_id&'
-        'redirect_uri=$redirect_uri&'
+        'client_id=$clientId&'
+        'redirect_uri=$redirectUri&'
         'scope=r_liteprofile%20r_emailaddress';
 
     // Open the authorization URL in a web view and wait for the result
@@ -156,11 +122,11 @@ class LoginWidget extends ConsumerWidget {
     // Request an access token using the authorization code
     if (code != null) {
       await requestAccessTokenLinkedin(
-          code: code,
-          ref: ref,
-          client_id: client_id,
-          redirect_uri: redirect_uri);
+          code: code, ref: ref, client_id: clientId, redirect_uri: redirectUri);
     }
+
+    checkUserLoggedIn(ref);
+    ref.read(showLoading.notifier).value = false;
   }
 
   // Extracts the authorization code from the callback URL
@@ -188,28 +154,28 @@ class LoginWidget extends ConsumerWidget {
   }) async {
     print("requestAccessTokenLinkedin");
     final tokenType = 'access_token_linkedin';
-    final CLIENT_ID = client_id;
-    final REDIRECT_URI = redirect_uri;
+    final clientId = client_id;
+    final redirectUri = redirect_uri;
 
     try {
       final url = Uri.parse(
-          'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?code=$code&token_type=$tokenType&CLIENT_ID=$CLIENT_ID&REDIRECT_URI=$REDIRECT_URI');
+          'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?code=$code&token_type=$tokenType&CLIENT_ID=$clientId&REDIRECT_URI=$redirectUri');
       final response = await http.get(url);
       print("requestAccessTokenLinkedin - response: $response");
       if (response.statusCode == 200) {
         final responseBody = response.body;
         final Map<String, dynamic> responseData = json.decode(responseBody);
-        final user_id = responseData['user_id'];
+        final userId = responseData['user_id'];
         final email = responseData['email'];
-        final picture_url = responseData['picture_url'];
-        final user_name = responseData['user_name'];
+        final pictureUrl = responseData['picture_url'];
+        final userName = responseData['user_name'];
 
         // print("User ID: $user_id");
         // print("Email: $email");
         // print("Picture URL: $picture_url");
         // print("User Name: $user_name");
         ref.read(showLoading.notifier).value = false;
-        await signinCustomUserFirebase(user_id, email, picture_url, user_name);
+        await signinCustomUserFirebase(userId, email, pictureUrl, userName);
       } else {
         print('Request failed with status: ${response.statusCode}');
       }
@@ -450,62 +416,67 @@ class LoginWidget extends ConsumerWidget {
     }
   }
 
+  Future<void> signInWithEmail({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      Toast.showByContext(
+        context: context,
+        message: getFirebaseMessageFromErrorCode(e.code),
+      );
+    } catch (e) {
+      Toast.showByContext(
+        context: context,
+        message: getFirebaseMessageFromErrorCode(""),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (ref.watch(showLoading)) {
       return const Center(child: CircularProgressIndicator());
     }
-    if (ref.watch(openEmailLogin)) {
-      return const EmailLoginView();
-    }
 
-    return SizedBox(
-      width: 430,
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 81),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         children: [
-          Container(
-            alignment: Alignment.centerLeft,
-            child: const Text(
-              "Log in",
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+          const Header(text: "Log in into your account"),
           const SizedBox(height: 42),
           LoginButton(
-            text: "Log in with Google",
-            icon: 'assets/google_logo.svg',
-            isVisible: googleLogin,
-            onPressed: () {
-              signInWithGoogle().whenComplete(() {
-                ref.read(userLoggedIn.notifier).value = true;
-              });
-            },
-          ),
-          LoginButton(
-            text: "Log in with Linkedin",
+            text: "Continue with LinkedIn",
             icon: 'assets/linkedin_logo.svg',
-            isVisible: linkedinLogin,
+            isVisible: true,
             onPressed: () {
               ref.read(showLoading.notifier).value = true;
-              authenticateLinkedin(ref: ref).whenComplete(
-                () {
-                  checkUserLoggedIn(ref);
-                  ref.read(showLoading.notifier).value = false;
-                },
-              );
+              authenticateLinkedin(ref: ref);
             },
           ),
           LoginButton(
-            text: "Log in with Github",
+            text: "Continue with Google",
+            icon: 'assets/google_logo.svg',
+            isVisible: true,
+            onPressed: () async {
+              await signInWithGoogle();
+              ref.read(userLoggedIn.notifier).value = true;
+            },
+          ),
+          LoginButton(
+            text: "Continue with Github",
             icon: 'assets/github_logo.svg',
-            isVisible: githubLogin,
             onPressed: () async {
               ref.read(showLoading.notifier).value = true;
               signInWithGitHub().whenComplete(
@@ -517,52 +488,261 @@ class LoginWidget extends ConsumerWidget {
             },
           ),
           LoginButton(
-            text: "Log in with facebook",
-            icon: 'assets/facebook_logo.svg',
-            isVisible: facebookLogin,
-            onPressed: () async {
-              ref.read(showLoading.notifier).value = true;
-              signInWithFacebook().whenComplete(() {
-                ref.read(userLoggedIn.notifier).value = true;
-                ref.read(showLoading.notifier).value = false;
-              });
-            },
-          ),
-          LoginButton(
-            text: "Log in with twiter",
-            icon: 'assets/twitter_logo.svg',
-            isVisible: twitterLogin,
-            onPressed: () async {
-              ref.read(showLoading.notifier).value = true;
-              signInWithTwitter().whenComplete(() {
-                ref.read(userLoggedIn.notifier).value = true;
-                ref.read(showLoading.notifier).value = false;
-              });
-            },
-          ),
-          LoginButton(
-            text: "Log in with Email",
-            icon: "assets/email.svg",
-            isVisible: emailLogin,
-            onPressed: () {
-              ref.read(openEmailLogin.notifier).value = true;
-            },
-          ),
-          LoginButton(
-            text: "Log in Anonymous",
+            text: "Continue with Anonymous",
             icon: 'assets/anonymous.svg',
             isVisible: anonymousLogin,
             onPressed: () async {
-              FirebaseAuth.instance.signInAnonymously().then(
-                    (a) => {
-                      if (onLoginAnonymousButtonPressed != null)
-                        onLoginAnonymousButtonPressed!()
-                    },
-                  );
+              await FirebaseAuth.instance.signInAnonymously();
+              if (onLoginAnonymousButtonPressed != null) {
+                onLoginAnonymousButtonPressed!();
+              }
             },
           ),
+          const SizedBox(height: 21),
+          const LinedText(text: "OR"),
+          const SizedBox(height: 21),
+          LoginTextField(header: "Email", controller: emailController),
+          const SizedBox(height: 12),
+          LoginTextField(header: "Password", controller: passwordController),
+          const SizedBox(height: 35),
+          LongButton(
+            text: "Log In",
+            onTap: () {
+              signInWithEmail(
+                context: context,
+                email: emailController.text,
+                password: passwordController.text,
+              );
+            },
+          ),
+          const SizedBox(height: 58),
+          TextAndClickableText(
+            onTap: () {
+              //TODO go signUp page
+            },
+            text1: "Don’t have an account?",
+            text2: "Sign up for free",
+          )
         ],
       ),
+    );
+  }
+}
+
+class Header extends StatelessWidget {
+  const Header({
+    super.key,
+    required this.text,
+  });
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      overflow: TextOverflow.ellipsis,
+      style: const TextStyle(
+        color: Color(0xFF3772FF),
+        fontSize: 30,
+        fontFamily: 'Open Sans',
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+}
+
+class LongButton extends StatelessWidget {
+  const LongButton({super.key, this.onTap, this.text});
+
+  final void Function()? onTap;
+  final String? text;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 42,
+        width: 464,
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+        decoration: const BoxDecoration(
+          color: Color(0xFF3772FF),
+          borderRadius: BorderRadius.all(Radius.circular(50)),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          text ?? "",
+          style: const TextStyle(
+            color: Color(0xFFF9F9F9),
+            fontSize: 16,
+            fontFamily: 'Open Sans',
+            fontWeight: FontWeight.w600,
+            height: 1.10,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class LinedText extends StatelessWidget {
+  const LinedText({super.key, required this.text});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(
+          width: 182,
+          child: Divider(
+            color: Color(0x7F404040),
+            thickness: 1.1,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Color(0xFF080708),
+              fontSize: 14,
+              fontFamily: 'Open Sans',
+              fontWeight: FontWeight.w400,
+              height: 1.40,
+              letterSpacing: -0.28,
+            ),
+          ),
+        ),
+        const SizedBox(
+          width: 182,
+          child: Divider(
+            color: Color(0x7F404040),
+            thickness: 1.1,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class LoginTextField extends StatelessWidget {
+  const LoginTextField({
+    super.key,
+    required this.header,
+    required this.controller,
+    this.obscureText = false,
+  });
+
+  final String header;
+  final bool obscureText;
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text.rich(
+          TextSpan(
+            children: [
+              const TextSpan(
+                text: '* ',
+                style: TextStyle(
+                  color: Color(0xFFD95858),
+                  fontSize: 16,
+                  fontFamily: 'Open Sans',
+                  fontWeight: FontWeight.w400,
+                  height: 1.40,
+                ),
+              ),
+              TextSpan(
+                text: header,
+                style: const TextStyle(
+                  color: Color(0xFF080708),
+                  fontSize: 16,
+                  fontFamily: 'Open Sans',
+                  fontWeight: FontWeight.w400,
+                  height: 1.40,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 41,
+          child: TextFormField(
+            obscureText: obscureText,
+            controller: controller,
+            decoration: InputDecoration(
+              focusedBorder: _customBorder(),
+              enabledBorder: _customBorder(),
+              isDense: true,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 18,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  OutlineInputBorder _customBorder() {
+    return const OutlineInputBorder(
+      borderSide: BorderSide(color: Color(0xFF3772FF), width: 1.0),
+      borderRadius: BorderRadius.all(Radius.circular(12)),
+    );
+  }
+}
+
+class TextAndClickableText extends StatelessWidget {
+  const TextAndClickableText({
+    super.key,
+    this.onTap,
+    required this.text1,
+    required this.text2,
+  });
+  final String text1;
+  final String text2;
+  final void Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          text1,
+          style: const TextStyle(
+            color: Color(0x99080708),
+            fontSize: 16,
+            fontFamily: 'Open Sans',
+            fontWeight: FontWeight.w400,
+            height: 1.40,
+          ),
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        GestureDetector(
+          onTap: onTap,
+          child: Text(
+            text2,
+            style: const TextStyle(
+              color: Color(0xFF3772FF),
+              fontSize: 16,
+              fontFamily: 'Open Sans',
+              fontWeight: FontWeight.w400,
+              height: 1.40,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -2,8 +2,9 @@ library flutter_firebase_framework;
 
 //import 'dart:ffi';
 
-import 'package:auth/email_login_view.dart';
 import 'package:auth/login_button.dart';
+import 'package:auth/toast.dart';
+import 'package:auth/utils/firebase_exception_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:firebase_admin/firebase_admin.dart';
 //import 'package:firebase_admin/src/auth/token_generator.dart';

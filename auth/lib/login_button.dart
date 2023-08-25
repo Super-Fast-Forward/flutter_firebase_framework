@@ -21,36 +21,33 @@ class LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!isVisible) return const SizedBox.shrink();
     return Container(
-      height: 65,
-      margin: const EdgeInsets.symmetric(vertical: 7),
+      height: 47,
+      width: 309,
+      margin: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        border: Border.all(color: Colors.black, width: 0.3),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: const Color(0xFF1D1C2A),
+          width: 0.3,
+        ),
       ),
       child: InkWell(
         onTap: onPressed,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 65,
-              height: 65,
-              decoration: const BoxDecoration(
-                border: Border(
-                  right: BorderSide(
-                    color: Colors.black,
-                    width: 0.3,
-                  ),
-                ),
-              ),
-              padding: const EdgeInsets.all(18),
+            SizedBox.square(
+              dimension: 23,
               child: SvgPicture.asset(icon),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                text,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+            const SizedBox(width: 16),
+            Text(
+              text,
+              style: const TextStyle(
+                color: Color(0xFF1D1C2A),
+                fontSize: 16,
+                fontFamily: 'Open Sans',
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],

@@ -448,82 +448,100 @@ class LoginWidget extends ConsumerWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 81),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          const Header(text: "Log in into your account"),
-          const SizedBox(height: 42),
-          LoginButton(
-            text: "Continue with LinkedIn",
-            icon: 'assets/linkedin_logo.svg',
-            isVisible: true,
-            onPressed: () {
-              ref.read(showLoading.notifier).value = true;
-              authenticateLinkedin(ref: ref);
-            },
-          ),
-          LoginButton(
-            text: "Continue with Google",
-            icon: 'assets/google_logo.svg',
-            isVisible: true,
-            onPressed: () async {
-              await signInWithGoogle();
-              ref.read(userLoggedIn.notifier).value = true;
-            },
-          ),
-          LoginButton(
-            text: "Continue with Github",
-            icon: 'assets/github_logo.svg',
-            onPressed: () async {
-              ref.read(showLoading.notifier).value = true;
-              signInWithGitHub().whenComplete(
-                () {
-                  ref.read(userLoggedIn.notifier).value = true;
-                  ref.read(showLoading.notifier).value = false;
-                },
-              );
-            },
-          ),
-          LoginButton(
-            text: "Continue with Anonymous",
-            icon: 'assets/anonymous.svg',
-            isVisible: anonymousLogin,
-            onPressed: () async {
-              await FirebaseAuth.instance.signInAnonymously();
-              if (onLoginAnonymousButtonPressed != null) {
-                onLoginAnonymousButtonPressed!();
-              }
-            },
-          ),
-          const SizedBox(height: 21),
-          const LinedText(text: "OR"),
-          const SizedBox(height: 21),
-          LoginTextField(header: "Email", controller: emailController),
-          const SizedBox(height: 12),
-          LoginTextField(header: "Password", controller: passwordController),
-          const SizedBox(height: 35),
-          LongButton(
-            text: "Log In",
-            onTap: () {
-              signInWithEmail(
-                context: context,
-                email: emailController.text,
-                password: passwordController.text,
-              );
-            },
-          ),
-          const SizedBox(height: 58),
-          TextAndClickableText(
-            onTap: () {
-              //TODO go signUp page
-            },
-            text1: "Don’t have an account?",
-            text2: "Sign up for free",
-          )
-        ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 81, vertical: 53),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            const Header(text: "Log in into your account"),
+            const SizedBox(height: 30),
+            LoginButton(
+              text: "Continue with LinkedIn",
+              icon: 'assets/linkedin_logo.svg',
+              isVisible: true,
+              onPressed: () {
+                ref.read(showLoading.notifier).value = true;
+                authenticateLinkedin(ref: ref);
+              },
+            ),
+            LoginButton(
+              text: "Continue with Google",
+              icon: 'assets/google_logo.svg',
+              isVisible: true,
+              onPressed: () async {
+                await signInWithGoogle();
+                ref.read(userLoggedIn.notifier).value = true;
+              },
+            ),
+            LoginButton(
+              text: "Continue with Github",
+              icon: 'assets/github_logo.svg',
+              onPressed: () async {
+                ref.read(showLoading.notifier).value = true;
+                signInWithGitHub().whenComplete(
+                  () {
+                    ref.read(userLoggedIn.notifier).value = true;
+                    ref.read(showLoading.notifier).value = false;
+                  },
+                );
+              },
+            ),
+            LoginButton(
+              text: "Continue with Anonymous",
+              icon: 'assets/anonymous.svg',
+              isVisible: anonymousLogin,
+              onPressed: () async {
+                await FirebaseAuth.instance.signInAnonymously();
+                if (onLoginAnonymousButtonPressed != null) {
+                  onLoginAnonymousButtonPressed!();
+                }
+              },
+            ),
+            const SizedBox(height: 21),
+            const LinedText(text: "OR"),
+            const SizedBox(height: 21),
+            SizedBox(
+              width: 464,
+              child: Column(
+                children: [
+                  LoginTextField(
+                    header: "Email",
+                    controller: emailController,
+                    text: "email address",
+                  ),
+                  const SizedBox(height: 12),
+                  LoginTextField(
+                    header: "Password",
+                    controller: passwordController,
+                    text: "password",
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 35),
+                  LongButton(
+                    text: "Log In",
+                    onTap: () {
+                      signInWithEmail(
+                        context: context,
+                        email: emailController.text,
+                        password: passwordController.text,
+                      );
+                    },
+                  ),
+                  SizedBox(height: 58),
+                  TextAndClickableText(
+                    onTap: () {
+                      //TODO go signUp page
+                    },
+                    text1: "Don’t have an account?",
+                    text2: "Sign up for free",
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -564,7 +582,6 @@ class LongButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 42,
-        width: 464,
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
         decoration: const BoxDecoration(
           color: Color(0xFF3772FF),
@@ -634,10 +651,12 @@ class LoginTextField extends StatelessWidget {
     required this.header,
     required this.controller,
     this.obscureText = false,
+    this.text,
   });
 
   final String header;
   final bool obscureText;
+  final String? text;
   final TextEditingController controller;
 
   @override
@@ -680,6 +699,15 @@ class LoginTextField extends StatelessWidget {
             decoration: InputDecoration(
               focusedBorder: _customBorder(),
               enabledBorder: _customBorder(),
+              hintText: text,
+              hintStyle: TextStyle(
+                color: Color(0xFF080708),
+                fontSize: 14,
+                fontFamily: 'Open Sans',
+                fontWeight: FontWeight.w400,
+                height: 1.40,
+                letterSpacing: -0.28,
+              ),
               isDense: true,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 20,
@@ -706,9 +734,12 @@ class TextAndClickableText extends StatelessWidget {
     this.onTap,
     required this.text1,
     required this.text2,
+    this.style,
   });
+
   final String text1;
   final String text2;
+  final TextStyle? style;
   final void Function()? onTap;
 
   @override
@@ -718,13 +749,7 @@ class TextAndClickableText extends StatelessWidget {
       children: [
         Text(
           text1,
-          style: const TextStyle(
-            color: Color(0x99080708),
-            fontSize: 16,
-            fontFamily: 'Open Sans',
-            fontWeight: FontWeight.w400,
-            height: 1.40,
-          ),
+          style: _style(),
         ),
         const SizedBox(
           width: 10,
@@ -733,16 +758,25 @@ class TextAndClickableText extends StatelessWidget {
           onTap: onTap,
           child: Text(
             text2,
-            style: const TextStyle(
-              color: Color(0xFF3772FF),
-              fontSize: 16,
-              fontFamily: 'Open Sans',
-              fontWeight: FontWeight.w400,
-              height: 1.40,
-            ),
+            style: _styleBlue(),
           ),
         ),
       ],
     );
+  }
+
+  TextStyle _style() {
+    return style ??
+        TextStyle(
+          color: Color(0x99080708),
+          fontSize: 16,
+          fontFamily: 'Open Sans',
+          fontWeight: FontWeight.w400,
+          height: 1.40,
+        );
+  }
+
+  TextStyle _styleBlue() {
+    return _style().copyWith(color: Color(0xFF3772FF));
   }
 }

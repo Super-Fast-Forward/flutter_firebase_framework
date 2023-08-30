@@ -35,9 +35,7 @@ class LoginPage extends ConsumerWidget {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            child: LoginWidget(
-              anonymousLogin: anonymousLogin,
-            ),
+            child: LogInWidget(anonymousLogin: anonymousLogin),
           ),
         ),
         Expanded(child: aboutTheApp)
@@ -56,7 +54,7 @@ class LoginPage extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               header,
-              LoginWidget(
+              LogInWidget(
                 anonymousLogin: anonymousLogin,
               ),
             ],

@@ -9,9 +9,6 @@ final showLoading = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
 final openEmailLogin = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
     (ref) => AuthStateNotifier<bool>(false));
 
-final openEmailSignIn = StateNotifierProvider<AuthStateNotifier<bool>, bool>(
-    (ref) => AuthStateNotifier<bool>(false));
-
 /// LoginButtonsWidget is a widget that displays the login buttons.
 /// Each button is a [ElevatedButton] that calls the appropriate login function.
 /// The login functions are defined in the [LoginConfig] class.
@@ -33,19 +30,234 @@ Future<void> initializeFirebase() async {
   await Firebase.initializeApp();
 }
 
-class LoginWidget extends ConsumerWidget {
-  /// This is the function that is called when the Anonymous Login button is pressed.
-  /// It is defined in the [LoginConfig] class.
-  /// Use it for a follow-up action when the user has logged in anonymously.
-  final Function? onLoginAnonymousButtonPressed;
-
-  ///Login Options are set in LoginConfig
-  const LoginWidget({
+class LogInWidget extends ConsumerWidget {
+  const LogInWidget({
     this.anonymousLogin = true,
-    this.onLoginAnonymousButtonPressed,
     Key? key,
   }) : super(key: key);
 
+  final bool anonymousLogin;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bool = ref.watch(openEmailLogin);
+    return bool
+        ? SignUpWidget(anonymousLogin: anonymousLogin)
+        : SignInWidget(anonymousLogin: anonymousLogin);
+  }
+}
+
+class SignInWidget extends ConsumerWidget {
+  const SignInWidget({
+    this.anonymousLogin = true,
+    Key? key,
+  }) : super(key: key);
+
+  final bool anonymousLogin;
+
+  Future<void> signInWithEmail({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      Toast.showByContext(
+        context: context,
+        message: getFirebaseMessageFromErrorCode(e.code),
+      );
+    } catch (e) {
+      Toast.showByContext(
+        context: context,
+        message: getFirebaseMessageFromErrorCode(""),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (ref.watch(showLoading)) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 81, vertical: 53),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          const Header(text: "Log in into your account"),
+          const SizedBox(height: 30),
+          const SocialSignIn(),
+          const SizedBox(height: 21),
+          const LinedText(text: "OR"),
+          const SizedBox(height: 21),
+          SizedBox(
+            width: 464,
+            child: Column(
+              children: [
+                LoginTextField(
+                  header: "Email",
+                  controller: emailController,
+                  text: "email address",
+                ),
+                const SizedBox(height: 12),
+                LoginTextField(
+                  header: "Password",
+                  controller: passwordController,
+                  text: "password",
+                  obscureText: true,
+                ),
+                const SizedBox(height: 35),
+                LongButton(
+                  text: "Log In",
+                  onTap: () {
+                    signInWithEmail(
+                      context: context,
+                      email: emailController.text,
+                      password: passwordController.text,
+                    );
+                  },
+                ),
+                const SizedBox(height: 58),
+                TextAndClickableText(
+                  onTap: () {
+                    ref.read(openEmailLogin.notifier).value = true;
+                  },
+                  text1: "Don’t have an account?",
+                  text2: "Sign up for free",
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SignUpWidget extends ConsumerWidget {
+  const SignUpWidget({
+    this.anonymousLogin = true,
+    Key? key,
+  }) : super(key: key);
+
+  final bool anonymousLogin;
+
+  Future<void> signUpWithEmail({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      Toast.showByContext(
+        context: context,
+        message: getFirebaseMessageFromErrorCode(e.code),
+      );
+    } catch (e) {
+      Toast.showByContext(
+        context: context,
+        message: getFirebaseMessageFromErrorCode(""),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (ref.watch(showLoading)) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 81, vertical: 53),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          const Header(text: "Create Your Free Account"),
+          const SizedBox(height: 30),
+          const SocialSignIn(),
+          const SizedBox(height: 21),
+          const LinedText(text: "OR"),
+          const SizedBox(height: 21),
+          SizedBox(
+            width: 464,
+            child: Column(
+              children: [
+                LoginTextField(
+                  header: "Email",
+                  controller: emailController,
+                  text: "email address",
+                ),
+                const SizedBox(height: 12),
+                LoginTextField(
+                  header: "Password",
+                  controller: passwordController,
+                  text: "password",
+                  obscureText: true,
+                ),
+                const SizedBox(height: 35),
+                LongButton(
+                  text: "Log In",
+                  onTap: () {
+                    signUpWithEmail(
+                      context: context,
+                      email: emailController.text,
+                      password: passwordController.text,
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextAndClickableText(
+                  onTap: () {},
+                  text1: "By signing up I agree with Job Search Ninja’s",
+                  text2: "Terms and conditions.",
+                  style: const TextStyle(
+                    color: Color(0xFF616161),
+                    fontSize: 14,
+                    fontFamily: 'Open Sans',
+                    fontWeight: FontWeight.w400,
+                    height: 1.40,
+                    letterSpacing: -0.28,
+                  ),
+                ),
+                const SizedBox(height: 23),
+                TextAndClickableText(
+                  onTap: () {
+                    ref.read(openEmailLogin.notifier).value = false;
+                  },
+                  text1: "Already a user?",
+                  text2: "Log In",
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SocialSignIn extends ConsumerWidget {
+  const SocialSignIn({
+    super.key,
+    this.anonymousLogin = true,
+  });
   final bool anonymousLogin;
 
   void checkUserLoggedIn(WidgetRef ref) {
@@ -93,134 +305,17 @@ class LoginWidget extends ConsumerWidget {
     return null;
   }
 
-  Future<void> authenticateLinkedin({required WidgetRef ref}) async {
-    // returne the current url to do the resquest
-    final validUrl = await validate_url();
-
-    const String clientId = '86huxyar2l3rkb';
-    final String redirectUri = '${validUrl}/auth.html';
-    print("redirect_uri: $redirectUri");
-    //final String redirect_uri = 'http://localhost:49215/auth.html';
-
-    print('Authenticating...');
-
-    final url = 'https://www.linkedin.com/oauth/v2/authorization?'
-        'response_type=code&'
-        'client_id=$clientId&'
-        'redirect_uri=$redirectUri&'
-        'scope=r_liteprofile%20r_emailaddress';
-
-    // Open the authorization URL in a web view and wait for the result
-    final result = await FlutterWebAuth2.authenticate(
-      url: url,
-      callbackUrlScheme: 'https',
-    );
-
-    // Extract the authorization code from the result
-    final code = await handleAuthResultCodeLinkedin(result);
-
-    // Request an access token using the authorization code
-    if (code != null) {
-      await requestAccessTokenLinkedin(
-          code: code, ref: ref, client_id: clientId, redirect_uri: redirectUri);
-    }
-
-    checkUserLoggedIn(ref);
-    ref.read(showLoading.notifier).value = false;
-  }
-
-  // Extracts the authorization code from the callback URL
-  Future<String?> handleAuthResultCodeLinkedin(String result) async {
-    print("handleAuthResultCodeLinkedin-test");
-    final currentUri = Uri.parse(result);
-
-    if (currentUri.queryParameters.containsKey('code')) {
-      final code = currentUri.queryParameters['code'];
-      print("Authorization Code was obtained");
-      return code;
-    }
-
-    return null;
-  }
-
-  // this is client service request
-  // I need to do a http request with the code
-  // Requests an access token using the authorization code
-  Future<void> requestAccessTokenLinkedin({
-    required String code,
-    required WidgetRef ref,
-    required String client_id,
-    required String redirect_uri,
-  }) async {
-    print("requestAccessTokenLinkedin");
-    final tokenType = 'access_token_linkedin';
-    final clientId = client_id;
-    final redirectUri = redirect_uri;
-
+  Future<bool> checkCustomUserExists(String uid) async {
+    print('checkCustomUserExists - start');
     try {
-      final url = Uri.parse(
-          'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?code=$code&token_type=$tokenType&CLIENT_ID=$clientId&REDIRECT_URI=$redirectUri');
-      final response = await http.get(url);
-      print("requestAccessTokenLinkedin - response: $response");
-      if (response.statusCode == 200) {
-        final responseBody = response.body;
-        final Map<String, dynamic> responseData = json.decode(responseBody);
-        final userId = responseData['user_id'];
-        final email = responseData['email'];
-        final pictureUrl = responseData['picture_url'];
-        final userName = responseData['user_name'];
-
-        // print("User ID: $user_id");
-        // print("Email: $email");
-        // print("Picture URL: $picture_url");
-        // print("User Name: $user_name");
-        ref.read(showLoading.notifier).value = false;
-        await signinCustomUserFirebase(userId, email, pictureUrl, userName);
-      } else {
-        print('Request failed with status: ${response.statusCode}');
-      }
+      final DocumentSnapshot snapshot =
+          await FirebaseFirestore.instance.collection('user').doc(uid).get();
+      return snapshot.exists; //true
     } catch (e) {
-      print('Error requestAccessTokenLinkedin: $e');
-      // Handle the error
+      print('Error checking user existence: $e');
+      return false;
     }
   }
-
-// Fuction that autenticate custom Provider (Linkedin, seek, Indeed)
-
-  Future<void> signinCustomUserFirebase(
-      userId, String email, String pictureURL, userName) async {
-    //Generate custom user
-
-    print('signinCustomUserFirebase');
-    final customToken = await generateCustomToken(userId);
-
-    final signinfirebase = await signInWithCustomToken(customToken as String);
-
-    if (signinfirebase) {
-      final currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser != null) {
-        String uid = currentUser.uid;
-        print('signInWithCustomToken - userID: $uid'); // Is it same?
-        if (userId == uid) {
-          // Check if the user exists in the database
-          bool userExists = await checkCustomUserExists(uid);
-
-          if (userExists) {
-            // User exists in the database,
-            print('User exists in the database');
-          } else {
-            // User doesn't exist in the database, create a new user, save data, and perform login
-            print('User does not exist in the database');
-            //Save data of user in database
-            await saveDataFirebase(uid, email, pictureURL, userName);
-          }
-        } else {
-          print("Authentication Failed - something went wrong");
-        }
-      }
-    }
-  }
-
   // It is require to enable IAM Service Account Credentials API
   // in cloud console Creates short-lived credentials
   // for impersonating IAM service accounts
@@ -271,35 +366,132 @@ class LoginWidget extends ConsumerWidget {
     }
   }
 
-  Future<bool> checkCustomUserExists(String uid) async {
-    print('checkCustomUserExists - start');
-    try {
-      final DocumentSnapshot snapshot =
-          await FirebaseFirestore.instance.collection('user').doc(uid).get();
-      return snapshot.exists; //true
-    } catch (e) {
-      print('Error checking user existence: $e');
-      return false;
+  // Fuction that autenticate custom Provider (Linkedin, seek, Indeed)
+
+  Future<void> signinCustomUserFirebase(
+      userId, String email, String pictureURL, userName) async {
+    //Generate custom user
+
+    print('signinCustomUserFirebase');
+    final customToken = await generateCustomToken(userId);
+
+    final signinfirebase = await signInWithCustomToken(customToken as String);
+
+    if (signinfirebase) {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        String uid = currentUser.uid;
+        print('signInWithCustomToken - userID: $uid'); // Is it same?
+        if (userId == uid) {
+          // Check if the user exists in the database
+          bool userExists = await checkCustomUserExists(uid);
+
+          if (userExists) {
+            // User exists in the database,
+            print('User exists in the database');
+          } else {
+            // User doesn't exist in the database, create a new user, save data, and perform login
+            print('User does not exist in the database');
+            //Save data of user in database
+            await saveDataFirebase(uid, email, pictureURL, userName);
+          }
+        } else {
+          print("Authentication Failed - something went wrong");
+        }
+      }
     }
   }
 
-  // Save the user data based
-  Future<void> saveDataFirebase(
-      String uid, String email, String pictureURL, String userName) async {
-    print('saveDataFirebase');
+  // this is client service request
+  // I need to do a http request with the code
+  // Requests an access token using the authorization code
+  Future<void> requestAccessTokenLinkedin({
+    required String code,
+    required WidgetRef ref,
+    required String client_id,
+    required String redirect_uri,
+  }) async {
+    print("requestAccessTokenLinkedin");
+    final tokenType = 'access_token_linkedin';
+    final clientId = client_id;
+    final redirectUri = redirect_uri;
+
     try {
-      final userRef = FirebaseFirestore.instance.collection('user').doc(uid);
+      final url = Uri.parse(
+          'https://us-central1-jsninja-dev.cloudfunctions.net/custom-token?code=$code&token_type=$tokenType&CLIENT_ID=$clientId&REDIRECT_URI=$redirectUri');
+      final response = await http.get(url);
+      print("requestAccessTokenLinkedin - response: $response");
+      if (response.statusCode == 200) {
+        final responseBody = response.body;
+        final Map<String, dynamic> responseData = json.decode(responseBody);
+        final userId = responseData['user_id'];
+        final email = responseData['email'];
+        final pictureUrl = responseData['picture_url'];
+        final userName = responseData['user_name'];
 
-      await userRef.set({
-        'email': email,
-        'pictureURL': pictureURL,
-        'userName': userName,
-      }, SetOptions(merge: true));
-
-      print('User created with UID: $uid');
+        // print("User ID: $user_id");
+        // print("Email: $email");
+        // print("Picture URL: $picture_url");
+        // print("User Name: $user_name");
+        ref.read(showLoading.notifier).value = false;
+        await signinCustomUserFirebase(userId, email, pictureUrl, userName);
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
     } catch (e) {
-      print('Error creating user: $e');
+      print('Error requestAccessTokenLinkedin: $e');
+      // Handle the error
     }
+  }
+
+  Future<void> authenticateLinkedin({required WidgetRef ref}) async {
+    // returne the current url to do the resquest
+    final validUrl = await validate_url();
+
+    const String clientId = '86huxyar2l3rkb';
+    final String redirectUri = '${validUrl}/auth.html';
+    print("redirect_uri: $redirectUri");
+    //final String redirect_uri = 'http://localhost:49215/auth.html';
+
+    print('Authenticating...');
+
+    final url = 'https://www.linkedin.com/oauth/v2/authorization?'
+        'response_type=code&'
+        'client_id=$clientId&'
+        'redirect_uri=$redirectUri&'
+        'scope=r_liteprofile%20r_emailaddress';
+
+    // Open the authorization URL in a web view and wait for the result
+    final result = await FlutterWebAuth2.authenticate(
+      url: url,
+      callbackUrlScheme: 'https',
+    );
+
+    // Extract the authorization code from the result
+    final code = await handleAuthResultCodeLinkedin(result);
+
+    // Request an access token using the authorization code
+    if (code != null) {
+      await requestAccessTokenLinkedin(
+          code: code, ref: ref, client_id: clientId, redirect_uri: redirectUri);
+    }
+
+    checkUserLoggedIn(ref);
+    ref.read(showLoading.notifier).value = false;
+  }
+
+  // Extracts the authorization code from the callback URL
+  Future<String?> handleAuthResultCodeLinkedin(String result) async {
+    print("handleAuthResultCodeLinkedin-test");
+    final currentUri = Uri.parse(result);
+
+    if (currentUri.queryParameters.containsKey('code')) {
+      final code = currentUri.queryParameters['code'];
+      print("Authorization Code was obtained");
+      return code;
+    }
+
+    return null;
   }
 
   Future<void> signInWithGoogle() async {
@@ -416,133 +608,69 @@ class LoginWidget extends ConsumerWidget {
     }
   }
 
-  Future<void> signInWithEmail({
-    required String email,
-    required String password,
-    required BuildContext context,
-  }) async {
+  // Save the user data based
+  Future<void> saveDataFirebase(
+      String uid, String email, String pictureURL, String userName) async {
+    print('saveDataFirebase');
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } on FirebaseAuthException catch (e) {
-      Toast.showByContext(
-        context: context,
-        message: getFirebaseMessageFromErrorCode(e.code),
-      );
+      final userRef = FirebaseFirestore.instance.collection('user').doc(uid);
+
+      await userRef.set({
+        'email': email,
+        'pictureURL': pictureURL,
+        'userName': userName,
+      }, SetOptions(merge: true));
+
+      print('User created with UID: $uid');
     } catch (e) {
-      Toast.showByContext(
-        context: context,
-        message: getFirebaseMessageFromErrorCode(""),
-      );
+      print('Error creating user: $e');
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (ref.watch(showLoading)) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 81, vertical: 53),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            const Header(text: "Log in into your account"),
-            const SizedBox(height: 30),
-            LoginButton(
-              text: "Continue with LinkedIn",
-              icon: 'assets/linkedin_logo.svg',
-              isVisible: true,
-              onPressed: () {
-                ref.read(showLoading.notifier).value = true;
-                authenticateLinkedin(ref: ref);
-              },
-            ),
-            LoginButton(
-              text: "Continue with Google",
-              icon: 'assets/google_logo.svg',
-              isVisible: true,
-              onPressed: () async {
-                await signInWithGoogle();
-                ref.read(userLoggedIn.notifier).value = true;
-              },
-            ),
-            LoginButton(
-              text: "Continue with Github",
-              icon: 'assets/github_logo.svg',
-              onPressed: () async {
-                ref.read(showLoading.notifier).value = true;
-                signInWithGitHub().whenComplete(
-                  () {
-                    ref.read(userLoggedIn.notifier).value = true;
-                    ref.read(showLoading.notifier).value = false;
-                  },
-                );
-              },
-            ),
-            LoginButton(
-              text: "Continue with Anonymous",
-              icon: 'assets/anonymous.svg',
-              isVisible: anonymousLogin,
-              onPressed: () async {
-                await FirebaseAuth.instance.signInAnonymously();
-                if (onLoginAnonymousButtonPressed != null) {
-                  onLoginAnonymousButtonPressed!();
-                }
-              },
-            ),
-            const SizedBox(height: 21),
-            const LinedText(text: "OR"),
-            const SizedBox(height: 21),
-            SizedBox(
-              width: 464,
-              child: Column(
-                children: [
-                  LoginTextField(
-                    header: "Email",
-                    controller: emailController,
-                    text: "email address",
-                  ),
-                  const SizedBox(height: 12),
-                  LoginTextField(
-                    header: "Password",
-                    controller: passwordController,
-                    text: "password",
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 35),
-                  LongButton(
-                    text: "Log In",
-                    onTap: () {
-                      signInWithEmail(
-                        context: context,
-                        email: emailController.text,
-                        password: passwordController.text,
-                      );
-                    },
-                  ),
-                  SizedBox(height: 58),
-                  TextAndClickableText(
-                    onTap: () {
-                      //TODO go signUp page
-                    },
-                    text1: "Don’t have an account?",
-                    text2: "Sign up for free",
-                  )
-                ],
-              ),
-            ),
-          ],
+    return Column(
+      children: [
+        LoginButton(
+          text: "Continue with LinkedIn",
+          icon: 'assets/linkedin_logo.svg',
+          isVisible: true,
+          onPressed: () {
+            ref.read(showLoading.notifier).value = true;
+            authenticateLinkedin(ref: ref);
+          },
         ),
-      ),
+        LoginButton(
+          text: "Continue with Google",
+          icon: 'assets/google_logo.svg',
+          isVisible: true,
+          onPressed: () async {
+            await signInWithGoogle();
+            ref.read(userLoggedIn.notifier).value = true;
+          },
+        ),
+        LoginButton(
+          text: "Continue with Github",
+          icon: 'assets/github_logo.svg',
+          onPressed: () async {
+            ref.read(showLoading.notifier).value = true;
+            signInWithGitHub().whenComplete(
+              () {
+                ref.read(userLoggedIn.notifier).value = true;
+                ref.read(showLoading.notifier).value = false;
+              },
+            );
+          },
+        ),
+        LoginButton(
+          text: "Continue with Anonymous",
+          icon: 'assets/anonymous.svg',
+          isVisible: anonymousLogin,
+          onPressed: () async {
+            await FirebaseAuth.instance.signInAnonymously();
+          },
+        ),
+      ],
     );
   }
 }
@@ -700,7 +828,7 @@ class LoginTextField extends StatelessWidget {
               focusedBorder: _customBorder(),
               enabledBorder: _customBorder(),
               hintText: text,
-              hintStyle: TextStyle(
+              hintStyle: const TextStyle(
                 color: Color(0xFF080708),
                 fontSize: 14,
                 fontFamily: 'Open Sans',
@@ -767,7 +895,7 @@ class TextAndClickableText extends StatelessWidget {
 
   TextStyle _style() {
     return style ??
-        TextStyle(
+        const TextStyle(
           color: Color(0x99080708),
           fontSize: 16,
           fontFamily: 'Open Sans',

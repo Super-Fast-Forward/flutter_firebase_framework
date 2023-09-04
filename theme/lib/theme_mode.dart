@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:theme/config.dart';
+import 'package:theme/local_storage/local_storage_export.dart';
 
 class ThemeModeStateNotifier extends StateNotifier<bool> {
   ThemeModeStateNotifier({required this.ref}) : super(false) {
@@ -17,6 +18,9 @@ class ThemeModeStateNotifier extends StateNotifier<bool> {
     if (ref.watch(authStateProvider).isLoaded || auth.currentUser != null) {
       final theme = await ThemeModeConfig.getTheme();
       state = theme;
+    } else {
+      final value = await SecureStorage.getDataFromKey(SecureStorageKeys.theme);
+      state = (value == "true");
     }
   }
 
@@ -26,6 +30,8 @@ class ThemeModeStateNotifier extends StateNotifier<bool> {
 
   void changeTheme(bool newState) async {
     state = newState;
+    print(state.toString());
+    SecureStorage.saveDataFromKey(SecureStorageKeys.theme, state.toString());
     if (ref.read(authStateProvider).isLoaded || auth.currentUser != null) {
       await ThemeModeConfig.saveTheme(state);
     }

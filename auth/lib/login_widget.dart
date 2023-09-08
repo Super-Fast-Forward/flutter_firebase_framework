@@ -97,7 +97,6 @@ class SignInWidget extends ConsumerWidget {
                   text: "Log In",
                   onTap: () {
                     ref.read(firebaseAuthProvider.notifier).signInWithEmail(
-                          context: context,
                           email: emailController.text,
                           password: passwordController.text,
                         );
@@ -170,7 +169,6 @@ class SignUpWidget extends ConsumerWidget {
                   text: "Log In",
                   onTap: () {
                     ref.read(firebaseAuthProvider.notifier).signUpWithEmail(
-                          context: context,
                           email: emailController.text,
                           password: passwordController.text,
                         );
@@ -223,8 +221,7 @@ class SocialSignIn extends ConsumerWidget {
           icon: 'assets/linkedin_logo.svg',
           isVisible: true,
           onPressed: () {
-            ref.read(showLoading.notifier).value = true;
-            ref.read(firebaseAuthProvider.notifier).authenticateLinkedin();
+            ref.read(linkedinAuthProvider.notifier).authenticateLinkedin();
           },
         ),
         LoginButton(

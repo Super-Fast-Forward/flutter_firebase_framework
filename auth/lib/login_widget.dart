@@ -166,7 +166,7 @@ class SignUpWidget extends ConsumerWidget {
                 ),
                 const SizedBox(height: 35),
                 LongButton(
-                  text: "Log In",
+                  text: "Create Account",
                   onTap: () {
                     ref.read(firebaseAuthProvider.notifier).signUpWithEmail(
                           email: emailController.text,

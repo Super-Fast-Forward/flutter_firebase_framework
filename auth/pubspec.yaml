@@ -13,6 +13,7 @@ dependencies:
   firebase_auth: 4.6.3
   firebase_auth_web: 5.5.3
   firebase_auth_platform_interface: 6.15.3
+  flutter_secure_storage: ^9.0.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.3.6
@@ -24,10 +25,12 @@ dependencies:
   firebase_admin: ^0.2.0
   shelf_router: ^1.1.2
   firebase_dart: ^1.0.3
+
   providers:
     git:
       url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
       path: providers
+      
 
 dev_dependencies:
   flutter_test:

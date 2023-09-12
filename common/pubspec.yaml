@@ -1,7 +1,6 @@
 name: common
 description: Common constants and types
 version: 0.0.1
-homepage:
 
 environment:
   sdk: ">=2.17.1 <3.3.3"

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 class Toast {
   Toast._();
 
+  static final GlobalKey<ScaffoldMessengerState> key =
+      GlobalKey<ScaffoldMessengerState>();
+
   static void showByContext({
     required BuildContext context,
     required String message,
@@ -10,6 +13,16 @@ class Toast {
     Color? color,
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
+      _getSnackBar(message, type, color: color),
+    );
+  }
+
+  static void show({
+    required String message,
+    SnackbarType type = SnackbarType.error,
+    Color? color,
+  }) {
+    key.currentState?.showSnackBar(
       _getSnackBar(message, type, color: color),
     );
   }

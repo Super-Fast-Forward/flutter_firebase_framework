@@ -18,12 +18,10 @@ dependencies:
   auth:
     git:
       url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
-      ref: bugfix/prevent-the-blink-of-the-light-theme-on-hard-refresh-if-user-saves-dark-theme
       path: auth
   providers:
     git:
       url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
-      ref: bugfix/prevent-the-blink-of-the-light-theme-on-hard-refresh-if-user-saves-dark-theme
       path: providers
 
 dependency_overrides:

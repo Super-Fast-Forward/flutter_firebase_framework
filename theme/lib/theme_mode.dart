@@ -19,7 +19,7 @@ class ThemeModeStateNotifier extends StateNotifier<bool> {
       final theme = await ThemeModeConfig.getTheme();
       state = theme;
     } else {
-      final value = await SecureStorage.getDataFromKey(SecureStorageKeys.theme);
+      final value = await LocalStorage.getDataFromKey(LocalStorageKeys.theme);
       state = (value == "true");
     }
   }
@@ -31,7 +31,7 @@ class ThemeModeStateNotifier extends StateNotifier<bool> {
   void changeTheme(bool newState) async {
     state = newState;
     print(state.toString());
-    SecureStorage.saveDataFromKey(SecureStorageKeys.theme, state.toString());
+    LocalStorage.saveDataFromKey(LocalStorageKeys.theme, state.toString());
     if (ref.read(authStateProvider).isLoaded || auth.currentUser != null) {
       await ThemeModeConfig.saveTheme(state);
     }

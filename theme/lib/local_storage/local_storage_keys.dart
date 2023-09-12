@@ -1,6 +1,6 @@
-enum SecureStorageKeys {
+enum LocalStorageKeys {
   theme(value: "Theme");
 
   final String value;
-  const SecureStorageKeys({required this.value});
+  const LocalStorageKeys({required this.value});
 }

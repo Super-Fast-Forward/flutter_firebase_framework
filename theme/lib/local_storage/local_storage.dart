@@ -1,32 +1,31 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme/local_storage/local_storage_keys.dart';
 
-class SecureStorage {
-  static FlutterSecureStorage _storage = FlutterSecureStorage();
+class LocalStorage {
+  static late final SharedPreferences _storage;
 
-  static Future<String?> getDataFromKey(final SecureStorageKeys key) async {
-    final String? value = await _storage.read(
-      key: key.value,
-    );
+  static Future<void> initialize() async {
+    _storage = await SharedPreferences.getInstance();
+  }
+
+  static String? getDataFromKey(final LocalStorageKeys key) {
+    final String? value = _storage.getString(key.value);
 
     return value;
   }
 
-  static Future<void> removeDataFromKey(final SecureStorageKeys key) async {
+  static Future<void> removeDataFromKey(final LocalStorageKeys key) async {
     try {
-      await _storage.delete(key: key.value);
+      await _storage.remove(key.value);
     } catch (failure) {
       print(failure);
     }
   }
 
   static Future<void> saveDataFromKey(
-      final SecureStorageKeys key, final String data) async {
+      final LocalStorageKeys key, final String data) async {
     try {
-      await _storage.write(
-        key: key.value,
-        value: data,
-      );
+      await _storage.setString(key.value, data);
     } catch (failure) {
       print(failure);
     }

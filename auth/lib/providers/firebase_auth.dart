@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:auth/providers/is_email_sign_in_provider.dart';
 import 'package:auth/toast.dart';
 import 'package:auth/utils/firebase_exception_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,12 +10,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final firebaseAuthProvider =
     StateNotifierProvider<FirebaseAuthProvider, String>(
   (ref) {
-    return FirebaseAuthProvider();
+    return FirebaseAuthProvider(ref);
   },
 );
 
 class FirebaseAuthProvider extends StateNotifier<String> {
-  FirebaseAuthProvider() : super('');
+  FirebaseAuthProvider(this._ref) : super('');
+
+  final Ref _ref;
 
   Future<void> signUpWithEmail({
     required String email,
@@ -22,10 +25,12 @@ class FirebaseAuthProvider extends StateNotifier<String> {
   }) async {
     await signIn(
       func: () {
-        return FirebaseAuth.instance.createUserWithEmailAndPassword(
+        final result = FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
+        _ref.read(isEmailSignInProvider.notifier).value = true;
+        return result;
       },
     );
   }
@@ -36,10 +41,12 @@ class FirebaseAuthProvider extends StateNotifier<String> {
   }) async {
     await signIn(
       func: () {
-        return FirebaseAuth.instance.signInWithEmailAndPassword(
+        final result = FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
+        _ref.read(isEmailSignInProvider.notifier).value = true;
+        return result;
       },
     );
   }
@@ -93,6 +100,7 @@ class FirebaseAuthProvider extends StateNotifier<String> {
 
   Future<void> signIn({required Future<UserCredential> Function() func}) async {
     try {
+      _ref.read(isEmailSignInProvider.notifier).value = false;
       final result = await func();
       linkAccount(result.credential);
       await checkUserExists(result);

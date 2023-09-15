@@ -90,7 +90,7 @@ class SignInWidget extends ConsumerWidget {
                   header: "Password",
                   controller: passwordController,
                   text: "password",
-                  obscureText: true,
+                  obscureText: ref.watch(showPasswordProvider),
                 ),
                 const SizedBox(height: 35),
                 LongButton(
@@ -162,7 +162,7 @@ class SignUpWidget extends ConsumerWidget {
                   header: "Password",
                   controller: passwordController,
                   text: "password",
-                  obscureText: true,
+                  obscureText: ref.watch(showPasswordProvider),
                 ),
                 const SizedBox(height: 35),
                 LongButton(
@@ -367,11 +367,13 @@ class LoginTextField extends StatelessWidget {
     required this.controller,
     this.obscureText = false,
     this.text,
+    this.icon,
   });
 
   final String header;
   final bool obscureText;
   final String? text;
+  final Widget? icon;
   final TextEditingController controller;
 
   @override
@@ -423,6 +425,7 @@ class LoginTextField extends StatelessWidget {
                 height: 1.40,
                 letterSpacing: -0.28,
               ),
+              suffix: icon,
               isDense: true,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 20,

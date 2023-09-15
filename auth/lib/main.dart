@@ -5,6 +5,7 @@ library flutter_firebase_framework;
 import 'package:auth/login_button.dart';
 import 'package:auth/providers/firebase_auth.dart';
 import 'package:auth/providers/linkedin_auth.dart';
+import 'package:auth/providers/show_password_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'dart:io';

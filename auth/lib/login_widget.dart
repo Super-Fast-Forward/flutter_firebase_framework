@@ -86,12 +86,7 @@ class SignInWidget extends ConsumerWidget {
                   text: "email address",
                 ),
                 const SizedBox(height: 12),
-                LoginTextField(
-                  header: "Password",
-                  controller: passwordController,
-                  text: "password",
-                  obscureText: ref.watch(showPasswordProvider),
-                ),
+                LoginPasswordTextField(controller: passwordController),
                 const SizedBox(height: 35),
                 LongButton(
                   text: "Log In",
@@ -106,6 +101,7 @@ class SignInWidget extends ConsumerWidget {
                 TextAndClickableText(
                   onTap: () {
                     ref.read(openEmailLogin.notifier).value = true;
+                    ref.read(showPasswordProvider.notifier).changeTheme(true);
                   },
                   text1: "Don’t have an account?",
                   text2: "Sign up for free",
@@ -158,11 +154,7 @@ class SignUpWidget extends ConsumerWidget {
                   text: "email address",
                 ),
                 const SizedBox(height: 12),
-                LoginPasswordTextField(
-                  textObscure: ref.watch(showPasswordProvider),
-                  controller: passwordController,
-                  onTap: ref.read(showPasswordProvider.notifier).toggleTheme,
-                ),
+                LoginPasswordTextField(controller: passwordController),
                 const SizedBox(height: 35),
                 LongButton(
                   text: "Create Account",
@@ -191,6 +183,7 @@ class SignUpWidget extends ConsumerWidget {
                 TextAndClickableText(
                   onTap: () {
                     ref.read(openEmailLogin.notifier).value = false;
+                    ref.read(showPasswordProvider.notifier).changeTheme(true);
                   },
                   text1: "Already a user?",
                   text2: "Log In",
@@ -359,27 +352,24 @@ class LinedText extends StatelessWidget {
   }
 }
 
-class LoginPasswordTextField extends StatelessWidget {
+class LoginPasswordTextField extends ConsumerWidget {
   const LoginPasswordTextField({
     super.key,
-    this.onTap,
     this.controller,
-    required this.textObscure,
   });
 
-  final void Function()? onTap;
   final TextEditingController? controller;
-  final bool textObscure;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool textObscure = ref.watch(showPasswordProvider);
     return LoginTextField(
       header: "Password",
       controller: controller,
       text: "password",
       icon: ObsecureText(
         isVisible: textObscure,
-        onTap: onTap,
+        onTap: ref.read(showPasswordProvider.notifier).toggleTheme,
       ),
       obscureText: textObscure,
     );
@@ -451,7 +441,7 @@ class LoginTextField extends StatelessWidget {
                 height: 1.40,
                 letterSpacing: -0.28,
               ),
-              suffix: icon,
+              suffixIcon: icon,
               isDense: true,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 20,
@@ -537,11 +527,19 @@ class ObsecureText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String icon = isVisible ? 'opened_eye' : 'closed_eye';
+    final String icon = isVisible ? 'closed_eye' : 'opened_eye';
     return GestureDetector(
       onTap: onTap,
-      child: SizedBox(
-        child: SvgPicture.asset('assets/$icon.svg'),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+        child: SizedBox(
+          height: 20,
+          width: 20,
+          child: SvgPicture.asset(
+            'assets/$icon.svg',
+            fit: BoxFit.fitWidth,
+          ),
+        ),
       ),
     );
   }

@@ -158,11 +158,10 @@ class SignUpWidget extends ConsumerWidget {
                   text: "email address",
                 ),
                 const SizedBox(height: 12),
-                LoginTextField(
-                  header: "Password",
+                LoginPasswordTextField(
+                  textObscure: ref.watch(showPasswordProvider),
                   controller: passwordController,
-                  text: "password",
-                  obscureText: ref.watch(showPasswordProvider),
+                  onTap: ref.read(showPasswordProvider.notifier).toggleTheme,
                 ),
                 const SizedBox(height: 35),
                 LongButton(
@@ -360,11 +359,38 @@ class LinedText extends StatelessWidget {
   }
 }
 
+class LoginPasswordTextField extends StatelessWidget {
+  const LoginPasswordTextField({
+    super.key,
+    this.onTap,
+    this.controller,
+    required this.textObscure,
+  });
+
+  final void Function()? onTap;
+  final TextEditingController? controller;
+  final bool textObscure;
+
+  @override
+  Widget build(BuildContext context) {
+    return LoginTextField(
+      header: "Password",
+      controller: controller,
+      text: "password",
+      icon: ObsecureText(
+        isVisible: textObscure,
+        onTap: onTap,
+      ),
+      obscureText: textObscure,
+    );
+  }
+}
+
 class LoginTextField extends StatelessWidget {
   const LoginTextField({
     super.key,
     required this.header,
-    required this.controller,
+    this.controller,
     this.obscureText = false,
     this.text,
     this.icon,
@@ -374,7 +400,7 @@ class LoginTextField extends StatelessWidget {
   final bool obscureText;
   final String? text;
   final Widget? icon;
-  final TextEditingController controller;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -496,5 +522,27 @@ class TextAndClickableText extends StatelessWidget {
 
   TextStyle _styleBlue() {
     return _style().copyWith(color: const Color(0xFF3772FF));
+  }
+}
+
+class ObsecureText extends StatelessWidget {
+  const ObsecureText({
+    super.key,
+    required this.isVisible,
+    this.onTap,
+  });
+
+  final bool isVisible;
+  final void Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final String icon = isVisible ? 'opened_eye' : 'closed_eye';
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        child: SvgPicture.asset('assets/$icon.svg'),
+      ),
+    );
   }
 }

@@ -87,7 +87,9 @@ class SignInWidget extends ConsumerWidget {
                 ),
                 const SizedBox(height: 12),
                 LoginPasswordTextField(controller: passwordController),
-                const SizedBox(height: 35),
+                const SizedBox(height: 14),
+                const RememberMe(isChecked: false),
+                const SizedBox(height: 30),
                 LongButton(
                   text: "Log In",
                   onTap: () {
@@ -155,7 +157,9 @@ class SignUpWidget extends ConsumerWidget {
                 ),
                 const SizedBox(height: 12),
                 LoginPasswordTextField(controller: passwordController),
-                const SizedBox(height: 35),
+                const SizedBox(height: 14),
+                const RememberMe(isChecked: false),
+                const SizedBox(height: 30),
                 LongButton(
                   text: "Create Account",
                   onTap: () {
@@ -248,6 +252,43 @@ class SocialSignIn extends ConsumerWidget {
           onPressed: () async {
             await FirebaseAuth.instance.signInAnonymously();
           },
+        ),
+      ],
+    );
+  }
+}
+
+class RememberMe extends StatelessWidget {
+  const RememberMe({
+    super.key,
+    required this.isChecked,
+  });
+
+  final bool isChecked;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(2),
+          child: Checkbox(
+            checkColor: Colors.white,
+            activeColor: Colors.grey,
+            value: isChecked,
+            shape: const RoundedRectangleBorder(),
+            onChanged: (bool? value) {},
+          ),
+        ),
+        const SizedBox(width: 11),
+        const Text(
+          'Remember me',
+          style: TextStyle(
+            color: Color(0x99080708),
+            fontSize: 16,
+            fontFamily: 'Open Sans',
+            fontWeight: FontWeight.w400,
+            height: 0.09,
+          ),
         ),
       ],
     );

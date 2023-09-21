@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:auth/providers/is_email_sign_in_provider.dart';
+import 'package:auth/providers/remember_me.dart';
 import 'package:auth/toast.dart';
 import 'package:auth/utils/firebase_exception_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,6 +34,7 @@ class FirebaseAuthProvider extends StateNotifier<String> {
         return result;
       },
     );
+    await _ref.read(rememberMe.notifier).updateFirebase();
   }
 
   Future<void> signInWithEmail({
@@ -49,6 +51,7 @@ class FirebaseAuthProvider extends StateNotifier<String> {
         return result;
       },
     );
+    await _ref.read(rememberMe.notifier).updateFirebase();
   }
 
   // Auth page: https://github.com/settings/applications
@@ -102,6 +105,7 @@ class FirebaseAuthProvider extends StateNotifier<String> {
     try {
       _ref.read(isEmailSignInProvider.notifier).value = false;
       final result = await func();
+      await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
       linkAccount(result.credential);
       await checkUserExists(result);
     } on FirebaseAuthException catch (e) {

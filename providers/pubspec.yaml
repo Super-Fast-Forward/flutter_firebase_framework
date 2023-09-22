@@ -19,7 +19,6 @@ dependencies:
   auth:
     git:
       url: https://github.com/Super-Fast-Forward/flutter_firebase_framework.git
-      ref: login
       path: auth
 
   # For testing locally

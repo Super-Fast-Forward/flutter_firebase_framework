@@ -34,7 +34,7 @@ class FirebaseAuthProvider extends StateNotifier<String> {
         return result;
       },
     );
-    await _ref.read(rememberMe.notifier).updateFirebase();
+    await _ref.read(rememberMeSignIn.notifier).updateFirebase();
   }
 
   Future<void> signInWithEmail({
@@ -51,7 +51,7 @@ class FirebaseAuthProvider extends StateNotifier<String> {
         return result;
       },
     );
-    await _ref.read(rememberMe.notifier).updateFirebase();
+    await _ref.read(rememberMeSignUp.notifier).updateFirebase();
   }
 
   // Auth page: https://github.com/settings/applications

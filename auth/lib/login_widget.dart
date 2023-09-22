@@ -88,7 +88,7 @@ class SignInWidget extends ConsumerWidget {
                 const SizedBox(height: 12),
                 LoginPasswordTextField(controller: passwordController),
                 const SizedBox(height: 14),
-                const RememberMe(isChecked: false),
+                RememberMe(provider: rememberMeSignIn),
                 const SizedBox(height: 30),
                 LongButton(
                   text: "Log In",
@@ -158,7 +158,7 @@ class SignUpWidget extends ConsumerWidget {
                 const SizedBox(height: 12),
                 LoginPasswordTextField(controller: passwordController),
                 const SizedBox(height: 14),
-                const RememberMe(isChecked: false),
+                RememberMe(provider: rememberMeSignUp),
                 const SizedBox(height: 30),
                 LongButton(
                   text: "Create Account",
@@ -258,15 +258,16 @@ class SocialSignIn extends ConsumerWidget {
   }
 }
 
-class RememberMe extends StatelessWidget {
+class RememberMe extends ConsumerWidget {
   const RememberMe({
+    required this.provider,
     super.key,
-    required this.isChecked,
   });
 
-  final bool isChecked;
+  final AutoDisposeStateNotifierProvider<RememberMeProvider, bool> provider;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       children: [
         Padding(
@@ -274,9 +275,11 @@ class RememberMe extends StatelessWidget {
           child: Checkbox(
             checkColor: Colors.white,
             activeColor: Colors.grey,
-            value: isChecked,
+            value: ref.watch(provider),
             shape: const RoundedRectangleBorder(),
-            onChanged: (bool? value) {},
+            onChanged: (bool? value) {
+              ref.read(provider.notifier).toggleRememberMe();
+            },
           ),
         ),
         const SizedBox(width: 11),

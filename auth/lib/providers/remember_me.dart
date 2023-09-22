@@ -1,7 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final rememberMe = StateNotifierProvider.autoDispose<RememberMeProvider, bool>(
+final rememberMeSignIn =
+    StateNotifierProvider.autoDispose<RememberMeProvider, bool>(
+  (ref) {
+    return RememberMeProvider();
+  },
+);
+
+final rememberMeSignUp =
+    StateNotifierProvider.autoDispose<RememberMeProvider, bool>(
   (ref) {
     return RememberMeProvider();
   },
@@ -10,11 +18,11 @@ final rememberMe = StateNotifierProvider.autoDispose<RememberMeProvider, bool>(
 class RememberMeProvider extends StateNotifier<bool> {
   RememberMeProvider() : super(false);
 
-  void toggleTheme() {
-    changeTheme(!state);
+  void toggleRememberMe() {
+    changeRememberMe(!state);
   }
 
-  void changeTheme(bool newState) async {
+  void changeRememberMe(bool newState) async {
     state = newState;
   }
 

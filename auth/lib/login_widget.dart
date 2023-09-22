@@ -269,6 +269,7 @@ class RememberMe extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.all(2),
@@ -276,7 +277,9 @@ class RememberMe extends ConsumerWidget {
             checkColor: Colors.white,
             activeColor: Colors.grey,
             value: ref.watch(provider),
-            shape: const RoundedRectangleBorder(),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(3)),
+            ),
             onChanged: (bool? value) {
               ref.read(provider.notifier).toggleRememberMe();
             },

@@ -293,7 +293,6 @@ class RememberMe extends ConsumerWidget {
             fontSize: 16,
             fontFamily: 'Open Sans',
             fontWeight: FontWeight.w400,
-            height: 0.09,
           ),
         ),
       ],

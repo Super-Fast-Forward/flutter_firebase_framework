@@ -55,6 +55,7 @@ class LogInWidget extends ConsumerWidget {
             githubLogin: githubLogin,
             googleLogin: googleLogin,
             linkedInLogin: linkedInLogin,
+            termsAndConditionsPageUrl: termsAndConditionsPageUrl,
           )
         : SignInWidget(
             anonymousLogin: anonymousLogin,

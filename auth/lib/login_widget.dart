@@ -287,7 +287,7 @@ class RememberMe extends ConsumerWidget {
         ),
         const SizedBox(width: 11),
         const Text(
-          'Remember me',
+          AppText.rememberMe,
           style: TextStyle(
             color: Color(0x99080708),
             fontSize: 16,
@@ -410,9 +410,9 @@ class LoginPasswordTextField extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     bool textObscure = ref.watch(showPasswordProvider);
     return LoginTextField(
-      header: "Password",
+      header: AppText.password,
       controller: controller,
-      text: "password",
+      text: AppText.password,
       icon: ObsecureText(
         isVisible: textObscure,
         onTap: ref.read(showPasswordProvider.notifier).toggleTheme,
@@ -573,7 +573,7 @@ class ObsecureText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String icon = isVisible ? 'closed_eye' : 'opened_eye';
+    final String icon = isVisible ? AppIcons.closedEye : AppIcons.openedeye;
     return GestureDetector(
       onTap: onTap,
       child: Padding(
@@ -581,10 +581,7 @@ class ObsecureText extends StatelessWidget {
         child: SizedBox(
           height: 20,
           width: 20,
-          child: SvgPicture.asset(
-            'assets/$icon.svg',
-            fit: BoxFit.fitWidth,
-          ),
+          child: SvgPicture.asset(icon, fit: BoxFit.fitWidth),
         ),
       ),
     );

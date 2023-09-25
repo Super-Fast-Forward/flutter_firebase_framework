@@ -2,6 +2,8 @@ library flutter_firebase_framework;
 
 //import 'dart:ffi';
 
+import 'package:auth/core/constant/app_icons.dart';
+import 'package:auth/core/constant/app_text.dart';
 import 'package:auth/login_button.dart';
 import 'package:auth/providers/firebase_auth.dart';
 import 'package:auth/providers/linkedin_auth.dart';

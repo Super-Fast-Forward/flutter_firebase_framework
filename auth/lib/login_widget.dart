@@ -32,30 +32,52 @@ Future<void> initializeFirebase() async {
 
 class LogInWidget extends ConsumerWidget {
   const LogInWidget({
+    super.key,
     this.termsAndConditionsPageUrl,
-    this.anonymousLogin = true,
-    Key? key,
-  }) : super(key: key);
+    required this.anonymousLogin,
+    required this.githubLogin,
+    required this.googleLogin,
+    required this.linkedInLogin,
+  });
 
   final bool anonymousLogin;
+  final bool linkedInLogin;
+  final bool googleLogin;
+  final bool githubLogin;
   final String? termsAndConditionsPageUrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool = ref.watch(openEmailLogin);
-    return bool
-        ? SignUpWidget(anonymousLogin: anonymousLogin)
-        : SignInWidget(anonymousLogin: anonymousLogin);
+    final bool isSignIn = ref.watch(openEmailLogin);
+    return isSignIn
+        ? SignUpWidget(
+            anonymousLogin: anonymousLogin,
+            githubLogin: githubLogin,
+            googleLogin: googleLogin,
+            linkedInLogin: linkedInLogin,
+          )
+        : SignInWidget(
+            anonymousLogin: anonymousLogin,
+            githubLogin: githubLogin,
+            googleLogin: googleLogin,
+            linkedInLogin: linkedInLogin,
+          );
   }
 }
 
 class SignInWidget extends ConsumerWidget {
   const SignInWidget({
-    this.anonymousLogin = true,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+    required this.anonymousLogin,
+    required this.githubLogin,
+    required this.googleLogin,
+    required this.linkedInLogin,
+  });
 
   final bool anonymousLogin;
+  final bool linkedInLogin;
+  final bool googleLogin;
+  final bool githubLogin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -74,7 +96,12 @@ class SignInWidget extends ConsumerWidget {
         children: [
           const Header(text: "Log in into your account"),
           const SizedBox(height: 30),
-          const SocialSignIn(),
+          SocialSignIn(
+            anonymousLogin: anonymousLogin,
+            githubLogin: githubLogin,
+            googleLogin: googleLogin,
+            linkedInLogin: linkedInLogin,
+          ),
           const SizedBox(height: 21),
           const LinedText(text: "OR"),
           const SizedBox(height: 21),
@@ -121,12 +148,18 @@ class SignInWidget extends ConsumerWidget {
 
 class SignUpWidget extends ConsumerWidget {
   const SignUpWidget({
+    super.key,
     this.termsAndConditionsPageUrl,
-    this.anonymousLogin = true,
-    Key? key,
-  }) : super(key: key);
+    required this.anonymousLogin,
+    required this.githubLogin,
+    required this.googleLogin,
+    required this.linkedInLogin,
+  });
 
   final bool anonymousLogin;
+  final bool linkedInLogin;
+  final bool googleLogin;
+  final bool githubLogin;
   final String? termsAndConditionsPageUrl;
 
   @override
@@ -146,7 +179,12 @@ class SignUpWidget extends ConsumerWidget {
         children: [
           const Header(text: "Create Your Free Account"),
           const SizedBox(height: 30),
-          const SocialSignIn(),
+          SocialSignIn(
+            anonymousLogin: anonymousLogin,
+            githubLogin: githubLogin,
+            googleLogin: googleLogin,
+            linkedInLogin: linkedInLogin,
+          ),
           const SizedBox(height: 21),
           const LinedText(text: "OR"),
           const SizedBox(height: 21),
@@ -215,9 +253,16 @@ class SignUpWidget extends ConsumerWidget {
 class SocialSignIn extends ConsumerWidget {
   const SocialSignIn({
     super.key,
-    this.anonymousLogin = true,
+    required this.anonymousLogin,
+    required this.githubLogin,
+    required this.googleLogin,
+    required this.linkedInLogin,
   });
+
   final bool anonymousLogin;
+  final bool linkedInLogin;
+  final bool googleLogin;
+  final bool githubLogin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -226,7 +271,7 @@ class SocialSignIn extends ConsumerWidget {
         LoginButton(
           text: "Continue with LinkedIn",
           icon: 'assets/linkedin_logo.svg',
-          isVisible: true,
+          isVisible: linkedInLogin,
           onPressed: () {
             ref.read(linkedinAuthProvider.notifier).authenticateLinkedin();
           },
@@ -234,7 +279,7 @@ class SocialSignIn extends ConsumerWidget {
         LoginButton(
           text: "Continue with Google",
           icon: 'assets/google_logo.svg',
-          isVisible: true,
+          isVisible: googleLogin,
           onPressed: () async {
             await ref.read(firebaseAuthProvider.notifier).signInWithGoogle();
             ref.read(userLoggedIn.notifier).value = true;
@@ -243,6 +288,7 @@ class SocialSignIn extends ConsumerWidget {
         LoginButton(
           text: "Continue with Github",
           icon: 'assets/github_logo.svg',
+          isVisible: githubLogin,
           onPressed: () async {
             ref.read(showLoading.notifier).value = true;
             ref

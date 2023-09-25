@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:providers/generic.dart';
+import 'package:url_launcher/url_launcher.dart';
 part 'login_widget.dart';
 part 'auth_state_notifier.dart';
 

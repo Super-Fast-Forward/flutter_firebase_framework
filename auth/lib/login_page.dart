@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Reusable login page UI
 class LoginPage extends ConsumerWidget {
   const LoginPage({
+    this.termsAndConditionsPageUrl,
     required this.aboutTheApp,
     required this.screenTitle,
     required this.header,
@@ -15,6 +16,7 @@ class LoginPage extends ConsumerWidget {
   final String screenTitle;
   final Widget aboutTheApp;
   final Widget header;
+  final String? termsAndConditionsPageUrl;
   final bool anonymousLogin;
 
   @override

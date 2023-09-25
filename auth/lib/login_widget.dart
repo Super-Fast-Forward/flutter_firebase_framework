@@ -32,11 +32,13 @@ Future<void> initializeFirebase() async {
 
 class LogInWidget extends ConsumerWidget {
   const LogInWidget({
+    this.termsAndConditionsPageUrl,
     this.anonymousLogin = true,
     Key? key,
   }) : super(key: key);
 
   final bool anonymousLogin;
+  final String? termsAndConditionsPageUrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -119,11 +121,13 @@ class SignInWidget extends ConsumerWidget {
 
 class SignUpWidget extends ConsumerWidget {
   const SignUpWidget({
+    this.termsAndConditionsPageUrl,
     this.anonymousLogin = true,
     Key? key,
   }) : super(key: key);
 
   final bool anonymousLogin;
+  final String? termsAndConditionsPageUrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -171,7 +175,14 @@ class SignUpWidget extends ConsumerWidget {
                 ),
                 const SizedBox(height: 16),
                 TextAndClickableText(
-                  onTap: () {},
+                  onTap: () async {
+                    if (termsAndConditionsPageUrl != null) {
+                      final Uri url = Uri.parse(
+                        termsAndConditionsPageUrl ?? "",
+                      );
+                      await launchUrl(url);
+                    }
+                  },
                   text1: "By signing up I agree with Job Search Ninja’s",
                   text2: "Terms and conditions.",
                   style: const TextStyle(

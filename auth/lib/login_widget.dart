@@ -631,7 +631,7 @@ class ObsecureText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String icon = isVisible ? AppIcons.closedEye : AppIcons.openedeye;
+    final String icon = isVisible ? AppIcons.closedEye : AppIcons.openedEye;
     return GestureDetector(
       onTap: onTap,
       child: Padding(

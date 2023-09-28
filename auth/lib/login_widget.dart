@@ -32,28 +32,53 @@ Future<void> initializeFirebase() async {
 
 class LogInWidget extends ConsumerWidget {
   const LogInWidget({
-    this.anonymousLogin = true,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+    this.termsAndConditionsPageUrl,
+    required this.anonymousLogin,
+    required this.githubLogin,
+    required this.googleLogin,
+    required this.linkedInLogin,
+  });
 
   final bool anonymousLogin;
+  final bool linkedInLogin;
+  final bool googleLogin;
+  final bool githubLogin;
+  final String? termsAndConditionsPageUrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool = ref.watch(openEmailLogin);
-    return bool
-        ? SignUpWidget(anonymousLogin: anonymousLogin)
-        : SignInWidget(anonymousLogin: anonymousLogin);
+    final bool isSignIn = ref.watch(openEmailLogin);
+    return isSignIn
+        ? SignUpWidget(
+            anonymousLogin: anonymousLogin,
+            githubLogin: githubLogin,
+            googleLogin: googleLogin,
+            linkedInLogin: linkedInLogin,
+            termsAndConditionsPageUrl: termsAndConditionsPageUrl,
+          )
+        : SignInWidget(
+            anonymousLogin: anonymousLogin,
+            githubLogin: githubLogin,
+            googleLogin: googleLogin,
+            linkedInLogin: linkedInLogin,
+          );
   }
 }
 
 class SignInWidget extends ConsumerWidget {
   const SignInWidget({
-    this.anonymousLogin = true,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+    required this.anonymousLogin,
+    required this.githubLogin,
+    required this.googleLogin,
+    required this.linkedInLogin,
+  });
 
   final bool anonymousLogin;
+  final bool linkedInLogin;
+  final bool googleLogin;
+  final bool githubLogin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -72,7 +97,12 @@ class SignInWidget extends ConsumerWidget {
         children: [
           const Header(text: "Log in into your account"),
           const SizedBox(height: 30),
-          const SocialSignIn(),
+          SocialSignIn(
+            anonymousLogin: anonymousLogin,
+            githubLogin: githubLogin,
+            googleLogin: googleLogin,
+            linkedInLogin: linkedInLogin,
+          ),
           const SizedBox(height: 21),
           const LinedText(text: "OR"),
           const SizedBox(height: 21),
@@ -86,13 +116,10 @@ class SignInWidget extends ConsumerWidget {
                   text: "email address",
                 ),
                 const SizedBox(height: 12),
-                LoginTextField(
-                  header: "Password",
-                  controller: passwordController,
-                  text: "password",
-                  obscureText: true,
-                ),
-                const SizedBox(height: 35),
+                LoginPasswordTextField(controller: passwordController),
+                const SizedBox(height: 14),
+                RememberMe(provider: rememberMeSignIn),
+                const SizedBox(height: 30),
                 LongButton(
                   text: "Log In",
                   onTap: () {
@@ -106,6 +133,7 @@ class SignInWidget extends ConsumerWidget {
                 TextAndClickableText(
                   onTap: () {
                     ref.read(openEmailLogin.notifier).value = true;
+                    ref.read(showPasswordProvider.notifier).changeTheme(true);
                   },
                   text1: "Don’t have an account?",
                   text2: "Sign up for free",
@@ -121,11 +149,19 @@ class SignInWidget extends ConsumerWidget {
 
 class SignUpWidget extends ConsumerWidget {
   const SignUpWidget({
-    this.anonymousLogin = true,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+    this.termsAndConditionsPageUrl,
+    required this.anonymousLogin,
+    required this.githubLogin,
+    required this.googleLogin,
+    required this.linkedInLogin,
+  });
 
   final bool anonymousLogin;
+  final bool linkedInLogin;
+  final bool googleLogin;
+  final bool githubLogin;
+  final String? termsAndConditionsPageUrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -144,7 +180,12 @@ class SignUpWidget extends ConsumerWidget {
         children: [
           const Header(text: "Create Your Free Account"),
           const SizedBox(height: 30),
-          const SocialSignIn(),
+          SocialSignIn(
+            anonymousLogin: anonymousLogin,
+            githubLogin: githubLogin,
+            googleLogin: googleLogin,
+            linkedInLogin: linkedInLogin,
+          ),
           const SizedBox(height: 21),
           const LinedText(text: "OR"),
           const SizedBox(height: 21),
@@ -158,13 +199,10 @@ class SignUpWidget extends ConsumerWidget {
                   text: "email address",
                 ),
                 const SizedBox(height: 12),
-                LoginTextField(
-                  header: "Password",
-                  controller: passwordController,
-                  text: "password",
-                  obscureText: true,
-                ),
-                const SizedBox(height: 35),
+                LoginPasswordTextField(controller: passwordController),
+                const SizedBox(height: 14),
+                RememberMe(provider: rememberMeSignUp),
+                const SizedBox(height: 30),
                 LongButton(
                   text: "Create Account",
                   onTap: () {
@@ -176,7 +214,14 @@ class SignUpWidget extends ConsumerWidget {
                 ),
                 const SizedBox(height: 16),
                 TextAndClickableText(
-                  onTap: () {},
+                  onTap: () async {
+                    if (termsAndConditionsPageUrl != null) {
+                      final Uri url = Uri.parse(
+                        termsAndConditionsPageUrl ?? "",
+                      );
+                      await launchUrl(url);
+                    }
+                  },
                   text1: "By signing up I agree with Job Search Ninja’s",
                   text2: "Terms and conditions.",
                   style: const TextStyle(
@@ -192,6 +237,7 @@ class SignUpWidget extends ConsumerWidget {
                 TextAndClickableText(
                   onTap: () {
                     ref.read(openEmailLogin.notifier).value = false;
+                    ref.read(showPasswordProvider.notifier).changeTheme(true);
                   },
                   text1: "Already a user?",
                   text2: "Log In",
@@ -208,9 +254,16 @@ class SignUpWidget extends ConsumerWidget {
 class SocialSignIn extends ConsumerWidget {
   const SocialSignIn({
     super.key,
-    this.anonymousLogin = true,
+    required this.anonymousLogin,
+    required this.githubLogin,
+    required this.googleLogin,
+    required this.linkedInLogin,
   });
+
   final bool anonymousLogin;
+  final bool linkedInLogin;
+  final bool googleLogin;
+  final bool githubLogin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -219,7 +272,7 @@ class SocialSignIn extends ConsumerWidget {
         LoginButton(
           text: "Continue with LinkedIn",
           icon: 'assets/linkedin_logo.svg',
-          isVisible: true,
+          isVisible: linkedInLogin,
           onPressed: () {
             ref.read(linkedinAuthProvider.notifier).authenticateLinkedin();
           },
@@ -227,7 +280,7 @@ class SocialSignIn extends ConsumerWidget {
         LoginButton(
           text: "Continue with Google",
           icon: 'assets/google_logo.svg',
-          isVisible: true,
+          isVisible: googleLogin,
           onPressed: () async {
             await ref.read(firebaseAuthProvider.notifier).signInWithGoogle();
             ref.read(userLoggedIn.notifier).value = true;
@@ -236,6 +289,7 @@ class SocialSignIn extends ConsumerWidget {
         LoginButton(
           text: "Continue with Github",
           icon: 'assets/github_logo.svg',
+          isVisible: githubLogin,
           onPressed: () async {
             ref.read(showLoading.notifier).value = true;
             ref
@@ -256,6 +310,48 @@ class SocialSignIn extends ConsumerWidget {
           onPressed: () async {
             await FirebaseAuth.instance.signInAnonymously();
           },
+        ),
+      ],
+    );
+  }
+}
+
+class RememberMe extends ConsumerWidget {
+  const RememberMe({
+    required this.provider,
+    super.key,
+  });
+
+  final AutoDisposeStateNotifierProvider<RememberMeProvider, bool> provider;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(2),
+          child: Checkbox(
+            checkColor: Colors.white,
+            activeColor: Colors.grey,
+            value: ref.watch(provider),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(3)),
+            ),
+            onChanged: (bool? value) {
+              ref.read(provider.notifier).toggleRememberMe();
+            },
+          ),
+        ),
+        const SizedBox(width: 11),
+        const Text(
+          AppText.rememberMe,
+          style: TextStyle(
+            color: Color(0x99080708),
+            fontSize: 16,
+            fontFamily: 'Open Sans',
+            fontWeight: FontWeight.w400,
+          ),
         ),
       ],
     );
@@ -360,19 +456,45 @@ class LinedText extends StatelessWidget {
   }
 }
 
+class LoginPasswordTextField extends ConsumerWidget {
+  const LoginPasswordTextField({
+    super.key,
+    this.controller,
+  });
+
+  final TextEditingController? controller;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool textObscure = ref.watch(showPasswordProvider);
+    return LoginTextField(
+      header: AppText.password,
+      controller: controller,
+      text: AppText.password,
+      icon: ObsecureText(
+        isVisible: textObscure,
+        onTap: ref.read(showPasswordProvider.notifier).toggleTheme,
+      ),
+      obscureText: textObscure,
+    );
+  }
+}
+
 class LoginTextField extends StatelessWidget {
   const LoginTextField({
     super.key,
     required this.header,
-    required this.controller,
+    this.controller,
     this.obscureText = false,
     this.text,
+    this.icon,
   });
 
   final String header;
   final bool obscureText;
   final String? text;
-  final TextEditingController controller;
+  final Widget? icon;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -423,6 +545,7 @@ class LoginTextField extends StatelessWidget {
                 height: 1.40,
                 letterSpacing: -0.28,
               ),
+              suffixIcon: icon,
               isDense: true,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 20,
@@ -493,5 +616,32 @@ class TextAndClickableText extends StatelessWidget {
 
   TextStyle _styleBlue() {
     return _style().copyWith(color: const Color(0xFF3772FF));
+  }
+}
+
+class ObsecureText extends StatelessWidget {
+  const ObsecureText({
+    super.key,
+    required this.isVisible,
+    this.onTap,
+  });
+
+  final bool isVisible;
+  final void Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final String icon = isVisible ? AppIcons.closedEye : AppIcons.openedEye;
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+        child: SizedBox(
+          height: 20,
+          width: 20,
+          child: SvgPicture.asset(icon, fit: BoxFit.fitWidth),
+        ),
+      ),
+    );
   }
 }

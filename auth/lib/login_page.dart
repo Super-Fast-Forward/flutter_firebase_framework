@@ -5,17 +5,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Reusable login page UI
 class LoginPage extends ConsumerWidget {
   const LoginPage({
+    super.key,
+    this.termsAndConditionsPageUrl,
     required this.aboutTheApp,
     required this.screenTitle,
     required this.header,
-    this.anonymousLogin = true,
-    Key? key,
-  }) : super(key: key);
+    this.anonymousLogin = false,
+    this.githubLogin = true,
+    this.googleLogin = true,
+    this.linkedInLogin = false,
+  });
+
+  final bool anonymousLogin;
+  final bool linkedInLogin;
+  final bool googleLogin;
+  final bool githubLogin;
 
   final String screenTitle;
   final Widget aboutTheApp;
   final Widget header;
-  final bool anonymousLogin;
+  final String? termsAndConditionsPageUrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,7 +44,13 @@ class LoginPage extends ConsumerWidget {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            child: LogInWidget(anonymousLogin: anonymousLogin),
+            child: LogInWidget(
+              anonymousLogin: anonymousLogin,
+              githubLogin: githubLogin,
+              googleLogin: googleLogin,
+              linkedInLogin: linkedInLogin,
+              termsAndConditionsPageUrl: termsAndConditionsPageUrl,
+            ),
           ),
         ),
         Expanded(child: aboutTheApp)
@@ -56,6 +71,10 @@ class LoginPage extends ConsumerWidget {
               header,
               LogInWidget(
                 anonymousLogin: anonymousLogin,
+                githubLogin: githubLogin,
+                googleLogin: googleLogin,
+                linkedInLogin: linkedInLogin,
+                termsAndConditionsPageUrl: termsAndConditionsPageUrl,
               ),
             ],
           ),

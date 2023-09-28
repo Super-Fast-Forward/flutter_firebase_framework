@@ -330,7 +330,7 @@ class RememberMe extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.all(2),
+          padding: const EdgeInsets.symmetric(vertical: 2),
           child: Checkbox(
             checkColor: Colors.white,
             activeColor: Colors.grey,

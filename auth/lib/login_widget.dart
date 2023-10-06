@@ -49,20 +49,22 @@ class LogInWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isSignIn = ref.watch(openEmailLogin);
-    return isSignIn
-        ? SignUpWidget(
-            anonymousLogin: anonymousLogin,
-            githubLogin: githubLogin,
-            googleLogin: googleLogin,
-            linkedInLogin: linkedInLogin,
-            termsAndConditionsPageUrl: termsAndConditionsPageUrl,
-          )
-        : SignInWidget(
-            anonymousLogin: anonymousLogin,
-            githubLogin: githubLogin,
-            googleLogin: googleLogin,
-            linkedInLogin: linkedInLogin,
-          );
+    return AutofillGroup(
+      child: isSignIn
+          ? SignUpWidget(
+              anonymousLogin: anonymousLogin,
+              githubLogin: githubLogin,
+              googleLogin: googleLogin,
+              linkedInLogin: linkedInLogin,
+              termsAndConditionsPageUrl: termsAndConditionsPageUrl,
+            )
+          : SignInWidget(
+              anonymousLogin: anonymousLogin,
+              githubLogin: githubLogin,
+              googleLogin: googleLogin,
+              linkedInLogin: linkedInLogin,
+            ),
+    );
   }
 }
 
@@ -111,6 +113,7 @@ class SignInWidget extends ConsumerWidget {
             child: Column(
               children: [
                 LoginTextField(
+                  autofillHints: const [AutofillHints.username],
                   header: "Email",
                   controller: emailController,
                   text: "email address",
@@ -194,6 +197,7 @@ class SignUpWidget extends ConsumerWidget {
             child: Column(
               children: [
                 LoginTextField(
+                  autofillHints: const [AutofillHints.username],
                   header: "Email",
                   controller: emailController,
                   text: "email address",
@@ -330,7 +334,7 @@ class RememberMe extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.all(2),
+          padding: const EdgeInsets.symmetric(vertical: 2),
           child: Checkbox(
             checkColor: Colors.white,
             activeColor: Colors.grey,
@@ -468,6 +472,7 @@ class LoginPasswordTextField extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     bool textObscure = ref.watch(showPasswordProvider);
     return LoginTextField(
+      autofillHints: const [AutofillHints.password],
       header: AppText.password,
       controller: controller,
       text: AppText.password,
@@ -488,6 +493,7 @@ class LoginTextField extends StatelessWidget {
     this.obscureText = false,
     this.text,
     this.icon,
+    this.autofillHints,
   });
 
   final String header;
@@ -495,6 +501,7 @@ class LoginTextField extends StatelessWidget {
   final String? text;
   final Widget? icon;
   final TextEditingController? controller;
+  final Iterable<String>? autofillHints;
 
   @override
   Widget build(BuildContext context) {
@@ -533,6 +540,7 @@ class LoginTextField extends StatelessWidget {
           child: TextFormField(
             obscureText: obscureText,
             controller: controller,
+            autofillHints: autofillHints,
             decoration: InputDecoration(
               focusedBorder: _customBorder(),
               enabledBorder: _customBorder(),

@@ -2,6 +2,8 @@ import 'package:auth/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/constant/app_icons.dart';
+
 /// Reusable login page UI
 class LoginPage extends ConsumerWidget {
   const LoginPage({
@@ -32,29 +34,70 @@ class LoginPage extends ConsumerWidget {
     bool isWideScreen =
         screenSize.width >= screenSize.height && screenSize.width > 800;
 
-    return Container(
-      color: Colors.white,
-      child: isWideScreen ? _buildWideScreen() : _buildNarrowScreen(),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: isWideScreen ? _buildWideScreen() : _buildNarrowScreen(),
     );
   }
 
   //Used when screen width >= screen height
   Widget _buildWideScreen() {
-    return Row(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            child: LogInWidget(
-              anonymousLogin: anonymousLogin,
-              githubLogin: githubLogin,
-              googleLogin: googleLogin,
-              linkedInLogin: linkedInLogin,
-              termsAndConditionsPageUrl: termsAndConditionsPageUrl,
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(bottom: 80),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 40),
+            child: Image.asset(
+              AppIcons.imgJSNLogo,
+              package: "auth",
+              height: 40,
             ),
           ),
-        ),
-        Expanded(child: aboutTheApp)
-      ],
+          Row(
+            children: [
+              const Expanded(
+                flex: 1,
+                child: SizedBox(),
+              ),
+              Expanded(
+                flex: 12,
+                child: IntrinsicHeight(
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 628,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadiusDirectional.horizontal(
+                                  start: Radius.circular(
+                            30,
+                          )),
+                          border: Border.all(
+                            width: 2,
+                            color: const Color(0xff3772FF),
+                          ),
+                        ),
+                        child: LogInWidget(
+                          anonymousLogin: anonymousLogin,
+                          githubLogin: githubLogin,
+                          googleLogin: googleLogin,
+                          linkedInLogin: linkedInLogin,
+                          termsAndConditionsPageUrl: termsAndConditionsPageUrl,
+                        ),
+                      ),
+                      Expanded(
+                        child: aboutTheApp,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

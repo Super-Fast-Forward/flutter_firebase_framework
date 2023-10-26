@@ -647,7 +647,11 @@ class ObsecureText extends StatelessWidget {
         child: SizedBox(
           height: 20,
           width: 20,
-          child: SvgPicture.asset(icon, fit: BoxFit.fitWidth),
+          child: SvgPicture.asset(
+            icon,
+            fit: BoxFit.fitWidth,
+            package: "auth",
+          ),
         ),
       ),
     );

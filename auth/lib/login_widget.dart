@@ -50,20 +50,24 @@ class LogInWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isSignIn = ref.watch(openEmailLogin);
     return AutofillGroup(
-      child: isSignIn
-          ? SignUpWidget(
-              anonymousLogin: anonymousLogin,
-              githubLogin: githubLogin,
-              googleLogin: googleLogin,
-              linkedInLogin: linkedInLogin,
-              termsAndConditionsPageUrl: termsAndConditionsPageUrl,
-            )
-          : SignInWidget(
-              anonymousLogin: anonymousLogin,
-              githubLogin: githubLogin,
-              googleLogin: googleLogin,
-              linkedInLogin: linkedInLogin,
-            ),
+      child: Container(
+        constraints: const BoxConstraints(minWidth: 310),
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
+        child: isSignIn
+            ? SignUpWidget(
+                anonymousLogin: anonymousLogin,
+                githubLogin: githubLogin,
+                googleLogin: googleLogin,
+                linkedInLogin: linkedInLogin,
+                termsAndConditionsPageUrl: termsAndConditionsPageUrl,
+              )
+            : SignInWidget(
+                anonymousLogin: anonymousLogin,
+                githubLogin: githubLogin,
+                googleLogin: googleLogin,
+                linkedInLogin: linkedInLogin,
+              ),
+      ),
     );
   }
 }
@@ -91,62 +95,58 @@ class SignInWidget extends ConsumerWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
-    return Container(
-      constraints: const BoxConstraints(minWidth: 310),
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          const Header(text: "Log in into your account"),
-          const SizedBox(height: 30),
-          SocialSignIn(
-            anonymousLogin: anonymousLogin,
-            githubLogin: githubLogin,
-            googleLogin: googleLogin,
-            linkedInLogin: linkedInLogin,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        const Header(text: "Log in into your account"),
+        const SizedBox(height: 30),
+        SocialSignIn(
+          anonymousLogin: anonymousLogin,
+          githubLogin: githubLogin,
+          googleLogin: googleLogin,
+          linkedInLogin: linkedInLogin,
+        ),
+        const SizedBox(height: 21),
+        const LinedText(text: "OR"),
+        const SizedBox(height: 21),
+        SizedBox(
+          width: 464,
+          child: Column(
+            children: [
+              LoginTextField(
+                autofillHints: const [AutofillHints.username],
+                header: "Email",
+                controller: emailController,
+                text: "email address",
+              ),
+              const SizedBox(height: 12),
+              LoginPasswordTextField(controller: passwordController),
+              const SizedBox(height: 14),
+              RememberMe(provider: rememberMeSignIn),
+              const SizedBox(height: 30),
+              LongButton(
+                text: "Log In",
+                onTap: () {
+                  ref.read(firebaseAuthProvider.notifier).signInWithEmail(
+                        email: emailController.text,
+                        password: passwordController.text,
+                      );
+                },
+              ),
+              const SizedBox(height: 58),
+              TextAndClickableText(
+                onTap: () {
+                  ref.read(openEmailLogin.notifier).value = true;
+                  ref.read(showPasswordProvider.notifier).changeTheme(true);
+                },
+                text1: "Don’t have an account?",
+                text2: "Sign up for free",
+              )
+            ],
           ),
-          const SizedBox(height: 21),
-          const LinedText(text: "OR"),
-          const SizedBox(height: 21),
-          SizedBox(
-            width: 464,
-            child: Column(
-              children: [
-                LoginTextField(
-                  autofillHints: const [AutofillHints.username],
-                  header: "Email",
-                  controller: emailController,
-                  text: "email address",
-                ),
-                const SizedBox(height: 12),
-                LoginPasswordTextField(controller: passwordController),
-                const SizedBox(height: 14),
-                RememberMe(provider: rememberMeSignIn),
-                const SizedBox(height: 30),
-                LongButton(
-                  text: "Log In",
-                  onTap: () {
-                    ref.read(firebaseAuthProvider.notifier).signInWithEmail(
-                          email: emailController.text,
-                          password: passwordController.text,
-                        );
-                  },
-                ),
-                const SizedBox(height: 58),
-                TextAndClickableText(
-                  onTap: () {
-                    ref.read(openEmailLogin.notifier).value = true;
-                    ref.read(showPasswordProvider.notifier).changeTheme(true);
-                  },
-                  text1: "Don’t have an account?",
-                  text2: "Sign up for free",
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -176,83 +176,79 @@ class SignUpWidget extends ConsumerWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
-    return Container(
-      constraints: const BoxConstraints(minWidth: 310),
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          const Header(text: "Create Your Free Account"),
-          const SizedBox(height: 30),
-          SocialSignIn(
-            anonymousLogin: anonymousLogin,
-            githubLogin: githubLogin,
-            googleLogin: googleLogin,
-            linkedInLogin: linkedInLogin,
-          ),
-          const SizedBox(height: 21),
-          const LinedText(text: "OR"),
-          const SizedBox(height: 21),
-          SizedBox(
-            width: 464,
-            child: Column(
-              children: [
-                LoginTextField(
-                  autofillHints: const [AutofillHints.username],
-                  header: "Email",
-                  controller: emailController,
-                  text: "email address",
-                ),
-                const SizedBox(height: 12),
-                LoginPasswordTextField(controller: passwordController),
-                const SizedBox(height: 14),
-                RememberMe(provider: rememberMeSignUp),
-                const SizedBox(height: 30),
-                LongButton(
-                  text: "Create Account",
-                  onTap: () {
-                    ref.read(firebaseAuthProvider.notifier).signUpWithEmail(
-                          email: emailController.text,
-                          password: passwordController.text,
-                        );
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextAndClickableText(
-                  onTap: () async {
-                    if (termsAndConditionsPageUrl != null) {
-                      final Uri url = Uri.parse(
-                        termsAndConditionsPageUrl ?? "",
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        const Header(text: "Create Your Free Account"),
+        const SizedBox(height: 30),
+        SocialSignIn(
+          anonymousLogin: anonymousLogin,
+          githubLogin: githubLogin,
+          googleLogin: googleLogin,
+          linkedInLogin: linkedInLogin,
+        ),
+        const SizedBox(height: 21),
+        const LinedText(text: "OR"),
+        const SizedBox(height: 21),
+        SizedBox(
+          width: 464,
+          child: Column(
+            children: [
+              LoginTextField(
+                autofillHints: const [AutofillHints.username],
+                header: "Email",
+                controller: emailController,
+                text: "email address",
+              ),
+              const SizedBox(height: 12),
+              LoginPasswordTextField(controller: passwordController),
+              const SizedBox(height: 14),
+              RememberMe(provider: rememberMeSignUp),
+              const SizedBox(height: 30),
+              LongButton(
+                text: "Create Account",
+                onTap: () {
+                  ref.read(firebaseAuthProvider.notifier).signUpWithEmail(
+                        email: emailController.text,
+                        password: passwordController.text,
                       );
-                      await launchUrl(url);
-                    }
-                  },
-                  text1: "By signing up I agree with Job Search Ninja’s",
-                  text2: "Terms and conditions.",
-                  style: const TextStyle(
-                    color: Color(0xFF616161),
-                    fontSize: 14,
-                    fontFamily: 'Open Sans',
-                    fontWeight: FontWeight.w400,
-                    height: 1.40,
-                    letterSpacing: -0.28,
-                  ),
+                },
+              ),
+              const SizedBox(height: 16),
+              TextAndClickableText(
+                onTap: () async {
+                  if (termsAndConditionsPageUrl != null) {
+                    final Uri url = Uri.parse(
+                      termsAndConditionsPageUrl ?? "",
+                    );
+                    await launchUrl(url);
+                  }
+                },
+                text1: "By signing up I agree with Job Search Ninja’s",
+                text2: "Terms and conditions.",
+                style: const TextStyle(
+                  color: Color(0xFF616161),
+                  fontSize: 14,
+                  fontFamily: 'Open Sans',
+                  fontWeight: FontWeight.w400,
+                  height: 1.40,
+                  letterSpacing: -0.28,
                 ),
-                const SizedBox(height: 23),
-                TextAndClickableText(
-                  onTap: () {
-                    ref.read(openEmailLogin.notifier).value = false;
-                    ref.read(showPasswordProvider.notifier).changeTheme(true);
-                  },
-                  text1: "Already a user?",
-                  text2: "Log In",
-                )
-              ],
-            ),
+              ),
+              const SizedBox(height: 23),
+              TextAndClickableText(
+                onTap: () {
+                  ref.read(openEmailLogin.notifier).value = false;
+                  ref.read(showPasswordProvider.notifier).changeTheme(true);
+                },
+                text1: "Already a user?",
+                text2: "Log In",
+              )
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

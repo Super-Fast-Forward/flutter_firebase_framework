@@ -42,62 +42,41 @@ class LoginPage extends ConsumerWidget {
 
   //Used when screen width >= screen height
   Widget _buildWideScreen() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 80),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40),
-            child: Image.asset(
-              AppIcons.imgJSNLogo,
-              package: "auth",
-              height: 40,
+    return Row(
+      children: [
+        Flexible(
+          flex: 2,
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 40),
+                    child: Image.asset(
+                      AppIcons.imgJSNLogo,
+                      package: "auth",
+                      height: 50,
+                    ),
+                  ),
+                  LogInWidget(
+                    anonymousLogin: anonymousLogin,
+                    githubLogin: githubLogin,
+                    googleLogin: googleLogin,
+                    linkedInLogin: linkedInLogin,
+                    termsAndConditionsPageUrl: termsAndConditionsPageUrl,
+                  ),
+                ],
+              ),
             ),
           ),
-          Row(
-            children: [
-              const Expanded(
-                flex: 1,
-                child: SizedBox(),
-              ),
-              Expanded(
-                flex: 12,
-                child: IntrinsicHeight(
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 628,
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadiusDirectional.horizontal(
-                                  start: Radius.circular(
-                            30,
-                          )),
-                          border: Border.all(
-                            width: 2,
-                            color: const Color(0xff3772FF),
-                          ),
-                        ),
-                        child: LogInWidget(
-                          anonymousLogin: anonymousLogin,
-                          githubLogin: githubLogin,
-                          googleLogin: googleLogin,
-                          linkedInLogin: linkedInLogin,
-                          termsAndConditionsPageUrl: termsAndConditionsPageUrl,
-                        ),
-                      ),
-                      Expanded(
-                        child: aboutTheApp,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+        ),
+        Flexible(
+          flex: 3,
+          child: aboutTheApp,
+        )
+      ],
     );
   }
 

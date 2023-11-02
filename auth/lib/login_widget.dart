@@ -91,8 +91,9 @@ class SignInWidget extends ConsumerWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 81, vertical: 53),
+    return Container(
+      constraints: const BoxConstraints(minWidth: 310),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
@@ -175,8 +176,9 @@ class SignUpWidget extends ConsumerWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 81, vertical: 53),
+    return Container(
+      constraints: const BoxConstraints(minWidth: 310),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
@@ -377,7 +379,7 @@ class Header extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       style: const TextStyle(
         color: Color(0xFF3772FF),
-        fontSize: 30,
+        fontSize: 24,
         fontFamily: 'Open Sans',
         fontWeight: FontWeight.w600,
       ),
@@ -424,17 +426,20 @@ class LinedText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        const SizedBox(
-          width: 182,
-          child: Divider(
+        Container(
+          constraints: const BoxConstraints(
+            maxWidth: 464,
+          ),
+          child: const Divider(
             color: Color(0x7F404040),
             thickness: 1.1,
           ),
         ),
-        Padding(
+        Container(
+          color: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Text(
             text,
@@ -446,13 +451,6 @@ class LinedText extends StatelessWidget {
               height: 1.40,
               letterSpacing: -0.28,
             ),
-          ),
-        ),
-        const SizedBox(
-          width: 182,
-          child: Divider(
-            color: Color(0x7F404040),
-            thickness: 1.1,
           ),
         ),
       ],
@@ -476,7 +474,7 @@ class LoginPasswordTextField extends ConsumerWidget {
       header: AppText.password,
       controller: controller,
       text: AppText.password,
-      icon: ObsecureText(
+      icon: ObscureText(
         isVisible: textObscure,
         onTap: ref.read(showPasswordProvider.notifier).toggleTheme,
       ),
@@ -590,24 +588,27 @@ class TextAndClickableText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Text(
-          text1,
-          style: _style(),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        GestureDetector(
-          onTap: onTap,
-          child: Text(
-            text2,
-            style: _styleBlue(),
+    return SizedBox(
+      width: double.infinity,
+      child: Wrap(
+        alignment: WrapAlignment.start,
+        children: [
+          Text(
+            text1,
+            style: _style(),
           ),
-        ),
-      ],
+          const SizedBox(
+            width: 10,
+          ),
+          GestureDetector(
+            onTap: onTap,
+            child: Text(
+              text2,
+              style: _styleBlue(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -627,8 +628,8 @@ class TextAndClickableText extends StatelessWidget {
   }
 }
 
-class ObsecureText extends StatelessWidget {
-  const ObsecureText({
+class ObscureText extends StatelessWidget {
+  const ObscureText({
     super.key,
     required this.isVisible,
     this.onTap,

@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:providers/firestore.dart';
-
+import 'common.dart';
 import 'col_stream_widget.dart';
 
 class ColPrintWidget extends ConsumerWidget {

@@ -1,9 +1,8 @@
 import 'dart:core';
-
-import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:providers/firestore.dart';
+import 'package:widgets/common.dart';
 import 'package:widgets/copy_to_clipboard_widget.dart';
 import 'package:widgets/doc_stream_widget.dart';
 
@@ -19,7 +18,7 @@ class MessageWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => DocStreamWidget(
       key: ValueKey(messageDocRef.id),
       docSP(messageDocRef.path),
-      (context, messageDoc) => ConstrainedBox(
+      (context, DS messageDoc) => ConstrainedBox(
           constraints: BoxConstraints(maxHeight: 800),
           child: Card(
               child: ListTile(

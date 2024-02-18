@@ -1,4 +1,4 @@
-import 'package:common/common.dart';
+import 'common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,10 +24,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 ///    )),
 ///
 class ColStreamWidget<ItemWidgetType> extends ConsumerWidget {
+  final AutoDisposeStreamProvider<QS> colStreamProvider;
   final Widget Function(
       BuildContext context, QS col, List<ItemWidgetType> items) builder;
   final ItemWidgetType Function(BuildContext context, DS doc) itemBuilder;
-  final AutoDisposeStreamProvider<QS> colStreamProvider;
   final Widget? loader;
   const ColStreamWidget(
     this.colStreamProvider,

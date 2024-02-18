@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,11 +8,10 @@ import 'package:providers/firestore.dart';
 import 'package:providers/generic.dart';
 import 'package:providers/watchers.dart';
 import 'package:widgets/col_stream_widget.dart';
-
 import 'package:widgets/doc_field_text_field.dart';
 import 'package:widgets/snp_text_edit.dart';
-
 import 'chat_widget_message.dart';
+import 'common.dart';
 
 class ChatWidget extends ConsumerWidget {
   FocusNode focusNode = FocusNode();

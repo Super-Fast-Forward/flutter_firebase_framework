@@ -1,7 +1,6 @@
 import 'package:auth/current_user_avatar_extended.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:widgets/theme_switch.dart';
 
 enum TabsAlignment { left, center, right }
 
@@ -25,7 +24,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final List<String>? tabs;
   //all other properties of AppBar widget can be added here
   final Widget userAvatar;
-  final Widget themeButton;
+  // final Widget themeButton;
   final Widget? settingsButton;
   final bool showUserAvatar;
   final bool showThemeButton;
@@ -43,7 +42,6 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
     this.showThemeButton = true,
     this.showSettingsButton = false,
     this.userAvatar = const CurrentUserAvatarExtended(),
-    this.themeButton = const ThemeSwitch(),
     this.settingsButton,
     this.onTabSelected,
     this.maxTabWidth = 100,
@@ -69,7 +67,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
           : title,
       actions: [
         if (showUserAvatar) userAvatar,
-        if (showThemeButton) themeButton,
+        // if (showThemeButton) themeButton,
         if (showSettingsButton && settingsButton != null) settingsButton!
       ],
     );

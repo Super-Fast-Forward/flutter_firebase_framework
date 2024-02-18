@@ -22,8 +22,6 @@ final FAI = FirebaseAuth.instance;
 final USER = FirebaseAuth.instance.currentUser;
 final DB = FirebaseFirestore.instance;
 
-const WIDE_SCREEN_WIDTH = 600;
-
 String formatFirestoreDoc(DS doc) {
   String jsonString = json.encode(doc.data(), toEncodable: (o) {
     if (o is Timestamp) {

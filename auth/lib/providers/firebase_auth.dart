@@ -92,20 +92,26 @@ class FirebaseAuthProvider extends StateNotifier<String> {
     });
   }
 
-  Future<void> signInWithGoogle() async {
-    signIn(func: () {
-      GoogleAuthProvider googleProvider = GoogleAuthProvider();
-      return FirebaseAuth.instance.signInWithPopup(
-        googleProvider,
-      );
-    });
+  Future<void> signInWithGoogle({bool localPersistanceEnabled = false}) async {
+    signIn(
+      func: () {
+        GoogleAuthProvider googleProvider = GoogleAuthProvider();
+        return FirebaseAuth.instance.signInWithPopup(googleProvider);
+      },
+      localPersistanceEnabled: localPersistanceEnabled,
+    );
   }
 
-  Future<void> signIn({required Future<UserCredential> Function() func}) async {
+  Future<void> signIn({
+    required Future<UserCredential> Function() func,
+    bool localPersistanceEnabled = false,
+  }) async {
     try {
       _ref.read(isEmailSignInProvider.notifier).value = false;
       final result = await func();
-      await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+      if (localPersistanceEnabled) {
+        await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+      }
       linkAccount(result.credential);
       await checkUserExists(result);
     } on FirebaseAuthException catch (e) {

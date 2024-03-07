@@ -86,6 +86,8 @@ class SignInWidget extends ConsumerWidget {
   final bool googleLogin;
   final bool githubLogin;
 
+  final bool isLocalPersistanceEnabled = false;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (ref.watch(showLoading)) {
@@ -106,6 +108,7 @@ class SignInWidget extends ConsumerWidget {
           githubLogin: githubLogin,
           googleLogin: googleLogin,
           linkedInLogin: linkedInLogin,
+          isLocalPersistanceEnabled: isLocalPersistanceEnabled,
         ),
         const SizedBox(height: 21),
         const LinedText(text: "OR"),
@@ -260,12 +263,15 @@ class SocialSignIn extends ConsumerWidget {
     required this.githubLogin,
     required this.googleLogin,
     required this.linkedInLogin,
+    isLocalPersistanceEnabled,
   });
 
   final bool anonymousLogin;
   final bool linkedInLogin;
   final bool googleLogin;
   final bool githubLogin;
+
+  final bool isLocalPersistanceEnabled = false;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -284,7 +290,9 @@ class SocialSignIn extends ConsumerWidget {
           icon: 'assets/google_logo.svg',
           isVisible: googleLogin,
           onPressed: () async {
-            await ref.read(firebaseAuthProvider.notifier).signInWithGoogle();
+            await ref.read(firebaseAuthProvider.notifier).signInWithGoogle(
+                  localPersistanceEnabled: isLocalPersistanceEnabled,
+                );
             ref.read(userLoggedIn.notifier).value = true;
           },
         ),

@@ -40,7 +40,7 @@ class ColStreamWidget<ItemWidgetType> extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) =>
       ref.watch(colStreamProvider).when(
-          data: (col) {
+          data: (QS col) {
             return builder(context, col,
                 col.docs.map((doc) => itemBuilder(context, doc)).toList());
           },
